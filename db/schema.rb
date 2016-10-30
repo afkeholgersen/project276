@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(version: 20161025202338) do
     t.string   "username"
     t.string   "email"
     t.string   "password"
+    t.string   "salt"
     t.integer  "role"
     t.integer  "preference_id"
     t.integer  "savedrecipe_id"
