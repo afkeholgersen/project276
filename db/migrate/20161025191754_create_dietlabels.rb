@@ -1,7 +1,8 @@
 class CreateDietlabels < ActiveRecord::Migration[5.0]
   def change
     create_table :dietlabels do |t|
-
+      t.string :name
+      t.string :apiparameter
       t.timestamps
     end
 

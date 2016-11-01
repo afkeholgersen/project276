@@ -1,7 +1,8 @@
 class CreateHealthlabels < ActiveRecord::Migration[5.0]
   def change
     create_table :healthlabels do |t|
-
+   	  t.string :name
+      t.string :apiparameter
       t.timestamps
     end
 
