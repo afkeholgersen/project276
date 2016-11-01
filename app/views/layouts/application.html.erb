@@ -2,13 +2,31 @@
 <html>
   <head>
     <title>Foodnatic</title>
-    <%= csrf_meta_tags %>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <link rel="stylesheet" type="text/css" href="navBar.css">
+    <script src="navBar.js" type="text/javascript"></script>
   </head>
 
+
   <body>
-    <%= yield %>
+    <div class="nav-fixer">
+    <ul class="topnav" id="topNavBar_left">
+      <li class="left"><a href="Home">Home</a></li>
+      <li class="left"><input type="text" name="keyword"></li>
+      <li class="left"><input type="submit" value="Search"></li>
+      <li class="account">
+        <a href="#" class="dropButton">Account</a>
+        <div id="accountDropDownItems" class="dropDownContent">
+          <a href="Setting">Setting</a>
+          <a href="Recipes">Saved Recipes</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="logo">
+    <img class="logo"><src="logo.jpg" alt="logo" align="middle">
+  </div>
   </body>
 </html>
