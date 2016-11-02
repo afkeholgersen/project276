@@ -23,13 +23,24 @@
 
   <div class="field">
     <%= f.label :password %>
-    <%= f.text_field :password %>
+    <%= f.password_field :password %>
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation %>
   </div>
 
-  <div class="field">
-    <%= f.label :preference_id %>
-    <%= f.number_field :preference_id %>
-  </div>
+  <%= fields_for @preference do |p| %>
+
+    <div class="field">
+      <%= p.label :healthlabel_ids %>
+      <%= p.number_field :healthlabel_ids  %>
+    </div>
+
+    <div class="field">
+      <%= p.label :dietlabel_ids %>
+      <%= p.number_field :dietlabel_ids  %>
+    </div>
+
+  <% end %>
 
   <div class="actions">
     <%= f.submit %>

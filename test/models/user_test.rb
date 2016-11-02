@@ -26,7 +26,7 @@ class UserTest < ActiveSupport::TestCase
   	assert_not u.save
   end
 
-  test "user save" do
+  test "user save success" do
 
   	u = User.new
   	p = Preference.new
@@ -34,6 +34,11 @@ class UserTest < ActiveSupport::TestCase
 
   	u.preference = p
   	u.savedrecipe = s
+
+
+    u.username="test"
+    u.password="test"
+    u.email="test@gmail.com"
 
   	assert u.save
 
