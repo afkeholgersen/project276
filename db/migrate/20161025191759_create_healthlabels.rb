@@ -3,6 +3,7 @@ class CreateHealthlabels < ActiveRecord::Migration[5.0]
     create_table :healthlabels do |t|
    	  t.string :name
       t.string :apiparameter
+      t.string :description
       t.timestamps
     end
 

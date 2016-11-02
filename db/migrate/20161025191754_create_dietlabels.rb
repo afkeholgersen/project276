@@ -3,6 +3,7 @@ class CreateDietlabels < ActiveRecord::Migration[5.0]
     create_table :dietlabels do |t|
       t.string :name
       t.string :apiparameter
+      t.string :description
       t.timestamps
     end
 
