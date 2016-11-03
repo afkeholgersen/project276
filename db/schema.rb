@@ -16,8 +16,11 @@ ActiveRecord::Schema.define(version: 20161025202338) do
   enable_extension "plpgsql"
 
   create_table "dietlabels", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name"
+    t.string   "apiparameter"
+    t.string   "description"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "dietlabels_preferences", force: :cascade do |t|
@@ -28,8 +31,11 @@ ActiveRecord::Schema.define(version: 20161025202338) do
   end
 
   create_table "healthlabels", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name"
+    t.string   "apiparameter"
+    t.string   "description"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "healthlabels_preferences", force: :cascade do |t|
@@ -65,6 +71,7 @@ ActiveRecord::Schema.define(version: 20161025202338) do
     t.string   "username"
     t.string   "email"
     t.string   "password"
+    t.string   "salt"
     t.integer  "role"
     t.integer  "preference_id"
     t.integer  "savedrecipe_id"
