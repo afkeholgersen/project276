@@ -1,13 +1,5 @@
 
 ul.topnav {
-    /*list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #990000;
-    position: fixed;
-    top: 0;
-    width: 100%;*/
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -15,7 +7,6 @@ ul.topnav {
     background-color: #990000;
     top: 0;
     width: 100%;
-
 }
 
 li{
@@ -82,4 +73,14 @@ div.logo {
 img.logo{
   display:in-line block;
   margin-top: 50px;
+}
+.main-page-buttons {
+  font: bold 11px Arial;
+  background-color: #990000;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-eft: 1px solid #CCCCCC;
 }
