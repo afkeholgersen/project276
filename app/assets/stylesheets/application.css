@@ -76,9 +76,10 @@ li a, .dropButton {
 li.account:hover .dropDownContent {
     display: block;
 }
-
-div.logo{
-  background-size: 272px 92px;
-  height: 92px;
-  width: 272px;
+div.logo {
+ text-align: center;
+}
+img.logo{
+  display:in-line block;
+  margin-top: 50px;
 }
