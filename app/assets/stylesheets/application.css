@@ -75,12 +75,22 @@ img.logo{
   margin-top: 50px;
 }
 .main-page-buttons {
-  font: bold 11px Arial;
+  font: 30px Arial;
   background-color: #990000;
-  color: #333333;
+  color: white;
   padding: 2px 6px 2px 6px;
   border-top: 1px solid #CCCCCC;
   border-right: 1px solid #333333;
   border-bottom: 1px solid #333333;
-  border-eft: 1px solid #CCCCCC;
+  border-left: 1px solid #CCCCCC;
+
+}
+.main-page-buttons:visited{
+  font-color:white;
+}
+div.main-page{
+
+}
+div.main-page-links{
+  text-align:center;
 }
