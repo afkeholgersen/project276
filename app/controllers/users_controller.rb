@@ -15,16 +15,36 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
+    @preference = Preference.new
+    @healthlabels = Healthlabel.all;
+    @dietlabels = Dietlabel.all;
+
   end
 
   # GET /users/1/edit
   def edit
+    @preference = Preference.new
   end
 
   # POST /users
   # POST /users.json
   def create
+
+    @healthlabels = Healthlabel.all;
+    @dietlabels = Dietlabel.all;
+
+    #create the new preference with the preference parameters we accept
+    @preference = Preference.new(preference_params)
+    #create the new user with the user parameters we accpet
     @user = User.new(user_params)
+
+    #assign the current preference to the user
+    @user.preference = @preference
+
+    #create a blank recipe table entry for the user to save recipes to
+    @user.savedrecipe = Savedrecipe.new
+    #assign the default user role
+    @user.role = 1;
 
     respond_to do |format|
       if @user.save
@@ -33,21 +53,34 @@ class UsersController < ApplicationController
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+      end 
     end
   end
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+
+    @healthlabels = Healthlabel.all;
+    @dietlabels = Dietlabel.all;
+
+    #create the new preference with the preference parameters we accept
+    @preference = Preference.new(preference_params)
+
+    #assign the current preference to the user and a new recipe
+    @user.preference = @preference
+    @user.savedrecipe = Savedrecipe.new
+
     respond_to do |format|
+
       if @user.update(user_params)
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user }
+        format.json { render :show, status: :found, location: @user }
       else
-        format.html { render :edit }
+        format.html { render :edit  }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
+
     end
   end
 
@@ -61,14 +94,20 @@ class UsersController < ApplicationController
     end
   end
 
+  #only call these methods within the class
   private
-    # Use callbacks to share common setup or constraints between actions.
+    
     def set_user
       @user = User.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    # Allow only certain field through
     def user_params
-      params.require(:user).permit(:username, :email, :password, :preference_id)
+      params.require(:user).permit(:username, :email, :password, :preference_id, :password_confirmation)
+    end
+
+    # Just need these two fields to create a preference
+    def preference_params
+      params.require(:preference).permit(:healthlabel_ids, :dietlabel_ids)
     end
 end

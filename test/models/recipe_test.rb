@@ -16,7 +16,7 @@ class RecipeTest < ActiveSupport::TestCase
 
 	test "Recipe to single recipe relation" do
 		r = Recipe.new
-		s = Savedrecipe.new
+		s = Savedrecipe.new 	
 
 		r.savedrecipe.push(s)
 		assert r.savedrecipe.length == 1

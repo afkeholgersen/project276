@@ -12,6 +12,7 @@
 
 
   <body>
+
     <div class="nav-fixer">
     <ul class="topnav" id="topNavBar_left">
 <!---      <li class="left"><a href="Home">Home</a></li> --->
@@ -21,13 +22,23 @@
       <li class="account">
         <a href="#" class="dropButton">Account</a>
         <div id="accountDropDownItems" class="dropDownContent">
-          <a href="Setting">Setting</a>
-          <a href="Recipes">Saved Recipes</a>
+          <% if current_user %>
+      	    <span>
+      	    	Hello <%= current_user.username %>
+      	    </span>
+            <%= link_to "Settings- points to new user for now", new_user_path%> <!--- TODO fix paths--->
+            <% link_to "Favorite Recipes-points to new user", new_user_path%>
+      	    <%= link_to "Log out", logout_path %>
+      	  <% else %>
+      	    <%= link_to "Sign up", new_user_path %>
+      	    <%= link_to "Log in", new_session_path %>
+      	  <% end %>
         </div>
       </li>
     </ul>
   </div>
 
     <%= yield %>
+
   </body>
 </html>

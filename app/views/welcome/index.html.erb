@@ -4,10 +4,18 @@
 </div>
 <div class="main-page">
   <div class="main-page-links">
-    <%= link_to "Create Account", new_user_path, :class => "main-page-buttons"%>
-    <%= link_to "Login", new_user_path, :class => "main-page-buttons" %> <!--- fix this link once page is created -->
+    
+	  <% if current_user %>
+	    <span>
+	    	Hello <%= current_user.username %>
+	    </span>
+	    <%= link_to "Log out", logout_path, :class => "main-page-buttons" %>
+	  <% else %>
+	    <%= link_to "Sign up", new_user_path, :class =>"main-page-buttons" %> or
+	    <%= link_to "Log in", new_session_path, :class =>"main-page-buttons" %>
+	  <% end %>
   </div>
-  
+
     <h1> Recipes of the week</h2>
   </div>
 </div>
