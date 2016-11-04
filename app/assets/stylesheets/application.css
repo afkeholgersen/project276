@@ -1,7 +1,7 @@
 
 ul.topnav {
     list-style-type: none;
-    margin: 0;
+    margin:0 auto;
     padding: 0;
     overflow: hidden;
     background-color: #990000;
@@ -11,12 +11,16 @@ ul.topnav {
 
 li{
   float: left;
+  display:inline-block;
+  font-size: 20px;
+  padding: 14px 16px;
+  text-decoration: none;
 }
 
 li, .dropButton{
+  font-size: 20px;
   display: inline-block;
   color: white;
-  text-align: center;
   padding: 14px 16px;
   text-decoration: none;
 }
@@ -83,14 +87,17 @@ img.logo{
   border-right: 1px solid #333333;
   border-bottom: 1px solid #333333;
   border-left: 1px solid #CCCCCC;
+  text-decoration:none;
 
 }
 .main-page-buttons:visited{
   font-color:white;
+  text-decoration:none;
 }
 div.main-page{
 
 }
 div.main-page-links{
   text-align:center;
+
 }

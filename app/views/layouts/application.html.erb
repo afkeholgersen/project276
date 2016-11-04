@@ -23,11 +23,11 @@
         <a href="#" class="dropButton">Account</a>
         <div id="accountDropDownItems" class="dropDownContent">
           <% if current_user %>
-      	    <span>
+      	  <!---  <span>
       	    	Hello <%= current_user.username %>
-      	    </span>
-            <%= link_to "Settings- points to new user for now", new_user_path%> <!--- TODO fix paths--->
-            <% link_to "Favorite Recipes-points to new user", new_user_path%>
+      	    </span> --->
+            <%= link_to "Settings*fix", new_user_path%> <!--- TODO fix paths--->
+            <%= link_to "Favorite Recipes*fix", new_user_path%>
       	    <%= link_to "Log out", logout_path %>
       	  <% else %>
       	    <%= link_to "Sign up", new_user_path %>
