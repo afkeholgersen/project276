@@ -53,7 +53,7 @@ class UsersController < ApplicationController
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
-      end 
+      end
     end
   end
 
@@ -96,7 +96,7 @@ class UsersController < ApplicationController
 
   #only call these methods within the class
   private
-    
+
     def set_user
       @user = User.find(params[:id])
     end
@@ -108,6 +108,6 @@ class UsersController < ApplicationController
 
     # Just need these two fields to create a preference
     def preference_params
-      params.require(:preference).permit(:healthlabel_ids, :dietlabel_ids)
+      params.require(:preference).permit(healthlabel_ids:[], dietlabel_ids:[])
     end
 end

@@ -16,9 +16,9 @@
     <div class="nav-fixer">
     <ul class="topnav" id="topNavBar_left">
 <!---      <li class="left"><a href="Home">Home</a></li> --->
-      <%= link_to '<li class="left">Home</li>'.html_safe, welcome_index_path %>
-      <li class="left"><input type="text" name="keyword"></li>
-      <li class="left"><input type="submit" value="Search"></li>
+      <%= link_to '<img  class= "logo-in-nav" src="/logo-reverse.png" alt="Home"/>'.html_safe, welcome_index_path %>
+  <!---    <li class="left"><input type="text" name="keyword"></li>
+      <li class="left"><input type="submit" value="Search"></li> -->
       <li class="account">
         <a href="#" class="dropButton">Account</a>
         <div id="accountDropDownItems" class="dropDownContent">
@@ -38,7 +38,9 @@
     </ul>
   </div>
 
-    <%= yield %>
 
+  <div class="main-div">
+    <%= yield %>
+  </div>
   </body>
 </html>

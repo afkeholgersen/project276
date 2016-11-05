@@ -15,6 +15,8 @@ li{
   font-size: 20px;
   padding: 14px 16px;
   text-decoration: none;
+    font-family: "Tahoma", Geneva, sans-serif;
+
 }
 
 li, .dropButton{
@@ -23,6 +25,7 @@ li, .dropButton{
   color: white;
   padding: 14px 16px;
   text-decoration: none;
+
 }
 
 li input{
@@ -32,13 +35,11 @@ li input{
 button.dropButton{
   border: none;
 }
-
 li.account{
   float: right;
   margin-right: 40px;
   display: inline-block;
 }
-
 div.dropDownContent {
   display: none;
   position: absolute;
@@ -46,7 +47,6 @@ div.dropDownContent {
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
-
 
 div.dropDownContent a {
     color: black;
@@ -62,10 +62,7 @@ li a, .dropButton {
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-
 }
-
-
 .dropdown-content a:hover {background-color: #f1f1f1}
 
 li.account:hover .dropDownContent {
@@ -79,7 +76,8 @@ img.logo{
   margin-top: 50px;
 }
 .main-page-buttons {
-  font: 30px Arial;
+  font-size: 50px;
+  font-family: "Tahoma", Geneva, sans-serif;
   background-color: #990000;
   color: white;
   padding: 2px 6px 2px 6px;
@@ -88,6 +86,7 @@ img.logo{
   border-bottom: 1px solid #333333;
   border-left: 1px solid #CCCCCC;
   text-decoration:none;
+  border-radius:10px;
 
 }
 .main-page-buttons:visited{
@@ -100,4 +99,14 @@ div.main-page{
 div.main-page-links{
   text-align:center;
 
+}
+img.logo-in-nav{
+  width: 20%;
+  height:90%;
+}
+.page-headers{
+
+}
+div.main-page{
+  margin-left:20px;
 }

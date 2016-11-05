@@ -1,24 +1,28 @@
-<p id="notice"><%= notice %></p>
+<%if current_user %>
 
-<p>
-  <strong>Username:</strong>
-  <%= @user.username %>
-</p>
+  <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Email:</strong>
-  <%= @user.email %>
-</p>
+  <p>
+    <strong>Username:</strong>
+    <%= @user.username %>
+  </p>
 
-<p>
-  <strong>Password:</strong>
-  <%= @user.password %>
-</p>
+  <p>
+    <strong>Email:</strong>
+    <%= @user.email %>
+  </p>
 
-<p>
-  <strong>Preference:</strong>
-  <%= @user.preference_id %>
-</p>
+  <p>
+    <strong>Password:</strong>
+    <%= @user.password %>
+  </p>
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+  <p>
+    <strong>Preference:</strong>
+    <%= @user.preference_id %>
+  </p>
+
+  <%= link_to 'Edit', edit_user_path(@user) %> |
+  <%= link_to 'Back', users_path %>
+
+<%end%>

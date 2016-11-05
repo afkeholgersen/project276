@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get 'welcome/index'
 
-  resources :users
+
 
   root to: 'welcome#index' #main home webpage
   get "welcome/index"
@@ -10,5 +10,5 @@ Rails.application.routes.draw do
 	get "logout" => "sessions#destroy"
 
   resources :sessions
-
+  resources :users
 end
