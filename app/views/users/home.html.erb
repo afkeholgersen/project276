@@ -1,11 +1,47 @@
 <%
-  hits = @json_resp["hits"]
+hits = @json_resp["hits"]
 
 %>
 
 
 <div class="container">
 
+  <% if @json_resp["error"].present? %>
+  <p class="well"> <%=  @json_resp["error"]%> </p>
+  <% end %>
+
+  <%= form_for(@user, html: { class:"form-inline"} ) do |f| %>
+  <% if @user.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+    <ul>
+      <% user.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+
+  <%= fields_for @user.preference do |p| %>
+
+  <div class="form-group">
+    <%= p.label :healthlabel_ids %>
+    <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, {}, {class: "form-control"} %>
+  </div>
+
+  <div class="form-group">
+    <%= p.label :dietlabel_ids %>
+    <%= p.select :dietlabel_ids, Dietlabel.all.map{|a| [a.name, a.id]}, {}, {class: "form-control"}  %>
+  </div>
+  <input type="hidden" name="redirect_to" value="home" />
+  <% end %>
+  <%= f.submit "Update preference", class: "btn btn-primary"%>
+
+  <% end %>
+
+
+  <% if hits.size > 0%>
   <p></p>
   <input type="hidden" id="to" value="<%= @json_resp["to"] %>" />
   <table class="table">
@@ -13,20 +49,23 @@
       <tr>
         <th>Recipe</th>
         <th>Health Label's</th>
+        <th>Diet Label's</th>
+        <th></th>
       </tr>
     </thead>
     <tbody id="recipies_rows">
-      <%= render "recipies" , hits: hits%>
+      <%= render "recipies" , hits: hits, user: @user%>
     </tbody>
   </table>
 
-  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right">Load More</a>
+  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a>
+
+  <% end %>
 </div>
 
 
 <script>
 function more(){
-
   $("#more_btn").addClass("disabled","disabled");
   $("#more_btn").removeClass( "btn-warning");
   $("#more_btn").addClass( "btn-default");
@@ -42,6 +81,19 @@ function more(){
     $("#more_btn").removeClass( "btn-default");
     $("#more_btn").addClass( "btn-warning");
     $("#more_btn").text( "Load More");
+  });
+}
+
+function save_recipe(ele,url){
+  $(ele).text("Saving..");
+  $.ajax({
+    method: "POST",
+    url: "<%= save_recipe_user_path %>",
+    data: { id: "<%= params[:id] %>" ,recipe_url: url},
+    dataType: "script"
+  }).done(function() {
+      $(ele).text("Saved");
+      $(ele).addClass("disabled","disabled");
   });
 }
 </script>
