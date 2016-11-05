@@ -1,6 +1,7 @@
 class User < ApplicationRecord
 	belongs_to :preference
 	belongs_to :savedrecipe
+	has_many :recipes
 
 	#does a validation of the password confirmation (checks if the password and password_confirmation matches)
 	validates :password, confirmation: true
