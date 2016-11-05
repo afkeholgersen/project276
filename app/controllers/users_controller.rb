@@ -4,7 +4,12 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    if current_user
+      redirect_to home_user_path(current_user)
+    else
+      redirect_to new_session_path
+    end
+    #@users = User.all
   end
 
   # GET /users/1
@@ -48,7 +53,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        format.html { redirect_to new_session_path, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -74,8 +79,15 @@ class UsersController < ApplicationController
     respond_to do |format|
 
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        format.json { render :show, status: :found, location: @user }
+        if params[:redirect_to].present?
+          format.html { redirect_to home_user_path(@user), notice: 'User was successfully updated.' }
+          format.json { render :show, status: :found, location: @user }
+        else
+          format.html { redirect_to @user, notice: 'User was successfully updated.' }
+          format.json { render :show, status: :found, location: @user }
+        end
+
+
       else
         format.html { render :edit  }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -101,19 +113,112 @@ class UsersController < ApplicationController
       faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
     end
 
-    url_params = ""
+    @user = User.find(params[:id])
+    health = @user.preference.healthlabel.first.apiparameter rescue ""
+    diet = @user.preference.dietlabel.first.apiparameter rescue ""
+
+    url_hash = {:q => "", :app_id => "ed2714cc", :app_key => "81029d1bb3daad9d1bdaf4a46adca6b2"}
+    url_hash[:diet] = diet
+    url_hash[:health] = health
+
     if params[:to].present?
       f = params[:to].to_i
       l = f +10
-      url_params='&from=' + f.to_s + '&to=' + l.to_s
+      url_hash[:from] =  f.to_s
+      url_hash[:to] = l.to_s
     end
-    @user = User.find(params[:id])
-    item = ""
-    item = @user.preference.healthlabel.first.name rescue "chiken"
 
-    response = conn.get "/search?q=#{item}&app_id=ed2714cc&app_key=81029d1bb3daad9d1bdaf4a46adca6b2"+url_params
-    @json_resp = JSON.parse(response.body)
+    url_params = url_hash.to_query
+
+    response = conn.get "/search?"+url_params
+    if response.status == 403
+      @json_resp= JSON.parse({:hits => {}, :error => "No results found for search criteria Diet=#{diet} & Health=#{health}"}.to_json)
+    else
+      @json_resp = JSON.parse(response.body)
+    end
   end
+
+  def save_recipe
+    @user = User.find(params[:id])
+    recipie_url = params[:recipe_url]
+    recipe_exists = @user.recipes.where(:recipe_id => recipie_url).first
+    rcp = @user.recipes.build(:recipe_id => recipie_url)
+    if !recipe_exists && rcp.save
+      save_recipes_attributes(rcp, recipie_url)
+      @message = "Saved successfully"
+    elsif recipe_exists
+       @message = "Recipe is available in your saved recipes list"
+    else
+      @message = "Unable to save recipe "+@user.errors.full_messages.to_sentence
+    end
+  end
+
+  def my_recipes
+    @user = User.find(params[:id])
+    @recipes = @user.recipes
+  end
+
+  def save_recipes_attributes(recipe, recipe_id)
+    conn = Faraday.new(:url => 'https://api.edamam.com') do |faraday|
+      faraday.request  :url_encoded             # form-encode POST params
+      faraday.response :logger                  # log requests to STDOUT
+      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+    end
+
+    url_hash = {:r => recipe_id, :app_id => "ed2714cc", :app_key => "81029d1bb3daad9d1bdaf4a46adca6b2"}
+    url_params = url_hash.to_query
+
+    response = conn.get "/search?"+url_params
+    if response.status == 403
+      @json_resp= JSON.parse({:hits => {}, :error => "No results found for search criteria Diet=#{diet} & Health=#{health}"}.to_json)
+    else
+      @json_resp = JSON.parse(response.body)
+    end
+    resp = @json_resp[0]
+
+    recipe.recipe_name = resp["label"]
+    recipe.image_url= resp["image"]
+    recipe.share_as = resp["shareAs"]
+    recipe.dietLabels= resp["dietLabels"].to_s
+    recipe.healthLabels= resp["healthLabels"].to_s
+    recipe.cautions= resp["cautions"].to_s
+    recipe.source= resp["source"]
+    recipe.sourceIcon= resp["sourceIcon"]
+    recipe.calories= resp["calories"].to_s
+    recipe.totalWeight= resp["totalWeight"].to_s
+    recipe.save
+
+
+    recipe.save
+    resp["ingredients"].each do |i|
+      igt =recipe.ingredients.build(text: i["text"], quantity: i["quantity"], measure: i["measure"], food: i["food"], weight: i["weight"])
+      igt.save!
+    end
+
+    resp["ingredientLines"].each do |i|
+      igt =recipe.ingredient_lines.build(text: i)
+      igt.save!
+    end
+
+    resp["totalNutrients"].each do |i|
+      k = i[0]
+      v = i[1]
+      igt =recipe.total_nutrient_nodes.build(label: v["label"], quantity: v["quantity"], unit: v["unit"], node_label: k)
+      igt.save!
+    end
+
+    resp["totalDaily"].each do |i|
+      k = i[0]
+      v = i[1]
+      igt =recipe.total_daily_nodes.build(label: v["label"], quantity: v["quantity"], unit: v["unit"], node_label: k)
+      igt.save!
+    end
+
+
+
+
+  end
+
 
   #only call these methods within the class
   private
@@ -124,6 +229,7 @@ class UsersController < ApplicationController
 
     # Allow only certain field through
     def user_params
+      return {} if params[:user].blank?
       params.require(:user).permit(:username, :email, :password, :preference_id, :password_confirmation)
     end
 
