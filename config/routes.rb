@@ -1,11 +1,14 @@
 Rails.application.routes.draw do
 
-	get "logout" => "sessions#destroy"
+  resources :recipes
+  get "logout" => "sessions#destroy"
 
 
   resources :users do
     member do
       get :home
+      get :my_recipes
+      post :save_recipe
     end
     collection do
 
