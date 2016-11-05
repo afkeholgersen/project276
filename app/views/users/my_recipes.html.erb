@@ -1,0 +1,29 @@
+
+<div class="container">
+  <h1>My Recipes</h1>
+  <% if @recipes.size == 0 %>
+    <p class="well"> No save recipes</p>
+  <% end %>
+
+  <% if @recipes.size > 0%>
+  <p></p>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Recipe</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="recipies_rows">
+        <% @recipes.each do |r| %>
+        <tr>
+          <td> <a target="_blank" href="<%= recipe_path(r) %>"><img src="<%= r.image_url%>" width="50"> &nbsp;&nbsp; <%= r.recipe_name %></a></td>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  <% end %>
+</div>
