@@ -1,0 +1,50 @@
+<div class="container" style="margin-bottom:300px;">
+
+  <br/>
+
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="row">
+        <div class="col-xs-4">
+          <img src="<%= @recipe.image_url %>" width="100"/>
+        </div>
+        <div class="col-xs-8">
+          <h3><%= @recipe.recipe_name %></h3>
+          <b style="color:blue;">* Information below is for 1 serving</b>
+        </div>
+      </div>
+
+        <p>
+          <a href="<%= @recipe.share_as %>" >Share</a> &nbsp; &nbsp;<a href="<%= @recipe.recipe_id %>" >Recipe ID</a>
+        </p>
+        <h4><%= @recipe.ingredients.size %> Ingredients</h4>
+        <% @recipe.ingredient_lines.each do |i| %>
+        <p><%= i.text %></p>
+        <% end %>
+
+        <p><b>Diet Labels:</b> <%= @recipe.dietLabels.tr('[ ] " ', '')   rescue @recipe.dietLabels %></p>
+        <p><b>Health Labels:</b> <%= @recipe.healthLabels.tr('[ ] " ', '')  rescue @recipe.healthLabels%></p>
+        <p>Cautions: <%= @recipe.cautions.tr('[ ] " ', '')  rescue @recipe.cautions %></p>
+
+        <p><b>Calories/Serving:</b> <%= @recipe.calories.to_f.round %></p>
+        <p>Total weight: <%= @recipe.totalWeight %></p>
+
+      </div>
+      <div class="col-xs-6">
+        <h3>Total Nutrients</h3>
+        <% @recipe.total_nutrient_nodes.each do |d| %>
+
+        <b><% d.node_label %></b>
+        <p>
+          <b><%= d.label %>   &nbsp;&nbsp;&nbsp;  </b>
+          <%= d.quantity.to_f.round %><%= d.unit %>&nbsp;&nbsp;
+          <% daily_node = @recipe.total_daily_nodes.where(node_label: d.node_label).first %>
+          <% if daily_node.present? %>
+          <%= daily_node.quantity.to_f.round %><%= daily_node.unit %>
+          <% end %>
+        </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
