@@ -16,17 +16,17 @@ class User < ApplicationRecord
 	validates_uniqueness_of :username
 
  	before_save :encrypt_password
-  
+
   #need to use self so that we can call it like a static method (User.authenticate)
   def self.authenticate(username, password)
-    user = find_by_username(username)
+    user = find_by_email(username)
     if user && user.password == BCrypt::Engine.hash_secret(password, user.salt)
       user
     else
       nil
     end
   end
-  
+
   #method to salt and create the encrypted password
   def encrypt_password
     if password.present?

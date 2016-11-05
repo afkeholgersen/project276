@@ -1,0 +1,2 @@
+$("#recipies_rows").append("<%= escape_javascript render 'recipies', hits:  @json_resp['hits'] %>");
+$("#to").val("<%= @json_resp["to"] %>");

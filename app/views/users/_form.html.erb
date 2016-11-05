@@ -1,4 +1,4 @@
-<%= form_for(user) do |f| %>
+<%= form_for(user, class:"form" ) do |f| %>
   <% if user.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -11,7 +11,7 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :username %>
     <%= f.text_field :username %>
   </div>
@@ -24,25 +24,28 @@
   <div class="field">
     <%= f.label :password %>
     <%= f.password_field :password %>
+
+
+  </div>
+  <div class="field">
     <%= f.label :password_confirmation %>
     <%= f.password_field :password_confirmation %>
   </div>
-
   <%= fields_for @preference do |p| %>
 
     <div class="field">
       <%= p.label :healthlabel_ids %>
-      <%= p.number_field :healthlabel_ids  %>
+      <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]} %>
     </div>
 
     <div class="field">
       <%= p.label :dietlabel_ids %>
-      <%= p.number_field :dietlabel_ids  %>
+      <%= p.select :dietlabel_ids, Dietlabel.all.map{|a| [a.name, a.id]} %>
     </div>
 
   <% end %>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit class: "btn btn-primary"%>
   </div>
 <% end %>

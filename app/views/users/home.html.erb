@@ -1,0 +1,47 @@
+<%
+  hits = @json_resp["hits"]
+
+%>
+
+
+<div class="container">
+
+  <p></p>
+  <input type="hidden" id="to" value="<%= @json_resp["to"] %>" />
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Recipe</th>
+        <th>Health Label's</th>
+      </tr>
+    </thead>
+    <tbody id="recipies_rows">
+      <%= render "recipies" , hits: hits%>
+    </tbody>
+  </table>
+
+  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right">Load More</a>
+</div>
+
+
+<script>
+function more(){
+
+  $("#more_btn").addClass("disabled","disabled");
+  $("#more_btn").removeClass( "btn-warning");
+  $("#more_btn").addClass( "btn-default");
+  $("#more_btn").text( "Loading...");
+
+  $.ajax({
+    method: "GET",
+    url: "<%= home_user_path(@user) %>",
+    data: { id: "<%= params[:id] %>" ,to: $("#to").val()},
+    dataType: "script"
+  }).done(function() {
+    $("#more_btn").removeClass("disabled","disabled");
+    $("#more_btn").removeClass( "btn-default");
+    $("#more_btn").addClass( "btn-warning");
+    $("#more_btn").text( "Load More");
+  });
+}
+</script>

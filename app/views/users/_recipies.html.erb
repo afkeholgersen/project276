@@ -1,0 +1,7 @@
+<% hits.each do |h| %>
+ <% r =  h["recipe"]%>
+<tr>
+  <td> <a target="_blank" href="<%= r["url"]%>"><img src="<%= r["image"]%>" width="50"> &nbsp;&nbsp; <%= r["label"] %></a></td>
+  <td> <%= r["healthLabels"].to_sentence %></td>
+</tr>
+<% end %>
