@@ -20,7 +20,7 @@ class User < ApplicationRecord
 
   #need to use self so that we can call it like a static method (User.authenticate)
   def self.authenticate(username, password)
-    user = find_by_email(username)
+    user = find_by_username(username)
     if user && user.password == BCrypt::Engine.hash_secret(password, user.salt)
       user
     else
