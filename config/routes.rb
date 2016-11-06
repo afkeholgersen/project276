@@ -1,19 +1,14 @@
 Rails.application.routes.draw do
-
-  resources :recipes
-  get "logout" => "sessions#destroy"
+  get 'welcome/index'
 
 
-  resources :users do
-    member do
-      get :home
-      get :my_recipes
-      post :save_recipe
-    end
-    collection do
 
-    end
-  end
+  root to: 'welcome#index' #main home webpage
+  get "welcome/index"
+  get "users/new"
+
+	get "logout" => "sessions#destroy"
+
   resources :sessions
-  root "users#index"
+  resources :users
 end

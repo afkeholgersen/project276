@@ -1,3 +1,4 @@
+<%= stylesheet_link_tag 'form' %>
 <%= form_for(user, class:"form" ) do |f| %>
   <% if user.errors.any? %>
     <div id="error_explanation">
@@ -10,8 +11,8 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="form-group">
+<div class=enclosure>
+  <div class="field">
     <%= f.label :username %>
     <%= f.text_field :username %>
   </div>
@@ -48,4 +49,5 @@
   <div class="actions">
     <%= f.submit class: "btn btn-primary"%>
   </div>
+</div>
 <% end %>
