@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :home]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :home, :save_recipe, :my_recipes]
 
   # GET /users
   # GET /users.json
@@ -107,44 +107,71 @@ class UsersController < ApplicationController
   end
 
   def home
-    conn = Faraday.new(:url => 'https://api.edamam.com') do |faraday|
+    health = @user.preference.healthlabel.first.apiparameter rescue ""
+    diet = @user.preference.dietlabel.first.apiparameter rescue ""
+
+    response,req_status = initiate_recommendation_request(params,{diet: diet, health: health})
+
+    if req_status.to_i == 403 || req_status.to_i == 404
+      ############################
+      response,req_status = initiate_recommendation_request(params,{diet: diet})
+
+      if req_status != 403 && req_status != 404
+        # show recommendations based on diet if combination of Diet & Health fails
+          resp = response.body
+      else
+
+        response,req_status = initiate_recommendation_request(params,{health: health})
+
+        if req_status != 403 && req_status != 404
+          # show recommendations based on health if combination of (Diet & Health fails) as well as only Diet- fails
+          resp = response.body
+        end
+      end
+
+      if resp == nil
+        # If no labels renders results then show then top recipes
+        response,req_status = initiate_recommendation_request(params,{q: "ALL"})
+        if req_status != 403 || req_status != 404
+          resp = response.body
+        else
+          resp = {:hits => {}, :error => "No results found for search criteria"}.to_json
+        end
+      end
+
+      @json_resp = JSON.parse(resp)
+    else
+      # Success with both diet & health labels
+      @json_resp = JSON.parse(response.body)
+    end
+  end
+
+  def initiate_recommendation_request(params,request_params_hash)
+    conn = Faraday.new(:url => ENV['API_URL'] ) do |faraday|
       faraday.request  :url_encoded             # form-encode POST params
       faraday.response :logger                  # log requests to STDOUT
       faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
     end
 
-    @user = User.find(params[:id])
-    health = @user.preference.healthlabel.first.apiparameter rescue ""
-    diet = @user.preference.dietlabel.first.apiparameter rescue ""
-
-    url_hash = {:q => "", :app_id => "ed2714cc", :app_key => "81029d1bb3daad9d1bdaf4a46adca6b2"}
-    url_hash[:diet] = diet
-    url_hash[:health] = health
-
+    url_hash = {:q => "", :app_id => ENV['APP_ID'] , :app_key => ENV['APP_KEY']}
     if params[:to].present?
       f = params[:to].to_i
       l = f +10
       url_hash[:from] =  f.to_s
       url_hash[:to] = l.to_s
     end
+    url_hash = url_hash.merge(request_params_hash)
 
     url_params = url_hash.to_query
-
     response = conn.get "/search?"+url_params
-    if response.status == 403
-      @json_resp= JSON.parse({:hits => {}, :error => "No results found for search criteria Diet=#{diet} & Health=#{health}"}.to_json)
-    else
-      @json_resp = JSON.parse(response.body)
-    end
+    return [response,response.status]
   end
 
   def save_recipe
-    @user = User.find(params[:id])
     recipie_url = params[:recipe_url]
     recipe_exists = @user.recipes.where(:recipe_id => recipie_url).first
-    rcp = @user.recipes.build(:recipe_id => recipie_url)
-    if !recipe_exists && rcp.save
-      save_recipes_attributes(rcp, recipie_url)
+
+    if !recipe_exists && save_recipes_attributes(@user,recipie_url)
       @message = "Saved successfully"
     elsif recipe_exists
        @message = "Recipe is available in your saved recipes list"
@@ -154,68 +181,70 @@ class UsersController < ApplicationController
   end
 
   def my_recipes
-    @user = User.find(params[:id])
     @recipes = @user.recipes
   end
 
-  def save_recipes_attributes(recipe, recipe_id)
-    conn = Faraday.new(:url => 'https://api.edamam.com') do |faraday|
+  def save_recipes_attributes(user,recipe_id)
+
+    recipe = user.recipes.build(:recipe_id => recipe_id)
+
+    conn = Faraday.new(:url => ENV['API_URL'] ) do |faraday|
       faraday.request  :url_encoded             # form-encode POST params
       faraday.response :logger                  # log requests to STDOUT
       faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
     end
 
-    url_hash = {:r => recipe_id, :app_id => "ed2714cc", :app_key => "81029d1bb3daad9d1bdaf4a46adca6b2"}
+    url_hash = {:r => recipe_id, :app_id => ENV['APP_ID'] , :app_key => ENV['APP_KEY']}
     url_params = url_hash.to_query
 
     response = conn.get "/search?"+url_params
-    if response.status == 403
-      @json_resp= JSON.parse({:hits => {}, :error => "No results found for search criteria Diet=#{diet} & Health=#{health}"}.to_json)
+    if response.status == 403 || response.status == 404
+      @json_resp= JSON.parse({:hits => {}, :error => "Unable to fetch recipe."}.to_json)
+      return false
     else
       @json_resp = JSON.parse(response.body)
     end
     resp = @json_resp[0]
 
     recipe.recipe_name = resp["label"]
-    recipe.image_url= resp["image"]
+    recipe.image_url = resp["image"]
     recipe.share_as = resp["shareAs"]
-    recipe.dietLabels= resp["dietLabels"].to_s
-    recipe.healthLabels= resp["healthLabels"].to_s
-    recipe.cautions= resp["cautions"].to_s
-    recipe.source= resp["source"]
-    recipe.sourceIcon= resp["sourceIcon"]
-    recipe.calories= resp["calories"].to_s
-    recipe.totalWeight= resp["totalWeight"].to_s
-    recipe.save
+    recipe.dietLabels = resp["dietLabels"].to_s
+    recipe.healthLabels = resp["healthLabels"].to_s
+    recipe.cautions = resp["cautions"].to_s
+    recipe.source = resp["source"]
+    recipe.sourceIcon = resp["sourceIcon"]
+    recipe.calories = resp["calories"].to_s
+    recipe.totalWeight = resp["totalWeight"].to_s
 
+    if recipe.save
+      resp["ingredients"].each do |i|
+        igt =recipe.ingredients.build(text: i["text"], quantity: i["quantity"], measure: i["measure"], food: i["food"], weight: i["weight"])
+        igt.save!
+      end
 
-    recipe.save
-    resp["ingredients"].each do |i|
-      igt =recipe.ingredients.build(text: i["text"], quantity: i["quantity"], measure: i["measure"], food: i["food"], weight: i["weight"])
-      igt.save!
+      resp["ingredientLines"].each do |i|
+        igt =recipe.ingredient_lines.build(text: i)
+        igt.save!
+      end
+
+      resp["totalNutrients"].each do |i|
+        k = i[0]
+        v = i[1]
+        igt =recipe.total_nutrient_nodes.build(label: v["label"], quantity: v["quantity"], unit: v["unit"], node_label: k)
+        igt.save!
+      end
+
+      resp["totalDaily"].each do |i|
+        k = i[0]
+        v = i[1]
+        igt =recipe.total_daily_nodes.build(label: v["label"], quantity: v["quantity"], unit: v["unit"], node_label: k)
+        igt.save!
+      end
+      return true
+    else
+      return false
     end
-
-    resp["ingredientLines"].each do |i|
-      igt =recipe.ingredient_lines.build(text: i)
-      igt.save!
-    end
-
-    resp["totalNutrients"].each do |i|
-      k = i[0]
-      v = i[1]
-      igt =recipe.total_nutrient_nodes.build(label: v["label"], quantity: v["quantity"], unit: v["unit"], node_label: k)
-      igt.save!
-    end
-
-    resp["totalDaily"].each do |i|
-      k = i[0]
-      v = i[1]
-      igt =recipe.total_daily_nodes.build(label: v["label"], quantity: v["quantity"], unit: v["unit"], node_label: k)
-      igt.save!
-    end
-
-
-
 
   end
 
@@ -224,7 +253,17 @@ class UsersController < ApplicationController
   private
 
     def set_user
-      @user = User.find(params[:id])
+      p_user = User.find(params[:id]) rescue nil
+      @user = current_user
+      if @user.blank? || (@user != p_user)
+        if @user.blank?
+          flash[:notice] = "Log in/ sign up to continue"
+          redirect_to new_session_path and return
+        else
+          flash[:notice] = "Unauthorized access"
+          redirect_to home_user_path(@user) and return
+        end
+      end
     end
 
     # Allow only certain field through
