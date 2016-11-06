@@ -1,3 +1,4 @@
+<%= stylesheet_link_tag 'form' %>
 <%= form_for(user) do |f| %>
   <% if user.errors.any? %>
     <div id="error_explanation">
@@ -10,35 +11,36 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= f.label :username %>
-    <%= f.text_field :username %>
-  </div>
-
-  <div class="field">
-    <%= f.label :email %>
-    <%= f.text_field :email %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %>
-    <%= f.password_field :password %>
-    <%= f.label :password_confirmation %>
-    <%= f.password_field :password_confirmation %>
-  </div>
-
-  <%= fields_for @preference do |p| %>
-
+  <div class="enclosure">
     <div class="field">
-      <%= p.label :healthlabel_ids %>
-      <%= p.number_field :healthlabel_ids  %>
+      <%= f.label :username %>
+      <%= f.text_field :username %>
     </div>
 
     <div class="field">
-      <%= p.label :dietlabel_ids %>
-      <%= p.number_field :dietlabel_ids  %>
+      <%= f.label :email %>
+      <%= f.text_field :email %>
     </div>
+
+    <div class="field">
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation %>
+    </div>
+
+    <%= fields_for @preference do |p| %>
+
+      <div class="field">
+        <%= p.label :healthlabel_ids %>
+        <%= p.number_field :healthlabel_ids  %>
+      </div>
+
+      <div class="field">
+        <%= p.label :dietlabel_ids %>
+        <%= p.number_field :dietlabel_ids  %>
+      </div>
+  </div>
 
   <% end %>
 
