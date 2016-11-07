@@ -5,7 +5,11 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     if current_user
-      redirect_to home_user_path(current_user)
+      if current_user.role == 2
+          redirect_to users_adminhome_path
+      else 
+        redirect_to home_user_path(current_user)
+      end
     else
       redirect_to new_session_path
     end
@@ -104,6 +108,10 @@ class UsersController < ApplicationController
       format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def adminhome
+    @users = User.all
   end
 
   def home
@@ -259,10 +267,16 @@ class UsersController < ApplicationController
         if @user.blank?
           flash[:notice] = "Log in/ sign up to continue"
           redirect_to new_session_path and return
-        else
+
+        elsif @user != p_user && @user.role == 1
           flash[:notice] = "Unauthorized access"
           redirect_to home_user_path(@user) and return
+        
+        else
+          @user = User.find(params[:id])
         end
+
+
       end
     end
 
