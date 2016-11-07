@@ -111,6 +111,11 @@ class UsersController < ApplicationController
   end
 
   def adminhome
+    if current_user
+      if current_user.role != 2
+        redirect_to home_user_path(current_user)
+      end
+    end
     @users = User.all
   end
 
@@ -272,7 +277,9 @@ class UsersController < ApplicationController
           flash[:notice] = "Unauthorized access"
           redirect_to home_user_path(@user) and return
         
-        else
+        #case where user is an admin
+        elsif @user.role == 2
+          #we set the current user to whichever one the admin put in the url
           @user = User.find(params[:id])
         end
 
