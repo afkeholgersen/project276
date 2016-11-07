@@ -290,7 +290,7 @@ class UsersController < ApplicationController
     # Allow only certain field through
     def user_params
       return {} if params[:user].blank?
-      params.require(:user).permit(:username, :email, :password, :preference_id, :password_confirmation)
+      params.require(:user).permit(:username, :email, :password, :preference_id, :password_confirmation, :role)
     end
 
     # Just need these two fields to create a preference
