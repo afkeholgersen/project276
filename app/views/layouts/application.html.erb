@@ -26,9 +26,10 @@
       	  <!---  <span>
       	    	Hello <%= current_user.username %>
       	    </span> --->
-            <%= link_to "Settings*fix", new_user_path%> <!--- TODO fix paths--->
-            <%= link_to "Favorite Recipes*fix", new_user_path%>
-      	    <%= link_to "Log out", logout_path %>
+            <%= link_to "Recommended Recipes", home_user_path(current_user) %>
+            <%= link_to "Favorite Recipes",  my_recipes_user_path(current_user) %>
+      	    <%= link_to "Settings", edit_user_path(current_user)%>
+            <%= link_to "Log out", logout_path %>
       	  <% else %>
       	    <%= link_to "Sign up", new_user_path %>
       	    <%= link_to "Log in", new_session_path %>
