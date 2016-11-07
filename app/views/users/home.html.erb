@@ -2,7 +2,7 @@
 hits = @json_resp["hits"]
 
 %>
-
+<!---
 
 <div class="container">
   <p id="notice"><%= notice %></p>
@@ -27,12 +27,12 @@ hits = @json_resp["hits"]
   <%= fields_for @user.preference do |p| %>
 
   <div class="form-group">
-    <%= p.label "Health Label" %> <!---was :healthlabel_ids --->
+    <%= p.label "Health Label" %> was :healthlabel_ids
     <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, {:include_blank => "Select"}, {class: "form-control"} %>
   </div>
 
   <div class="form-group">
-    <%= p.label "Diet Label" %> <!--- was: :dietlabel_ids --->
+    <%= p.label "Diet Label" %> was: :dietlabel_ids
     <%= p.select :dietlabel_ids, Dietlabel.all.map{|a| [a.name, a.id]}, {:include_blank => "Select"}, {class: "form-control"}  %>
   </div>
   <input type="hidden" name="redirect_to" value="home" />
@@ -40,8 +40,8 @@ hits = @json_resp["hits"]
   <%= f.submit "Update preference", class: "btn btn-primary"%>
 
   <% end %>
-
-
+--->
+<h1 class="page-headers">Recommended for You </h1> 
   <% if hits.size > 0%>
   <p></p>
   <input type="hidden" id="to" value="<%= @json_resp["to"] %>" />
