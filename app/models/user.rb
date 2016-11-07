@@ -36,4 +36,9 @@ class User < ApplicationRecord
     end
   end
 
+  def self.curr_recipe_exists(user, param)
+    recipe_exists = user.recipes.where(:recipe_id => param)
+    recipe_exists.length
+  end
+
 end
