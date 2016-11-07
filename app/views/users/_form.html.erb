@@ -32,17 +32,19 @@
     <%= f.label :password_confirmation %>
     <%= f.password_field :password_confirmation %>
   </div>
-  <%= fields_for @preference do |p| %>
 
-    <div class="field">
-      <%= p.label :healthlabel_ids %>
-      <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, :include_blank => "Select" %>
-    </div>
+  <%= fields_for @user.preference do |p| %>
 
-    <div class="field">
-      <%= p.label :dietlabel_ids %>
-      <%= p.select :dietlabel_ids, Dietlabel.all.map{|a| [a.name, a.id]}, :include_blank => "Select" %>
-    </div>
+  <div class="field">
+    <%= p.label :healthlabel_ids %>
+    <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, :include_blank => "Select" %>
+  </div>
+
+  <div class="field">
+    <%= p.label :dietlabel_ids %>
+    <%= p.select :dietlabel_ids, Dietlabel.all.map{|a| [a.name, a.id]}, :include_blank => "Select" %>
+  </div>
+
 
   <% end %>
 

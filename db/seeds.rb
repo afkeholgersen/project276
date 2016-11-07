@@ -7,9 +7,9 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
-Dietlabel.create([  
+Dietlabel.create([
 
-{name: 'Balanced', apiparameter: 'balanced', description: 'Protein/Fat/Carb values in 15/35/50 ratio'}, 
+{name: 'Balanced', apiparameter: 'balanced', description: 'Protein/Fat/Carb values in 15/35/50 ratio'},
 {name: 'High-Fiber', apiparameter: 'high-fiber', description: 'More than 5g fiber per serving'},
 {name: 'High-Protein', apiparameter: 'high-protein', description: 'More than 50% of total calories from proteins'},
 {name: 'Low-Carb', apiparameter: 'low-carb', description: 'Less than 20% of total calories from carbs'},
@@ -32,7 +32,7 @@ Healthlabel.create([
 {name: 'Low potassium', apiparameter: 'low-potassium', description: 'Less than 150mg per serving'},
 {name: 'Lupine-free', apiparameter: 'lupine-free', description: 'does not contain lupine or derivatives'},
 {name: 'Mustard-free', apiparameter: 'mustard-free', description: 'does not contain mustard or derivatives'},
-{name: 'n/a', apiparameter: 'low-fat-abs', description: 'Less than 3g of fat per serving'},
+#{name: 'n/a', apiparameter: 'low-fat-abs', description: 'Less than 3g of fat per serving'},
 {name: 'No oil added', apiparameter: 'No-oil-added', description: 'No oil added except to what is contained in the basic ingredients'},
 {name: 'No-sugar', apiparameter: 'low-sugar', description: 'No simple sugars &#8211; glucose, dextrose, galactose, fructose, sucrose, lactose, maltose'},
 {name: 'Paleo', apiparameter: 'paleo', description: 'Excludes what are perceived to be agricultural products; grains, legumes, dairy products, potatoes, refined salt, refined sugar, and processed oils'},
