@@ -196,6 +196,11 @@ class UsersController < ApplicationController
   def my_recipes
     @recipes = @user.recipes
   end
+  
+  def recipe_exists
+    recipie_url = params[:recipe_url]
+    recipe_exists = @user.recipes.where(:recipe_id => recipie_url).first
+  end
 
   def save_recipes_attributes(user,recipe_id)
 
