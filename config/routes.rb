@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get 'welcome/index'
 
+  resources :recipes
 
 
   root to: 'welcome#index' #main home webpage
@@ -21,5 +22,5 @@ Rails.application.routes.draw do
 
     end
   end
-  
+
 end
