@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  text: MyText
+  quantity: MyString
+  measure: MyString
+  food: MyString
+  weight: MyString
+  recipe_id: 1
+
+two:
+  text: MyText
+  quantity: MyString
+  measure: MyString
+  food: MyString
+  weight: MyString
+  recipe_id: 1

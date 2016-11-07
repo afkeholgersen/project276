@@ -1,3 +1,14 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  get 'welcome/index'
+
+
+
+  root to: 'welcome#index' #main home webpage
+  get "welcome/index"
+  get "users/new"
+
+	get "logout" => "sessions#destroy"
+
+  resources :sessions
+  resources :users
 end

@@ -1,0 +1,21 @@
+
+<div class="logo">
+  <img  class= "logo" src="/logo.jpg" alt="logo" />
+</div>
+<div class="main-page">
+  <div class="main-page-links">
+
+	  <% if current_user %>
+	    <h1>
+	    	Hello <%= current_user.username %>!
+	    </h1>
+	    <%= link_to "Log out", logout_path, :class => "main-page-buttons" %>
+	  <% else %>
+	    <%= link_to "Sign up", new_user_path, :class =>"main-page-buttons" %>
+	    <%= link_to "Log in", new_session_path, :class =>"main-page-buttons" %>
+	  <% end %>
+  </div>
+
+    <h1 style="left='10px'"> Recipes of the week</h2>
+  </div>
+</div>

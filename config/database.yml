@@ -25,6 +25,7 @@ development:
   <<: *default
   database: project276_development
 
+
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
@@ -83,3 +84,8 @@ production:
   database: project276_production
   username: project276
   password: <%= ENV['PROJECT276_DATABASE_PASSWORD'] %>
+
+
+
+#DATABASE_URL='postgres://mveugzxupnbsrw:rq0ZCptCMR6-0HFXdTQCH9d6NO@ec2-174-129-209-53.compute-1.amazonaws.com:5432/d2k45v6b4t0m58'
+>>>>>>> Control

@@ -4,11 +4,43 @@
     <title>Project276</title>
     <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <!---  <link rel="stylesheet" type="text/css" href="application.css">
+    <script src="application.js" type="text/javascript"></script> --->
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
   </head>
 
+
   <body>
+
+    <div class="nav-fixer">
+    <ul class="topnav" id="topNavBar_left">
+<!---      <li class="left"><a href="Home">Home</a></li> --->
+      <%= link_to '<img  class= "logo-in-nav" src="/logo-reverse.png" alt="Home"/>'.html_safe, welcome_index_path %>
+  <!---    <li class="left"><input type="text" name="keyword"></li>
+      <li class="left"><input type="submit" value="Search"></li> -->
+      <li class="account">
+        <a href="#" class="dropButton">Account</a>
+        <div id="accountDropDownItems" class="dropDownContent">
+          <% if current_user %>
+      	  <!---  <span>
+      	    	Hello <%= current_user.username %>
+      	    </span> --->
+            <%= link_to "Settings*fix", new_user_path%> <!--- TODO fix paths--->
+            <%= link_to "Favorite Recipes*fix", new_user_path%>
+      	    <%= link_to "Log out", logout_path %>
+      	  <% else %>
+      	    <%= link_to "Sign up", new_user_path %>
+      	    <%= link_to "Log in", new_session_path %>
+      	  <% end %>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+
+  <div class="main-div">
     <%= yield %>
+  </div>
   </body>
 </html>
