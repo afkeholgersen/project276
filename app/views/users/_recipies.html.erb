@@ -1,7 +1,8 @@
 <% hits.each do |h| %>
  <% r =  h["recipe"]%>
 <tr>
-  <td> <a target="_blank" href="<%= r["url"]%>"><img src="<%= r["image"]%>" width="50"> &nbsp;&nbsp; <%= r["label"] %></a></td>
+  <td> <a target="_blank" href="<%= r["url"]%>"><img src="<%= r["image"]%>" width="120"> &nbsp; </a></td>
+  <td> <a target="_blank" href="<%= r["url"]%>"><%= r["label"] %> </a></td>
   <td> <%= r["healthLabels"].to_sentence %></td>
   <td> <%= r["dietLabels"].to_sentence %></td>
   <td><a href="javascript:void(0);" onclick="save_recipe($(this),'<%= r['uri'] %>')"> Save recipe</a>

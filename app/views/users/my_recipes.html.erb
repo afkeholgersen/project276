@@ -1,8 +1,8 @@
 
 <div class="container">
-
+<h1 class="page-headers"> Saved Recipes</h2>
   <% if @recipes.size == 0 %>
-    <p class="well"> No saved recipes!</p>
+    <p class="well"> No saved recipes... yet!</p>
   <% end %>
 
   <% if @recipes.size > 0%>
@@ -11,14 +11,16 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Recipe</th>
           <th></th>
+          <th>Recipe</th>
         </tr>
       </thead>
       <tbody id="recipies_rows">
         <% @recipes.each do |r| %>
         <tr>
-          <td> <a target="_blank" href="<%= recipe_path(r) %>"><img src="<%= r.image_url%>" width="50"> &nbsp;&nbsp; <%= r.recipe_name %></a></td>
+          <td> <a target="_blank" href="<%= recipe_path(r) %>"><img src="<%= r.image_url%>" width="130"> </a></td>
+          </td>
+          <td> <a target="_blank" href="<%= recipe_path(r) %>"><%= r.recipe_name %></a></td>
           </td>
         </tr>
         <% end %>

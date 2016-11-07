@@ -112,10 +112,24 @@ img.logo-in-nav{
 div.main-page{
   margin-left:20px;
 }
-table.table{
+table.table {
   font-family: "Tahoma", Geneva, sans-serif;
+  border collapse:collapse;
+}
+table.table a:link, table.table a:visited, table a:active{
+  text-decoration:none;
+  color:#990000;
 
 }
-#recipes_rows{
+table.th, table.td{
+  padding:10px;
 
+}
+table.th{
+  font-size:50px;
+}
+
+table.table a:hover {
+  text-decoration:underline;
+  color: #727272;
 }
