@@ -80,7 +80,6 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  <<: *default
   database: project276_production
   username: project276
   password: <%= ENV['PROJECT276_DATABASE_PASSWORD'] %>
@@ -88,4 +87,3 @@ production:
 
 
 #DATABASE_URL='postgres://mveugzxupnbsrw:rq0ZCptCMR6-0HFXdTQCH9d6NO@ec2-174-129-209-53.compute-1.amazonaws.com:5432/d2k45v6b4t0m58'
->>>>>>> Control
