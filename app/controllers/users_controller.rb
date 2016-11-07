@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     if current_user
       if current_user.role == 2
           redirect_to users_adminhome_path
-      else 
+      else
         redirect_to home_user_path(current_user)
       end
     else
@@ -196,10 +196,11 @@ class UsersController < ApplicationController
   def my_recipes
     @recipes = @user.recipes
   end
-  
+
   def recipe_exists
     recipie_url = params[:recipe_url]
     recipe_exists = @user.recipes.where(:recipe_id => recipie_url).first
+    return recipe_exists
   end
 
   def save_recipes_attributes(user,recipe_id)
@@ -281,7 +282,7 @@ class UsersController < ApplicationController
         elsif @user != p_user && @user.role == 1
           flash[:notice] = "Unauthorized access"
           redirect_to home_user_path(@user) and return
-        
+
         #case where user is an admin
         elsif @user.role == 2
           #we set the current user to whichever one the admin put in the url

@@ -5,7 +5,13 @@
   <td> <a target="_blank" href="<%= r["url"]%>"><%= r["label"] %> </a></td>
   <td> <%= r["healthLabels"].to_sentence %></td>
   <td> <%= r["dietLabels"].to_sentence %></td>
-  <td><a href="javascript:void(0);" onclick="save_recipe($(this),'<%= r['uri'] %>')"> Saved</a>
+<!---  <% if recipe_exists(r['url']) %>
+  <td><a href="javascript:void(0);">Saved</a>
   </td>
+  <% else %> --->
+  <td><a href="javascript:void(0);" onclick="save_recipe($(this),'<%= r['uri'] %>')"> Save Recipe</a>
+  </td>
+<!---
+  <% end %> ---> 
 </tr>
 <% end %>
