@@ -17,7 +17,7 @@ li{
   font-size: 20px;
   padding: 14px 16px;
   text-decoration: none;
-    font-family: "Tahoma", Geneva, sans-serif;
+  font-family: "Tahoma", Geneva, sans-serif;
 
 }
 
@@ -113,5 +113,9 @@ div.main-page{
   margin-left:20px;
 }
 table.table{
-  
+  font-family: "Tahoma", Geneva, sans-serif;
+
+}
+#recipes_rows{
+
 }
