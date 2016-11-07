@@ -36,12 +36,12 @@
 
     <div class="field">
       <%= p.label :healthlabel_ids %>
-      <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]} %>
+      <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, :include_blank => "Select" %>
     </div>
 
     <div class="field">
       <%= p.label :dietlabel_ids %>
-      <%= p.select :dietlabel_ids, Dietlabel.all.map{|a| [a.name, a.id]} %>
+      <%= p.select :dietlabel_ids, Dietlabel.all.map{|a| [a.name, a.id]}, :include_blank => "Select" %>
     </div>
 
   <% end %>
