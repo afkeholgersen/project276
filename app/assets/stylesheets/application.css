@@ -12,7 +12,6 @@ ul.topnav {
 
 
 li{
-  float: left;
   display:inline-block;
   font-size: 20px;
   padding: 14px 16px;
@@ -135,4 +134,14 @@ table.table a:hover {
 }
 table.td {
 
+}
+
+
+#notice {
+  color: red;
+  font-size: 30px ;
+}
+
+#error_explanation ul li {
+  color: red;
 }
