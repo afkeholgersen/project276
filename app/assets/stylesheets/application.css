@@ -121,15 +121,18 @@ table.table a:link, table.table a:visited, table a:active{
   color:#990000;
 
 }
-table.th, table.td{
+th.table, td.table{
   padding:10px;
-
+  font-size:50px 
 }
-table.th{
+th.table{
   font-size:50px;
 }
 
 table.table a:hover {
   text-decoration:underline;
   color: #727272;
+}
+table.td {
+
 }
