@@ -120,44 +120,52 @@ class UsersController < ApplicationController
   end
 
   def home
+    @foundItems = []
     health = @user.preference.healthlabel.first.apiparameter rescue ""
     diet = @user.preference.dietlabel.first.apiparameter rescue ""
+    tries = [{diet: diet, q: health},{diet: diet, q: diet}, {diet: diet, health: health}, {diet: diet, q: ""}]
 
-    response,req_status = initiate_recommendation_request(params,{diet: diet, health: health})
+    response,req_status = initiate_recommendation_request(params,{diet: diet})
+    pg=0;
+    @json_resp = nil;
 
-    if req_status.to_i == 403 || req_status.to_i == 404
-      ############################
-      response,req_status = initiate_recommendation_request(params,{diet: diet})
+    #stops to-from=100
+      while verifyHealthLabels < 10 && pg < 100
+        tries.each do |t|
+          logger.debug t
 
-      if req_status != 403 && req_status != 404
-        # show recommendations based on diet if combination of Diet & Health fails
-          resp = response.body
-      else
+          params[:from] = 0
+          params[:to] = pg+100
+          logger.debug @foundItems.length
+          if (@user.preference.healthlabel[0].apiparameter.downcase != "alcohol-free")
+            response,req_status = initiate_recommendation_request(params,t)
+          else
+            @specialcase=true
+            response,req_status = initiate_recommendation_request(params,t)
+          end
+          resp = response.body  
+          
+            #if resp == nil
+              # If no labels renders results then show then top recipes
+              #response,req_status = initiate_recommendation_request(params,{q: "ALL"})
+              #if req_status != 403 || req_status != 404
+                #resp = response.body
+              #else
+                #resp = {:hits => {}, :error => "No results found for search criteria"}.to_json
+          begin
+            @json_resp = JSON.parse(resp)
 
-        response,req_status = initiate_recommendation_request(params,{health: health})
 
-        if req_status != 403 && req_status != 404
-          # show recommendations based on health if combination of (Diet & Health fails) as well as only Diet- fails
-          resp = response.body
-        end
-      end
+          rescue JSON::ParserError
+            pg+=100
+            next
+          end #end try
 
-      if resp == nil
-        # If no labels renders results then show then top recipes
-        response,req_status = initiate_recommendation_request(params,{q: "ALL"})
-        if req_status != 403 || req_status != 404
-          resp = response.body
-        else
-          resp = {:hits => {}, :error => "No results found for search criteria"}.to_json
-        end
-      end
+        end #end tries
+        pg+=100
+    end #end while loop
 
-      @json_resp = JSON.parse(resp)
-    else
-      # Success with both diet & health labels
-      @json_resp = JSON.parse(response.body)
-    end
-  end
+  end #end function
 
   def initiate_recommendation_request(params,request_params_hash)
     conn = Faraday.new(:url => ENV['API_URL'] ) do |faraday|
@@ -167,18 +175,50 @@ class UsersController < ApplicationController
     end
 
     url_hash = {:q => "", :app_id => ENV['APP_ID'] , :app_key => ENV['APP_KEY']}
+
     if params[:to].present?
+      url_hash[:to] = params[:to].to_s
       f = params[:to].to_i
       l = f +10
-      url_hash[:from] =  f.to_s
+       
+    else
+      f = 0
+      l = f+10
       url_hash[:to] = l.to_s
     end
+    if params[:from].present?
+        url_hash[:from] = params[:from].to_s
+    else
+        url_hash[:from] = f.to_s
+    end
     url_hash = url_hash.merge(request_params_hash)
-
     url_params = url_hash.to_query
     response = conn.get "/search?"+url_params
+    logger.debug "/search?"+url_params
     return [response,response.status]
   end
+
+  def verifyHealthLabels
+    if @json_resp != nil && @json_resp
+      hits = @json_resp["hits"]
+      hits.each do |h| 
+        r =  h["recipe"]
+        downcasedHealthLabels = r["healthLabels"].map(&:downcase)
+        if downcasedHealthLabels.include?(@user.preference.healthlabel[0].apiparameter.downcase) || @specialcase
+          if @foundItems.include?(r)
+            next
+          end
+          @foundItems.push(r)
+        end
+      end
+
+      return @foundItems.length
+    else
+      return 0
+    end
+
+  end
+
 
   def save_recipe
     recipie_url = params[:recipe_url]

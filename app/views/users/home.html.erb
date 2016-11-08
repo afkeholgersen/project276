@@ -1,15 +1,10 @@
-<%
-hits = @json_resp["hits"]
 
-%>
+
+
 <!---
 
 <div class="container">
   <p id="notice"><%= notice %></p>
-
-  <% if @json_resp["error"].present? %>
-  <p class="well"> <%=  @json_resp["error"]%> </p>
-  <% end %>
 
   <%= form_for(@user, html: { class:"form-inline"} ) do |f| %>
   <% if @user.errors.any? %>
@@ -42,9 +37,8 @@ hits = @json_resp["hits"]
   <% end %>
 --->
 <h1 class="page-headers">Recommended for You </h1> 
-  <% if hits.size > 0%>
+
   <p></p>
-  <input type="hidden" id="to" value="<%= @json_resp["to"] %>" />
   <table class="table">
     <thead>
       <tr class="table">
@@ -56,13 +50,12 @@ hits = @json_resp["hits"]
       </tr>
     </thead>
     <tbody id="recipies_rows">
-      <%= render "recipies" , hits: hits, user: @user%>
+      <%= render "recipies" , user: @user%>
     </tbody>
   </table>
 
   <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a>
 
-  <% end %>
 </div>
 
 

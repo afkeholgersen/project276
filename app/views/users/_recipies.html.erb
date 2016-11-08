@@ -1,15 +1,15 @@
-<% hits.each do |h| %>
- <% r =  h["recipe"]%>
-<tr>
-  <td> <a target="_blank" href="<%= r["url"]%>"><img src="<%= r["image"]%>" width="120"> &nbsp; </a></td>
-  <td> <a target="_blank" href="<%= r["url"]%>"><%= r["label"] %> </a></td>
-  <td> <%= r["healthLabels"].to_sentence %></td>
-  <td> <%= r["dietLabels"].to_sentence %></td>
-  <% if User.curr_recipe_exists(@user, r['uri']).to_i > 0 %>
-  	<td><a href="javascript:void(0);"> Saved </a>
-  <% else %>
-  	<td><a href="javascript:void(0);" onclick="save_recipe($(this),'<%= r['uri'] %>')"> Save recipe</a>
-  </td>
+<% @foundItems.each do |r| %>
+
+  <tr>
+    <td> <a target="_blank" href="<%= r["url"]%>"><img src="<%= r["image"]%>" width="120"> &nbsp; </a></td>
+    <td> <a target="_blank" href="<%= r["url"]%>"><%= r["label"] %> </a></td>
+    <td> <%= r["healthLabels"].to_sentence %></td>
+    <td> <%= r["dietLabels"].to_sentence %></td>
+    <% if User.curr_recipe_exists(@user, r['uri']).to_i > 0 %>
+    	<td><a href="javascript:void(0);"> Saved </a>
+    <% else %>
+    	<td><a href="javascript:void(0);" onclick="save_recipe($(this),'<%= r['uri'] %>')"> Save recipe</a>
+    </td>
+    <% end %>
+  </tr>
   <% end %>
-</tr>
-<% end %>
