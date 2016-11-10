@@ -7,10 +7,15 @@ div.enclosure{
   border-color: #990000;
   border-width: thin;
   border-radius: 20px;
-  width:50%;
+  width:90%;
+  font-size: 25px;
 }
 
 div.field{
   text-align: right;
   margin-right: 35%;
+}
+
+div.action{
+  font-size: 25px;
 }
