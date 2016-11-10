@@ -34,9 +34,14 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <% if current_user %>
-                  <li><%= link_to "Settings*fix", new_user_path%> <!--- TODO fix paths---></li>
-                  <li><%= link_to "Favorite Recipes*fix", new_user_path%></li>
-            	    <li><%= link_to "Log out", logout_path %></li>
+                  <li><%= link_to "Settings", edit_user_path(current_user)%> <!--- TODO fix paths---></li>
+                  <li><%= link_to "Favorite Recipes", my_recipes_user_path(current_user)%></li>
+                  <li><%= link_to "Recommended Recipes", home_user_path(current_user) %></li>
+                  <li><%= link_to "Favorite Recipes",  my_recipes_user_path(current_user) %></li>
+                  <% if current_user.role == 2 %>
+                    <li><%= link_to "Admin Panel", users_adminhome_path %></li>
+                  <% end %>
+                  <li><%= link_to "Log out", logout_path %></li>
             	  <% else %>
             	    <li><%= link_to "Sign up", new_user_path %></li>
             	    <li><%= link_to "Log in", new_session_path %></li>
