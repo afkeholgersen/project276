@@ -14,21 +14,25 @@ a{ /* set default font size of text to 25px */
   }
 }
 
+li input{
+  font-size: 30px;
+}
+
 li.dropdown a.dropdown-toggle{
   color: white;
-  font-size: 40;
+  font-size: 30px;
+}
+
+li.dropdown a.dropdown-toggle:hover{
+  color: white;
 }
 
 li{
   display:inline-block;
   font-size: 20px;
-  padding: 14px 16px;
+  padding: 17px 20px;
   text-decoration: none;
   font-family: "Tahoma", Geneva, sans-serif;
-}
-
-li input{
-  padding: 10px 15px;
 }
 
 img{

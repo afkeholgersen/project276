@@ -1,8 +1,8 @@
 div.enclosure{
   text-align: center;
   margin: auto;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding-top: 7%;
+  padding-bottom: 7%;
   border-style: solid;
   border-color: #990000;
   border-width: thin;
@@ -13,9 +13,5 @@ div.enclosure{
 
 div.field{
   text-align: right;
-  margin-right: 35%;
-}
-
-div.action{
-  font-size: 25px;
+  margin-right: 33%;
 }
