@@ -1,14 +1,14 @@
 div.enclosure{
   text-align: center;
   margin: auto;
-  padding-top: 7%;
-  padding-bottom: 7%;
+  padding-top: 9%;
+  padding-bottom: 9%;
   border-style: solid;
   border-color: #990000;
   border-width: thin;
   border-radius: 20px;
-  width:90%;
-  font-size: 25px;
+  width:150%;
+  font-size: 35px;
 }
 
 div.field{

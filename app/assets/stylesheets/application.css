@@ -2,10 +2,11 @@ nav.navbar-default  {
     background: url('../barBackground.jpeg');
     box-shadow: inset 0 0 0 1000px rgba(153,0,0,0.8);
     margin-bottom: 10%;
+    padding-bottom: 30px;
 }
 
-a{ /* set default font size of text to 25px */
-  font-size: 25px;
+a{ /* set default font size of text to 35px */
+  font-size: 35px;
 }
 
 @media (min-width: 979px){ /* only screen bigger than 979px can hover */
@@ -15,12 +16,17 @@ a{ /* set default font size of text to 25px */
 }
 
 li input{
-  font-size: 30px;
+  font-size: 40px;
+}
+
+ul.dropdown-menu{
+  font-size: 40px;
 }
 
 li.dropdown a.dropdown-toggle{
   color: white;
-  font-size: 30px;
+  font-size: 40px;
+  padding-right: 50px;
 }
 
 li.dropdown a.dropdown-toggle:hover{
@@ -31,6 +37,7 @@ li{
   display:inline-block;
   font-size: 20px;
   padding: 17px 20px;
+  margin-top: 2%;
   text-decoration: none;
   font-family: "Tahoma", Geneva, sans-serif;
 }

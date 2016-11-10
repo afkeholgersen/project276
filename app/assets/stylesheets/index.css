@@ -63,6 +63,12 @@ table.td {
 
 }
 
+input.mainSearch{
+  width: 35%;
+  height: 20%;
+  font-size: 45px;
+}
+
 
 #notice {
   color: red;
