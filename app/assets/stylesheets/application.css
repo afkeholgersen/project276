@@ -1,5 +1,5 @@
 
-ul.topnav {
+nav.navbar-default {
     list-style-type: none;
     margin:0 auto;
     padding: 0;
@@ -17,7 +17,6 @@ li{
   padding: 14px 16px;
   text-decoration: none;
   font-family: "Tahoma", Geneva, sans-serif;
-
 }
 
 li, .dropButton{
@@ -122,7 +121,7 @@ table.table a:link, table.table a:visited, table a:active{
 }
 th.table, td.table{
   padding:10px;
-  font-size:50px 
+  font-size:50px
 }
 th.table{
   font-size:50px;
