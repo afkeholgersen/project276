@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
 	  	begin 
 	  		User.find(session[:user_id])
 	  	rescue ActiveRecord::RecordNotFound
+	  		session[:user_id]=nil
 	  		nil
 	  	end
 	  end
