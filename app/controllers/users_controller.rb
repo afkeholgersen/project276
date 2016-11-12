@@ -80,6 +80,12 @@ class UsersController < ApplicationController
     @user.preference = @preference
     @user.savedrecipe = Savedrecipe.new
 
+    #deletes the password parameter if its empty so we don't get error that password is blank
+    if user_params[:password].blank?
+      params[:user].delete(:password)
+      params[:user].delete(:password_confirmation)
+    end
+
     respond_to do |format|
 
       if @user.update(user_params)

@@ -30,10 +30,20 @@ class User < ApplicationRecord
 
   #method to salt and create the encrypted password
   def encrypt_password
-    if password.present?
+
+    if self.password.present? && self.salt.present?
+      if User.find(self.id).password == self.password
+        self.password = self.password
+        self.salt = self.salt
+        return
+      end
+    end
+
+    if self.password.present?
       self.salt = BCrypt::Engine.generate_salt
       self.password = BCrypt::Engine.hash_secret(password, salt)
     end
+
   end
 
   def self.curr_recipe_exists(user, param)
