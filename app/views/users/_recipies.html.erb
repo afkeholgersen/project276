@@ -8,8 +8,8 @@
     <% if User.curr_recipe_exists(@user, r['uri']).to_i > 0 %>
     	<td><a href="javascript:void(0);"> Saved </a>
     <% else %>
-    	<td><i class="material-icons">save</i><a href="javascript:void(0);" onclick="save_recipe($(this),'<%= r['uri'] %>')"> Save recipe</a>
-      
+    	<td><i class="material-icons">save</i><a href="javascript:void(0);" onclick="save_recipe($(this),'<%= r['uri'] %>')">Save recipe</a>
+
     </td>
 
     <% end %>
