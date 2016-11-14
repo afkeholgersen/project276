@@ -45,9 +45,6 @@ class UsersController < ApplicationController
 
     #assign the current preference to the user
     @user.preference = @preference
-
-    #create a blank recipe table entry for the user to save recipes to
-    @user.savedrecipe = Savedrecipe.new
     #assign the default user role
     @user.role = 1;
 
@@ -206,45 +203,7 @@ class UsersController < ApplicationController
     end
     resp = @json_resp[0]
 
-    recipe.recipe_name = resp["label"]
-    recipe.image_url = resp["image"]
-    recipe.share_as = resp["shareAs"]
-    recipe.dietLabels = resp["dietLabels"].to_s
-    recipe.healthLabels = resp["healthLabels"].to_s
-    recipe.cautions = resp["cautions"].to_s
-    recipe.source = resp["source"]
-    recipe.sourceIcon = resp["sourceIcon"]
-    recipe.calories = resp["calories"].to_s
-    recipe.totalWeight = resp["totalWeight"].to_s
-
-    if recipe.save
-      resp["ingredients"].each do |i|
-        igt =recipe.ingredients.build(text: i["text"], quantity: i["quantity"], measure: i["measure"], food: i["food"], weight: i["weight"])
-        igt.save!
-      end
-
-      resp["ingredientLines"].each do |i|
-        igt =recipe.ingredient_lines.build(text: i)
-        igt.save!
-      end
-
-      resp["totalNutrients"].each do |i|
-        k = i[0]
-        v = i[1]
-        igt =recipe.total_nutrient_nodes.build(label: v["label"], quantity: v["quantity"], unit: v["unit"], node_label: k)
-        igt.save!
-      end
-
-      resp["totalDaily"].each do |i|
-        k = i[0]
-        v = i[1]
-        igt =recipe.total_daily_nodes.build(label: v["label"], quantity: v["quantity"], unit: v["unit"], node_label: k)
-        igt.save!
-      end
-      return true
-    else
-      return false
-    end
+    recipe.save_from_response(resp)
 
   end
 
