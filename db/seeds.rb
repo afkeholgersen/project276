@@ -6,10 +6,9 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+Dietlabel.create([
 
-Dietlabel.create([  
-
-{name: 'Balanced', apiparameter: 'balanced', description: 'Protein/Fat/Carb values in 15/35/50 ratio'}, 
+{name: 'Balanced', apiparameter: 'balanced', description: 'Protein/Fat/Carb values in 15/35/50 ratio'},
 {name: 'High-Fiber', apiparameter: 'high-fiber', description: 'More than 5g fiber per serving'},
 {name: 'High-Protein', apiparameter: 'high-protein', description: 'More than 50% of total calories from proteins'},
 {name: 'Low-Carb', apiparameter: 'low-carb', description: 'Less than 20% of total calories from carbs'},
