@@ -6,7 +6,7 @@ nav.navbar-default  {
 }
 
 a{ /* set default font size of text to 35px */
-  font-size: 35px;
+  font-size: 20px;
 }
 
 @media (min-width: 979px){ /* only screen bigger than 979px can hover */
@@ -16,17 +16,25 @@ a{ /* set default font size of text to 35px */
 }
 
 li input{
-  font-size: 40px;
+  font-size: 20px;
 }
 
 ul.dropdown-menu{
-  font-size: 40px;
+  font-size: 20px;
 }
 
 li.dropdown a.dropdown-toggle{
   color: white;
-  font-size: 40px;
+  font-size: 20px;
   padding-right: 50px;
+}
+
+body {
+  /*http://uigradients.com/#MetallicToad*/
+  background: #abbaab; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #abbaab , #ffffff); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #abbaab , #ffffff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
 }
 
 li.dropdown a.dropdown-toggle:hover{
@@ -49,4 +57,14 @@ img{
 
 body{
   padding-top: 10%;
+}
+
+
+.search-bar .search-button{
+    background: white; 
+}
+
+.search-bar button{
+    border:0;
+    background:transparent;
 }
