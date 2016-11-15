@@ -1,6 +1,5 @@
 class User < ApplicationRecord
-	belongs_to :preference
-	belongs_to :savedrecipe
+	has_one :preference
 	has_many :recipes
 
 	#does a validation of the password confirmation (checks if the password and password_confirmation matches)
@@ -20,7 +19,7 @@ class User < ApplicationRecord
 
   #need to use self so that we can call it like a static method (User.authenticate)
   def self.authenticate(username, password)
-    user = find_by_username(username)
+    user = find_by_email(username)
     if user && user.password == BCrypt::Engine.hash_secret(password, user.salt)
       user
     else
