@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :home, :save_recipe, :my_recipes]
-
+  
   # GET /users
   # GET /users.json
   def index
@@ -27,7 +27,6 @@ class UsersController < ApplicationController
     @preference = Preference.new
     @healthlabels = Healthlabel.all;
     @dietlabels = Dietlabel.all;
-
   end
 
   # GET /users/1/edit
@@ -79,6 +78,12 @@ class UsersController < ApplicationController
     #assign the current preference to the user and a new recipe
     @user.preference = @preference
     @user.savedrecipe = Savedrecipe.new
+
+    #deletes the password parameter if its empty so we don't get error that password is blank
+    if user_params[:password].blank?
+      params[:user].delete(:password)
+      params[:user].delete(:password_confirmation)
+    end
 
     respond_to do |format|
 
@@ -143,8 +148,8 @@ class UsersController < ApplicationController
             @specialcase=true
             response,req_status = initiate_recommendation_request(params,t)
           end
-          resp = response.body  
-          
+          resp = response.body
+
             #if resp == nil
               # If no labels renders results then show then top recipes
               #response,req_status = initiate_recommendation_request(params,{q: "ALL"})
@@ -180,7 +185,7 @@ class UsersController < ApplicationController
       url_hash[:to] = params[:to].to_s
       f = params[:to].to_i
       l = f +10
-       
+
     else
       f = 0
       l = f+10
@@ -201,7 +206,7 @@ class UsersController < ApplicationController
   def verifyHealthLabels
     if @json_resp != nil && @json_resp
       hits = @json_resp["hits"]
-      hits.each do |h| 
+      hits.each do |h|
         r =  h["recipe"]
         downcasedHealthLabels = r["healthLabels"].map(&:downcase)
         if downcasedHealthLabels.include?(@user.preference.healthlabel[0].apiparameter.downcase) || @specialcase
@@ -232,6 +237,19 @@ class UsersController < ApplicationController
       @message = "Unable to save recipe "+@user.errors.full_messages.to_sentence
     end
   end
+
+  def unsave_recipe
+    recipe_url= params[:recipe_url]
+    recipe_exists = @user.recipes.where(:recipe_id => recipe_url).first
+    if recipe_exists
+      @user.recipes.where(:recipe_id => recipe_url).destroy
+      @message= "Removed from your recipes list"
+    else
+      @message= "Already removed from your recipes list"
+    end
+  end
+  #will this delete all savings of this in the database?
+
 
   def my_recipes
     @recipes = @user.recipes
