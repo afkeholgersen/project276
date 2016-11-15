@@ -12,6 +12,8 @@ class User < ApplicationRecord
 	validates_presence_of :username
 	validates_presence_of :email
 
+	#validate email- at least looks like an email
+	validates :email, email: true
 
 	#makes sure username is not taken
 	validates_uniqueness_of :username

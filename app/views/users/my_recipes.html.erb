@@ -12,7 +12,8 @@
       <thead>
         <tr>
           <th></th>
-          <th>Recipe</th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="recipies_rows">
@@ -22,6 +23,8 @@
           </td>
           <td> <a target="_blank" href="<%= recipe_path(r) %>"><%= r.recipe_name %></a></td>
           </td>
+          <td> <i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')">Remove</a>
+          </td>
         </tr>
         <% end %>
       </tbody>
@@ -29,3 +32,20 @@
 
   <% end %>
 </div>
+
+<!--- should this be added to a javascript file instead of within this page?? --->
+
+<script>
+
+function unsave_recipe(ele,url){
+  $(ele).text("Removing from your saved recipes..");
+  $.ajax({
+    method: "DELETE",
+    url: "<%= unsave_recipe_user_path %> ",
+    data: { id: "<%= params[:id] %>" ,recipe_url: url},
+    dataType: "script"
+  }).done(function() {
+    location.reload();
+  });
+}
+</script>
