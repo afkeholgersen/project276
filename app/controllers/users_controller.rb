@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+<<<<<<< HEAD
   before_action :set_user, only: [:show, :edit, :update, :destroy, :home, :save_recipe, :my_recipes]
   
   # GET /users
@@ -14,6 +15,14 @@ class UsersController < ApplicationController
       redirect_to new_session_path
     end
     #@users = User.all
+=======
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
+
+  # GET /users
+  # GET /users.json
+  def index
+    @users = User.all
+>>>>>>> DB
   end
 
   # GET /users/1
@@ -27,6 +36,10 @@ class UsersController < ApplicationController
     @preference = Preference.new
     @healthlabels = Healthlabel.all;
     @dietlabels = Dietlabel.all;
+<<<<<<< HEAD
+=======
+
+>>>>>>> DB
   end
 
   # GET /users/1/edit
@@ -56,12 +69,20 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
+<<<<<<< HEAD
         format.html { redirect_to new_session_path, notice: 'User was successfully created.' }
+=======
+        format.html { redirect_to @user, notice: 'User was successfully created.' }
+>>>>>>> DB
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
+<<<<<<< HEAD
       end
+=======
+      end 
+>>>>>>> DB
     end
   end
 
@@ -79,6 +100,7 @@ class UsersController < ApplicationController
     @user.preference = @preference
     @user.savedrecipe = Savedrecipe.new
 
+<<<<<<< HEAD
     #deletes the password parameter if its empty so we don't get error that password is blank
     if user_params[:password].blank?
       params[:user].delete(:password)
@@ -97,6 +119,13 @@ class UsersController < ApplicationController
         end
 
 
+=======
+    respond_to do |format|
+
+      if @user.update(user_params)
+        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.json { render :show, status: :found, location: @user }
+>>>>>>> DB
       else
         format.html { render :edit  }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -115,6 +144,7 @@ class UsersController < ApplicationController
     end
   end
 
+<<<<<<< HEAD
   def adminhome
     if current_user
       if current_user.role != 2
@@ -349,12 +379,23 @@ class UsersController < ApplicationController
 
 
       end
+=======
+  #only call these methods within the class
+  private
+    
+    def set_user
+      @user = User.find(params[:id])
+>>>>>>> DB
     end
 
     # Allow only certain field through
     def user_params
+<<<<<<< HEAD
       return {} if params[:user].blank?
       params.require(:user).permit(:username, :email, :password, :preference_id, :password_confirmation, :role)
+=======
+      params.require(:user).permit(:username, :email, :password, :preference_id, :password_confirmation)
+>>>>>>> DB
     end
 
     # Just need these two fields to create a preference

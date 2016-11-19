@@ -26,9 +26,9 @@
     <%= f.label :password %>
     <%= f.password_field :password %>
 
-
   </div>
   <div class="field">
+
     <%= f.label :password_confirmation %>
     <%= f.password_field :password_confirmation %>
   </div>
@@ -73,4 +73,21 @@
     <%= f.submit class: "btn btn-primary"%>
   </div>
 </div>
+  <%= fields_for @preference do |p| %>
+
+    <div class="field">
+      <%= p.label :healthlabel_ids %>
+      <%= p.number_field :healthlabel_ids  %>
+    </div>
+
+    <div class="field">
+      <%= p.label :dietlabel_ids %>
+      <%= p.number_field :dietlabel_ids  %>
+    </div>
+
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
 <% end %>

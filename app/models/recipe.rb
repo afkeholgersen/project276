@@ -5,4 +5,6 @@ class Recipe < ApplicationRecord
   has_many :ingredient_lines, dependent: :destroy
   has_many :total_daily_nodes, dependent: :destroy
   has_many :total_nutrient_nodes, dependent: :destroy
+	has_many :comments, dependent: :destroy
+
 end

@@ -15,6 +15,7 @@
 
   <body>
 
+<<<<<<< HEAD
     <div class="nav-fixer">
     <ul class="topnav" id="topNavBar_left">
 <!---      <li class="left"><a href="Home">Home</a></li> --->
@@ -48,5 +49,21 @@
   <div class="main-div">
     <%= yield %>
   </div>
+=======
+  	
+	  <% if current_user %>
+	    <span>
+	    	Hello <%= current_user.username %>
+	    </span>
+	    <%= link_to "Log out", logout_path %>
+	  <% else %>
+	    <%= link_to "Sign up", new_user_path %> or
+	    <%= link_to "log in", new_session_path %>
+	  <% end %>
+
+
+		<%= yield %>
+  
+>>>>>>> DB
   </body>
 </html>

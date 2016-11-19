@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 	#get current user
 	def current_user
 	  if session[:user_id]
-	  	begin 
+	  	begin
 	  		User.find(session[:user_id])
 	  	rescue ActiveRecord::RecordNotFound
 	  		session[:user_id]=nil
@@ -17,5 +17,5 @@ class ApplicationController < ActionController::Base
 	  	end
 	  end
 	end
-	
+
 end
