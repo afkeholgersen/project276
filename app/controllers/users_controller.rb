@@ -161,6 +161,7 @@ class UsersController < ApplicationController
             @json_resp = JSON.parse(resp)
 
 
+
           rescue JSON::ParserError
             pg+=100
             next
@@ -208,14 +209,27 @@ class UsersController < ApplicationController
       hits = @json_resp["hits"]
       hits.each do |h|
         r =  h["recipe"]
-        downcasedHealthLabels = r["healthLabels"].map(&:downcase)
-        if downcasedHealthLabels.include?(@user.preference.healthlabel[0].apiparameter.downcase) || @specialcase
-          if @foundItems.include?(r)
-            next
+        if params["search"].present? && !params["search"].empty?
+          if r["healthLabels"].to_sentence.downcase.include?(params["search"].downcase) || r["dietLabels"].to_sentence.downcase.include?(params["search"].downcase) || r["label"].downcase.include?(params["search"].downcase)
+            downcasedHealthLabels = r["healthLabels"].map(&:downcase)
+            if downcasedHealthLabels.include?(@user.preference.healthlabel[0].apiparameter.downcase) || @specialcase
+              if @foundItems.include?(r)
+                next
+              end
+              @foundItems.push(r)
+            end
           end
-          @foundItems.push(r)
-        end
+        else
+          downcasedHealthLabels = r["healthLabels"].map(&:downcase)
+          if downcasedHealthLabels.include?(@user.preference.healthlabel[0].apiparameter.downcase) || @specialcase
+            if @foundItems.include?(r)
+              next
+            end
+            @foundItems.push(r)
+          end
+        end  
       end
+
 
       return @foundItems.length
     else
