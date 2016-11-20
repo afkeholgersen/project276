@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
     member do
       get :home
+      get :search
       get :my_recipes
       post :save_recipe
       delete :unsave_recipe

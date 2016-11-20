@@ -61,10 +61,27 @@ body{
 
 
 .search-bar .search-button{
-    background: white; 
+    background: white;
 }
 
 .search-bar button{
     border:0;
     background:transparent;
+}
+
+.portfolio .thumbnail {
+    position: relative;
+}
+
+.portfolio .thumbnail:hover {
+    cursor: pointer;
+}
+
+.portfolio .caption {
+    bottom: 0;
+    position: absolute;
+}
+
+.portfolio .btn {
+    opacity: 0.75;
 }
