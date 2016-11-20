@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :home, :save_recipe, :my_recipes]
-  
+
   # GET /users
   # GET /users.json
   def index
@@ -95,8 +95,6 @@ class UsersController < ApplicationController
           format.html { redirect_to @user, notice: 'User was successfully updated.' }
           format.json { render :show, status: :found, location: @user }
         end
-
-
       else
         format.html { render :edit  }
         format.json { render json: @user.errors, status: :unprocessable_entity }
