@@ -7,7 +7,6 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
-<<<<<<< HEAD
 Dietlabel.create([
 
 {name: 'Balanced', apiparameter: 'balanced', description: 'Protein/Fat/Carb values in 15/35/50 ratio'},
