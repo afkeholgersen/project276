@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   get 'welcome/index'
   get "users/adminhome"
   resources :recipes
@@ -18,6 +19,7 @@ Rails.application.routes.draw do
     member do
       get :home
       get :my_recipes
+      get :individual_recipes
       post :save_recipe
       delete :unsave_recipe
     end

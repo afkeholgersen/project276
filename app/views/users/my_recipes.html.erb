@@ -1,11 +1,14 @@
 
 <div class="container">
 <h1 class="page-headers"> Saved Recipes</h2>
-  <% if @recipes.size == 0 %>
-    <p class="well"> No saved recipes... yet!</p>
-  <% end %>
+  <% if @recipes %>
+    <% if @recipes.size == 0 %>
+      <p class="well"> No saved recipes... yet!</p>
+    <% end %>
+ 
 
   <% if @recipes.size > 0%>
+  <% end %>
   <p></p>
 
     <table class="table">
