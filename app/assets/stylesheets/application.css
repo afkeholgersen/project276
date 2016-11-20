@@ -61,10 +61,13 @@ body{
 
 
 .search-bar .search-button{
-    background: white; 
+    background: white;
 }
 
 .search-bar button{
     border:0;
     background:transparent;
+}
+.table table{
+
 }
