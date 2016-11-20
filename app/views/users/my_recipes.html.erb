@@ -7,28 +7,19 @@
 
   <% if @recipes.size > 0%>
   <p></p>
-<!--
-    <table class="table">
-      <thead>
-        <tr>
-          <th></th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="recipies_rows"> -->
-      <% @recipes.in_groups_of(3,false).each do |group| %>
-        <div class="row"> <!-- only have a new row every 3 rows -->
-        <% group.each do |r| %>
-        <div class="col-md-4 portfolio-item">
-          <a target="_blank" href="<%= recipe_path(r) %>">
-          <img class="img-responsive" src="<%= r.image_url%>" alt="">
-          </a>
-          <a target="_blank" href="<%= recipe_path(r) %>">
-          <h3><%= r.recipe_name %></h3> </a>
-          <p><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')">Remove</a></p>
-
-        </div>
+  <% @recipes.in_groups_of(4,false).each do |group| %>
+    <div class="row portfolio"> <!-- only have a new row every 3 rows -->
+    <% group.each do |r| %>
+    <div class="col-sm-6 col-md-3">
+      <div class="thumnbail">
+        <a target="_blank" href="<%= recipe_path(r) %>">
+        <img class="img-responsive" src="<%= r.image_url%>" alt="">
+        </a>
+        <a target="_blank" href="<%= recipe_path(r) %>">
+        <h3><%= r.recipe_name %></h3> </a>
+        <p><a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')"><i class="material-icons">delete_forever</i> Remove</a></p>
+    </div>
+  </div>
         <%end%>
       </div>
       <% end %>
