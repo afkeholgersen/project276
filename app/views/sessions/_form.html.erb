@@ -1,4 +1,15 @@
 <%= stylesheet_link_tag 'form' %>
+<% if session.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(session.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+    <ul>
+    <% session.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
 <%= form_tag("/sessions", method: "post") do %>
 
 <div class="enclosure">

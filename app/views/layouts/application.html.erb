@@ -28,9 +28,17 @@
         </div>
         <div>
           <ul class="nav navbar-nav navbar-right">
-            <!-- Search Bar (does not work yet) -->
-            <li><input type="text" class="Seach" placeholder="Search Recipes.."></li>
-            <!-- drowndown menu -->
+            <li class="left">
+        <!-- For now, can only search if a current user, -->
+        <%if current_user.present?%>
+          <%= form_tag home_user_path(current_user), :method => 'get' do %>
+            <p>
+              <%= text_field_tag :search, params[:search], class: "left" %>
+              <%= submit_tag "Search", :name => nil, class: "left" %>
+           </p>
+          <% end %>
+        <% end %>
+     </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account<span class="caret"></span></a>
               <ul class="dropdown-menu">

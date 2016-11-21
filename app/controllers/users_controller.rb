@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :home, :save_recipe, :my_recipes]
-  
+
   # GET /users
   # GET /users.json
   def index
@@ -160,8 +160,6 @@ class UsersController < ApplicationController
           begin
             @json_resp = JSON.parse(resp)
 
-
-
           rescue JSON::ParserError
             pg+=100
             next
@@ -227,10 +225,8 @@ class UsersController < ApplicationController
             end
             @foundItems.push(r)
           end
-        end  
+        end
       end
-
-
       return @foundItems.length
     else
       return 0

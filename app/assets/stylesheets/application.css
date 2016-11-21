@@ -2,7 +2,7 @@ nav.navbar-default  {
     background: url('../barBackground.jpeg');
     box-shadow: inset 0 0 0 1000px rgba(153,0,0,0.8);
     margin-bottom: 10%;
-    padding-bottom: 30px;
+    padding-bottom: 3px;
 }
 
 a{ /* set default font size of text to 35px */
@@ -31,9 +31,6 @@ li.dropdown a.dropdown-toggle{
 
 body {
   /*http://uigradients.com/#MetallicToad*/
-  background: #abbaab; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to left, #abbaab , #ffffff); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to left, #abbaab , #ffffff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 }
 
@@ -50,9 +47,13 @@ li{
   font-family: "Tahoma", Geneva, sans-serif;
 }
 
-img{
-  width: 50%;
-  height:10%;
+.logo-in-nav {
+  width:50%;
+}
+
+#saved-img img{
+  width: 100%;
+
 }
 
 body{
@@ -68,20 +69,6 @@ body{
     border:0;
     background:transparent;
 }
-
-.portfolio .thumbnail {
-    position: relative;
-}
-
-.portfolio .thumbnail:hover {
-    cursor: pointer;
-}
-
-.portfolio .caption {
-    bottom: 0;
-    position: absolute;
-}
-
-.portfolio .btn {
-    opacity: 0.75;
+#recipe-name{
+  font-size: 80%;
 }
