@@ -13,7 +13,6 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.css">
   </head>
 
-
     <body   <% if content_for?(:body_attributes) %>
     <%= yield(:body_attributes) %> 
   <% end %>>
@@ -51,5 +50,6 @@
   <div class="main-div">
     <%= yield %>
   </div>
+
   </body>
 </html>

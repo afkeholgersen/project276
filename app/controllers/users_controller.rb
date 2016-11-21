@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+
   before_action :set_user, only: [:show, :edit, :update, :destroy, :home, :save_recipe, :my_recipes]
   # GET /users
   # GET /users.json
@@ -13,6 +14,7 @@ class UsersController < ApplicationController
       redirect_to new_session_path
     end
     #@users = User.all
+
   end
 
   # GET /users/1
@@ -26,6 +28,7 @@ class UsersController < ApplicationController
     @preference = Preference.new
     @healthlabels = Healthlabel.all;
     @dietlabels = Dietlabel.all;
+
   end
 
   # GET /users/1/edit
@@ -55,12 +58,16 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
+
         format.html { redirect_to new_session_path, notice: 'User was successfully created.' }
+
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
+
       end
+
     end
   end
 
@@ -77,7 +84,6 @@ class UsersController < ApplicationController
     #assign the current preference to the user and a new recipe
     @user.preference = @preference
     @user.savedrecipe = Savedrecipe.new
-
     #deletes the password parameter if its empty so we don't get error that password is blank
     if user_params[:password].blank?
       params[:user].delete(:password)
@@ -94,7 +100,6 @@ class UsersController < ApplicationController
           format.html { redirect_to @user, notice: 'User was successfully updated.' }
           format.json { render :show, status: :found, location: @user }
         end
-
 
       else
         format.html { render :edit  }
@@ -410,6 +415,7 @@ class UsersController < ApplicationController
     def user_params
       return {} if params[:user].blank?
       params.require(:user).permit(:username, :email, :password, :preference_id, :password_confirmation, :role)
+
     end
 
     # Just need these two fields to create a preference

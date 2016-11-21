@@ -10,11 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20161105104417) do
+=======
+ActiveRecord::Schema.define(version: 20161115184021) do
+>>>>>>> DB
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+<<<<<<< HEAD
+=======
+  create_table "comments", force: :cascade do |t|
+    t.text     "comment_text"
+    t.integer  "vote",         default: 0
+    t.integer  "user_id"
+    t.integer  "recipe_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+>>>>>>> DB
   create_table "dietlabels", force: :cascade do |t|
     t.string   "name"
     t.string   "apiparameter"

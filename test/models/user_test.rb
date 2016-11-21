@@ -46,7 +46,7 @@ class UserTest < ActiveSupport::TestCase
   	assert Preference.all.length == 3;
   	assert Savedrecipe.all.length == 3;
   end
-
+  
   test "user email validation" do
     u=User.new
     p=Preference.new
@@ -59,5 +59,6 @@ class UserTest < ActiveSupport::TestCase
     u.email="test"
     assert_not u.save
   end
+
 
 end

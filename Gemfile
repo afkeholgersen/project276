@@ -68,5 +68,3 @@ gem 'phantomjs', :require => "phantomjs/poltergeist"
 gem 'chosen-rails'
 
 gem 'typhoeus'
-
-
