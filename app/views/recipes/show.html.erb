@@ -51,10 +51,11 @@
 
     <div id="commen_board">
       <h4>Comment Board</h4>
-      <%= form_for @user do |f| %>
-        <%= f.label :comment_text %>
-        <%= f.text_field :comment_text %>
-        <%= f.submit %>
+      <%= form_for @user do |c| %>
+        <%= c.label :Comment %><br>
+        <%= c.text_field :comment_text %><br>
+
+        <%= c.submit %>
       <% end %>
 
     </div>
