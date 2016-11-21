@@ -1,9 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :home, :save_recipe, :my_recipes]
-<<<<<<< HEAD
 
-=======
->>>>>>> apiupdate
   # GET /users
   # GET /users.json
   def index
@@ -162,33 +159,24 @@ class UsersController < ApplicationController
     end
   end
 
-<<<<<<< HEAD
-          rescue JSON::ParserError
-            pg+=100
-            next
-          end #end try
-=======
-
-    def individual_recipes
-      uri = params['uri']
-      apiURL = ENV['API_URL'].to_s + "/search?app_id=" + ENV['APP_ID'].to_s + "&app_key="+ ENV['APP_KEY'].to_s + "&r="
-      conn = Faraday.new(:url => "") do |faraday|
-        faraday.request  :url_encoded             # form-encode POST params
-        faraday.response :logger               # log requests to STDOUT
-        faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-      end
-        recipeInfo = apiURL+uri
-        resp = conn.get recipeInfo
-        if resp.body != nil
-          json_resp = JSON.parse(resp.body)
-           respond_to do |format|
-             format.json {render json: json_resp[0], status: :ok }
-            end
-          
-        end
->>>>>>> apiupdate
-
+  def individual_recipes
+    uri = params['uri']
+    apiURL = ENV['API_URL'].to_s + "/search?app_id=" + ENV['APP_ID'].to_s + "&app_key="+ ENV['APP_KEY'].to_s + "&r="
+    conn = Faraday.new(:url => "") do |faraday|
+      faraday.request  :url_encoded             # form-encode POST params
+      faraday.response :logger               # log requests to STDOUT
+      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
     end
+      recipeInfo = apiURL+uri
+      resp = conn.get recipeInfo
+      if resp.body != nil
+        json_resp = JSON.parse(resp.body)
+         respond_to do |format|
+           format.json {render json: json_resp[0], status: :ok }
+          end
+
+      end
+  end
     # @foundItems = []
     # health = @user.preference.healthlabel.first.apiparameter rescue ""
     # diet = @user.preference.dietlabel.first.apiparameter rescue ""
@@ -234,7 +222,7 @@ class UsersController < ApplicationController
     #     pg+=100
     # end #end while loop
 
-  end #end function
+#  end #end function
 
   def initiate_recommendation_request(params,request_params_hash)
     conn = Faraday.new(:url => ENV['API_URL'] ) do |faraday|
@@ -436,4 +424,4 @@ class UsersController < ApplicationController
     def preference_params
       params.require(:preference).permit(healthlabel_ids: [], dietlabel_ids: [])
     end
-
+end

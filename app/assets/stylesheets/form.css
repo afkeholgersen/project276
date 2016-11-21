@@ -16,10 +16,9 @@ div.field{
   margin-right: 42%;
 }
 
-<<<<<<< HEAD
 div.pad-left {
   margin-right: 38%
-=======
+}
 div.chosen-field {
   text-align: right;
   margin-right: 35%;
@@ -27,5 +26,5 @@ div.chosen-field {
 
 li {
   text-align: left;
->>>>>>> apiupdate
+
 }

@@ -4,8 +4,6 @@ nav.navbar-default  {
     margin-bottom: 10%;
     padding-bottom: 0px;
 }
-
-<<<<<<< HEAD
 a{ /* set default font size of text to 35px */
   font-size: 20px;
 }
@@ -14,8 +12,6 @@ a{ /* set default font size of text to 35px */
   ul.navbar-right li.dropdown:hover > ul.dropdown-menu{
     display:block;
   }
-=======
-
 
 li, .dropButton{
   font-size: 20px;
@@ -23,7 +19,6 @@ li, .dropButton{
   padding: 14px 16px;
   text-decoration: none;
 
->>>>>>> apiupdate
 }
 
 li input{
