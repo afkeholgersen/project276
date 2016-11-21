@@ -10,13 +10,11 @@
   <div class="row portfolio"> <!-- only have a new row every 3 rows -->
     <% group.each do |r| %>
     <div class="col-sm-6 col-md-3">
-      <div class="thumbnail">
+      <div class="thumbnail" data-toggle="popover" title="<%= r.recipe_name%>" data-content= " get ingredients/ labels here... ">
       <a target="_blank" href="<%= recipe_path(r) %>">
       <img id="saved-image" class="img-responsive" src="<%= r.image_url%>" alt="" >
-
-
       <h3 id="recipe-name"><%= r.recipe_name %></h3> </a>
-      <p><a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')"><i class="material-icons">delete_forever</i> Remove</a></p>
+      <p ><a id="remove-recipe" href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')"><i class="material-icons">delete_forever</i> Remove</a></p>
     </div>
     </div>
     <%end%>
@@ -41,4 +39,9 @@ function unsave_recipe(ele,url){
     location.reload();
   });
 }
+
+$('[data-toggle="popover"]').popover({
+  placement: "auto",
+  trigger: "hover"
+})
 </script>
