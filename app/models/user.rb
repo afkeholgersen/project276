@@ -2,6 +2,7 @@ class User < ApplicationRecord
 	belongs_to :preference
 	belongs_to :savedrecipe
 	has_many :recipes
+	has_many :comments, dependent: :destroy
 
 	#does a validation of the password confirmation (checks if the password and password_confirmation matches)
 	validates :password, confirmation: true
@@ -32,7 +33,6 @@ class User < ApplicationRecord
 
   #method to salt and create the encrypted password
   def encrypt_password
-
     if self.password.present? && self.salt.present?
       if User.find(self.id).password == self.password
         self.password = self.password
@@ -51,6 +51,10 @@ class User < ApplicationRecord
   def self.curr_recipe_exists(user, param)
     recipe_exists = user.recipes.where(:recipe_id => param)
     recipe_exists.length
+    if password.present?
+      self.salt = BCrypt::Engine.generate_salt
+      self.password = BCrypt::Engine.hash_secret(password, salt)
+    end
   end
 
 end
