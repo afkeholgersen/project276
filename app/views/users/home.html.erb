@@ -72,7 +72,8 @@ function tableData(r) {
     tdata += '<td> <a target="_blank" href="'+r["url"]+'">'+r["label"]+' </a></td>'
     tdata += ' <td> '+r["healthLabels"] +' </td>'
     tdata += '<td> '+r["dietLabels"] + '</td>'
-    tdata += '<td><i class="material-icons">save</i><a href="javascript:void(0);" onclick="save_recipe($(this),'+"'"+r['uri']+"'"+')">Save recipe</a>'
+
+    tdata += '<td><i class="material-icons">save</i><a href="javascript:void(0);" onclick="save_recipes($(this),'+"'"+r['uri']+"'"+')">Save recipe</a>'
     tdata += '</td>'
     tdata += '</tr>'
   return tdata
@@ -125,15 +126,23 @@ function more(){
 
 
   
-
-function save_recipe(ele,url){
+function save_recipes(ele, recipeURI){
   $(ele).text("Saving..");
+  var recipe;
+  $.each(foundItems, function(ind, val) {
+    if (val['uri'] == recipeURI)
+    {
+      recipe = val
+      return
+    }
+  })
+  console.log(recipe)
   $.ajax({
     method: "POST",
     url: "<%= save_recipe_user_path %>",
-    data: { id: "<%= params[:id] %>" ,recipe_url: url},
-    dataType: "script"
+    data: { id: "<%= params[:id] %>", recipe: recipe },
   }).done(function() {
+      console.log("finish save_recipe")
       $(ele).text("Saved");
       $(ele).addClass("disabled","disabled");
   });

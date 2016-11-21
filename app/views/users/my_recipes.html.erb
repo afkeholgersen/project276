@@ -22,11 +22,11 @@
       <tbody id="recipies_rows">
         <% @recipes.each do |r| %>
         <tr>
-          <td> <a target="_blank" href="<%= recipe_path(r) %>"><img src="<%= r.image_url%>" width="130"> </a></td>
+          <td> <a href="<%=recipe_path(r)%>"><img src="<%= r.sourceIcon %>" width="130"> </a></td>
           </td>
-          <td> <a target="_blank" href="<%= recipe_path(r) %>"><%= r.recipe_name %></a></td>
+          <td> <a target="_blank" href="<%= recipe_path(r) %>"><%= r.title %></a></td>
           </td>
-          <td> <i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')">Remove</a>
+          <td> <i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['source'] %>')">Remove</a>
           </td>
         </tr>
         <% end %>
@@ -36,9 +36,15 @@
   <% end %>
 </div>
 
-<!--- should this be added to a javascript file instead of within this page?? --->
+
+
+<!--- should this be added to a javascript file instead of within this page?? -->
+
+
+
 
 <script>
+
 
 function unsave_recipe(ele,url){
   $(ele).text("Removing from your saved recipes..");
