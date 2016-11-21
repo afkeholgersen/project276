@@ -4,16 +4,15 @@
 <% content_for(:body_attributes) do %>
   data-no-turbolink="true"
 <% end %>
-
-
+<div class="container">
 <h1 class="page-headers">Recommended for You </h1>
   <p></p>
 
   <span class="insertDynamicData"> </span>
 
   <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a>
-
 </div>
+
 
 
 <script>
@@ -27,7 +26,6 @@ function tableData(r, extra) {
     if (extra == true){
       tdata+= '<div class="row portfolio">'
     }
-
     tdata += '<div class="col-sm-6 col-md-3">'
     tdata += '<div class="thumbnail" data-toggle="popover" title="'+r["label"]+'" data-content= "'+r["healthLabels"] +' '+r["dietLabels"] +'">'
     tdata += '<a target="_blank" href="'+r["url"]+'">'
