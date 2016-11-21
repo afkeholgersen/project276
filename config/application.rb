@@ -14,6 +14,5 @@ module Project276
     ENV['APP_ID'] = "3096f3a5"
     ENV['APP_KEY'] = "889c5a8d00ada6f56ebc32e860f65978"
     ENV['API_URL'] = "https://api.edamam.com"
-
   end
 end

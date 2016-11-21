@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   #allows the view to use this method
 	helper_method :current_user
 
+
 	private
 
 	#get current user

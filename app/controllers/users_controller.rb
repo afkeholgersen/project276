@@ -1,6 +1,9 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :home, :save_recipe, :my_recipes]
+<<<<<<< HEAD
 
+=======
+>>>>>>> apiupdate
   # GET /users
   # GET /users.json
   def index
@@ -123,49 +126,113 @@ class UsersController < ApplicationController
   end
 
   def home
-    @foundItems = []
-    health = @user.preference.healthlabel.first.apiparameter rescue ""
-    diet = @user.preference.dietlabel.first.apiparameter rescue ""
-    tries = [{diet: diet, q: health},{diet: diet, q: diet}, {diet: diet, health: health}, {diet: diet, q: ""}]
+    Rails.cache.clear
+    @foundLinks = []
 
-    response,req_status = initiate_recommendation_request(params,{diet: diet})
-    pg=0;
-    @json_resp = nil;
+    apiURL = ENV['API_URL'].to_s + "/search?app_id=" + ENV['APP_ID'].to_s + "&app_key="+ ENV['APP_KEY'].to_s + "&r="
+    conn = Faraday.new(:url => "") do |faraday|
+      faraday.request  :url_encoded             # form-encode POST params
+      faraday.response :logger               # log requests to STDOUT
+      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+    end
 
-    #stops to-from=100
-      while verifyHealthLabels < 10 && pg < 100
-        tries.each do |t|
-          logger.debug t
+    baseURL = "https://www.edamam.com/recipes/-/"
+    current_user.preference.healthlabel.each do |hlabel|
+      baseURL += hlabel.apiparameter+"/"
+    end
+    current_user.preference.dietlabel.each do |dlabel|
+      baseURL += dlabel.apiparameter+"/"
+    end
+    logger.debug baseURL
+    #page = Nokogiri::HTML(open(baseURL))
+    #opens up the page using watir (based off of selinium) using phantomjs driver
+    brows = Watir::Browser.new(:phantomjs)
+    brows.goto baseURL
+    #http://api.edamam.com/search?app_id=ed2714cc&app_key=81029d1bb3daad9d1bdaf4a46adca6b2&r="
 
-          params[:from] = 0
-          params[:to] = pg+100
-          logger.debug @foundItems.length
-          if (@user.preference.healthlabel[0].apiparameter.downcase != "alcohol-free")
-            response,req_status = initiate_recommendation_request(params,t)
-          else
-            @specialcase=true
-            response,req_status = initiate_recommendation_request(params,t)
-          end
-          resp = response.body
+    #wait for AJAX calls to populate div's
+    sleep 1
 
-            #if resp == nil
-              # If no labels renders results then show then top recipes
-              #response,req_status = initiate_recommendation_request(params,{q: "ALL"})
-              #if req_status != 403 || req_status != 404
-                #resp = response.body
-              #else
-                #resp = {:hits => {}, :error => "No results found for search criteria"}.to_json
-          begin
-            @json_resp = JSON.parse(resp)
+    doc = Nokogiri::HTML(brows.html)
 
+    doc.css("li[itemtype='http://schema.org/Thing']").each do |link|
+      logger.debug link['data-id']
+      @foundLinks.push(link['data-id'])
+      #logger.debug resp.body
+    end
+  end
+
+<<<<<<< HEAD
           rescue JSON::ParserError
             pg+=100
             next
           end #end try
+=======
 
-        end #end tries
-        pg+=100
-    end #end while loop
+    def individual_recipes
+      uri = params['uri']
+      apiURL = ENV['API_URL'].to_s + "/search?app_id=" + ENV['APP_ID'].to_s + "&app_key="+ ENV['APP_KEY'].to_s + "&r="
+      conn = Faraday.new(:url => "") do |faraday|
+        faraday.request  :url_encoded             # form-encode POST params
+        faraday.response :logger               # log requests to STDOUT
+        faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+      end
+        recipeInfo = apiURL+uri
+        resp = conn.get recipeInfo
+        if resp.body != nil
+          json_resp = JSON.parse(resp.body)
+           respond_to do |format|
+             format.json {render json: json_resp[0], status: :ok }
+            end
+          
+        end
+>>>>>>> apiupdate
+
+    end
+    # @foundItems = []
+    # health = @user.preference.healthlabel.first.apiparameter rescue ""
+    # diet = @user.preference.dietlabel.first.apiparameter rescue ""
+    # tries = [{diet: diet, q: health},{diet: diet, q: diet}, {diet: diet, health: health}, {diet: diet, q: ""}]
+
+    # response,req_status = initiate_recommendation_request(params,{diet: diet})
+    # pg=0;
+    # @json_resp = nil;
+
+    # #stops to-from=100
+    #   while verifyHealthLabels < 10 && pg < 100
+    #     tries.each do |t|
+    #       logger.debug t
+
+    #       params[:from] = 0
+    #       params[:to] = pg+100
+    #       logger.debug @foundItems.length
+    #       if (@user.preference.healthlabel[0].apiparameter.downcase != "alcohol-free")
+    #         response,req_status = initiate_recommendation_request(params,t)
+    #       else
+    #         @specialcase=true
+    #         response,req_status = initiate_recommendation_request(params,t)
+    #       end
+    #       resp = response.body
+
+    #         #if resp == nil
+    #           # If no labels renders results then show then top recipes
+    #           #response,req_status = initiate_recommendation_request(params,{q: "ALL"})
+    #           #if req_status != 403 || req_status != 404
+    #             #resp = response.body
+    #           #else
+    #             #resp = {:hits => {}, :error => "No results found for search criteria"}.to_json
+    #       begin
+    #         @json_resp = JSON.parse(resp)
+
+
+    #       rescue JSON::ParserError
+    #         pg+=100
+    #         next
+    #       end #end try
+
+    #     end #end tries
+    #     pg+=100
+    # end #end while loop
 
   end #end function
 
@@ -367,6 +434,6 @@ class UsersController < ApplicationController
 
     # Just need these two fields to create a preference
     def preference_params
-      params.require(:preference).permit(:healthlabel_ids, :dietlabel_ids)
+      params.require(:preference).permit(healthlabel_ids: [], dietlabel_ids: [])
     end
-end
+
