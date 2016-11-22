@@ -15,12 +15,18 @@ class RecipesController < ApplicationController
       recipeInfo = apiURL+uri
       resp = conn.get recipeInfo
       if resp.body != nil
-        json_resp = JSON.parse(resp.body)
-        @recipe = json_resp[0]
-        logger.debug @reicpe
-        respond_to do |format|
-        	format.html
+        begin
+          json_resp = JSON.parse(resp.body)
+          @recipe = json_resp[0]
+          logger.debug @reicpe
+          respond_to do |format|
+          	format.html
+          end
+        rescue => ex
+          logger.debug ex
         end
+
+        
          # respond_to do |format|
          #   format.json {render json: json_resp[0], status: :ok }
          #  end
