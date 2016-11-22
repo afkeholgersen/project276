@@ -49,13 +49,14 @@
 
     <br>
 
-    <div id="commen_board">
+    <div id="comment_board">
       <h4>Comment Board</h4>
-      <%= form_for @user do |c| %>
-        <%= c.label :Comment %><br>
-        <%= c.text_field :comment_text %><br>
-
-        <%= c.submit %>
+      <%= form_tag("/recipes", method: "post") do %>
+        <%= label_tag :comment_text %>
+        <%= text_field_tag :comment_text %><br>
+        <div class="actions">
+          <%= submit_tag "Submit Comment" ,class: "btn btn-primary", value: @recipe.id %>
+        </div>
       <% end %>
 
     </div>
