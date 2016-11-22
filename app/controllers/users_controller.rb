@@ -129,6 +129,26 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
+  def search
+    apiURL = ENV['API_URL'].to_s + "/search?app_id=" + ENV['APP_ID'].to_s + "&app_key="+ ENV['APP_KEY'].to_s + "&q="
+    conn = Faraday.new(:url => "") do |faraday|
+      faraday.request  :url_encoded             # form-encode POST params
+      faraday.response :logger               # log requests to STDOUT
+      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+    end
+    baseURL=apiURL+params[:search]
+    resp = conn.get baseURL
+
+    if resp.body != nil
+      json_resp = JSON.parse(resp.body)
+      logger.debug json_resp
+      @searchResults = json_resp
+      respond_to do |format|
+        format.html
+      end
+    end
+
+  end
 
   def home
     @foundLinks = []
@@ -158,7 +178,6 @@ class UsersController < ApplicationController
     sleep 1
 
     doc = Nokogiri::HTML(brows.html)
-    logger.debug doc
     doc.css("li[itemtype='http://schema.org/Thing']").each do |link|
       logger.debug link['data-id']
       @foundLinks.push(link['data-id'])
