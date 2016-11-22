@@ -72,8 +72,12 @@ function tableData(r) {
     tdata += '<td> <a target="_blank" href="'+r["url"]+'">'+r["label"]+' </a></td>'
     tdata += ' <td> '+r["healthLabels"] +' </td>'
     tdata += '<td> '+r["dietLabels"] + '</td>'
-
-    tdata += '<td><i class="material-icons">save</i><a href="javascript:void(0);" onclick="save_recipes($(this),'+"'"+r['uri']+"'"+')">Save recipe</a>'
+    if (r["rExist"] == 1) {
+      tdata += '<td><a href="javascript:void(0);"> Saved </a>'
+    } 
+    else {
+      tdata += '<td><i class="material-icons">save</i><a href="javascript:void(0);" onclick="save_recipes($(this),'+"'"+r['uri']+"'"+')">Save recipe</a>'
+    }
     tdata += '</td>'
     tdata += '</tr>'
   return tdata
@@ -95,6 +99,7 @@ $(document).ready(function(){
       url: "<%= individual_recipes_user_path(@user) %>",
       data: {uri: "<%= fl %>"}
     }).done(function(resp) {
+      console.log(resp)
       foundItems.push(resp)
       finishedCalls += 1
       $(".insertDynamicData").append(tableData(foundItems[finishedCalls-1]))

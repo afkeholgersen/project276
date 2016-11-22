@@ -54,6 +54,7 @@ function unsave_recipe(ele,url){
     data: { id: "<%= params[:id] %>" ,recipe_url: url},
     dataType: "script"
   }).done(function() {
+    console.log("DONE")
     location.reload();
   });
 }

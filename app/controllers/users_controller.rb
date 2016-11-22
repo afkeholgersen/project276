@@ -200,13 +200,28 @@ class UsersController < ApplicationController
       faraday.response :logger               # log requests to STDOUT
       faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
     end
+      logger.debug uri
       recipeInfo = apiURL+uri
+
+      uri = URI.unescape(uri)
+      logger.debug uri
+      recipe_exists = current_user.savedrecipe.recipe.where(:source => uri).first
       resp = conn.get recipeInfo
       if resp.body != nil
         json_resp = JSON.parse(resp.body)
-         respond_to do |format|
-           format.json {render json: json_resp[0], status: :ok }
+        if recipe_exists
+          json_resp[0]['rExist'] = 1
+          puts JSON[json_resp[0]]
+          respond_to do |format|
+            format.json {render json: json_resp[0], status: :ok }
           end
+        else
+          json_resp[0]['rExist'] = 0
+          puts JSON[json_resp[0]]
+          respond_to do |format|
+            format.json {render json: json_resp[0], status: :ok }
+          end
+        end
         
       end
 
@@ -315,9 +330,9 @@ class UsersController < ApplicationController
 
   def unsave_recipe
     recipe_url= params[:recipe_url]
-    recipe_exists = @user.recipes.where(:recipe_id => recipe_url).first
+    recipe_exists = current_user.savedrecipe.recipe.where(:source => recipe_url).first
     if recipe_exists
-      @user.recipes.where(:recipe_id => recipe_url).destroy
+      current_user.savedrecipe.recipe.destroy(current_user.savedrecipe.recipe.where(:source => recipe_url).first.id)
       @message= "Removed from your recipes list"
     else
       @message= "Already removed from your recipes list"
