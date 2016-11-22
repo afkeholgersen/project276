@@ -37,4 +37,33 @@
 
     <br>
 
+
+    <div id="comment_board">
+      <h4>Show All Comments</h4>
+      <% @comment.each do |c| %>
+      <%= c.user.username %>: <br>
+      <%= c.comment_text %><br><br>
+      <% end %>
+    </div>
+
+    <div id="comment_board_reply">
+    <h5>Comment Board</h5>
+      <%= form_tag("/recipes", method: "post", :remote => true) do %>
+        <%= label_tag :comment_text %>
+        <%= text_field_tag :comment_text %><br>
+        <%= hidden_field_tag :recipe_id, params[:id] %>
+        <div class="actions">
+          <%= submit_tag "Submit Comment" ,class: "btn btn-primary" %>
+        </div>
+      <% end %>
+
+    </div>
   </div>
+
+<script>
+$('.btn').on("click", function() {
+  console.log("FOUND");
+  setTimeout(location.reload(),5000);
+}
+)
+</script>
