@@ -6,7 +6,6 @@ Rails.application.routes.draw do
 
 
   root to: 'welcome#index' #main home webpage
-  get "welcome/index"
 
   get "users/new"
 

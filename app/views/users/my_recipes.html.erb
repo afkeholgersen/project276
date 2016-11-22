@@ -4,6 +4,7 @@
 <div class="container">
 <h1 class="page-headers"> Saved Recipes</h2>
   <% if @recipes %>
+
   <% if @recipes.size == 0 %>
       <p class="well"> No saved recipes... yet!</p>
     <% end %>
@@ -14,11 +15,11 @@
     <div class="row portfolio"> <!-- only have a new row every 3 rows -->
       <% group.each do |r| %>
       <div class="col-sm-6 col-md-3">
-        <div class="thumbnail" data-toggle="popover" title="<%= r.recipe_name%>" data-content= " get ingredients/ labels here... ">
+        <div class="thumbnail" data-toggle="popover" title="<%= r.title%>" data-content= "<%= r.dietLabels %> <%= r.healthLabels%> ">
         <a target="_blank" href="<%= recipe_path(r) %>">
-        <img id="saved-image" class="img-responsive" src="<%= r.image_url%>" alt="" >
-        <h3 id="recipe-name"><%= r.recipe_name %></h3> </a>
-        <p ><a id="remove-recipe" href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')"><i class="material-icons">delete_forever</i> Remove</a></p>
+        <img id = "saved-image"  class="img-responsive" src="<%= r.sourceIcon %>" width="130"> </a>
+        <h3 id="recipe-name"><%= r.title %></h3> </a>
+        <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['source'] %>')">Remove</a></p>
       </div>
       </div>
       <%end%>
@@ -29,9 +30,15 @@
   <%end%>
 </div>
 
-<!--- should this be added to a javascript file instead of within this page?? --->
+
+
+<!--- should this be added to a javascript file instead of within this page?? -->
+
+
+
 
 <script>
+
 
 function unsave_recipe(ele,url){
   $(ele).text("Removing from your saved recipes..");
@@ -41,6 +48,7 @@ function unsave_recipe(ele,url){
     data: { id: "<%= params[:id] %>" ,recipe_url: url},
     dataType: "script"
   }).done(function() {
+    console.log("DONE")
     location.reload();
   });
 }

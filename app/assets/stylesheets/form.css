@@ -24,7 +24,11 @@ div.chosen-field {
   margin-right: 35%;
 }
 
+
+div.chosen-field {
+  text-align: right;
+  margin-right: 35%;
+}
 li {
   text-align: left;
-
 }

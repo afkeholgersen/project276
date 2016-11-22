@@ -4,9 +4,11 @@ nav.navbar-default  {
     margin-bottom: 10%;
     padding-bottom: 0px;
 }
+
 a{ /* set default font size of text to 35px */
   font-size: 20px;
 }
+
 
 @media (min-width: 979px){ /* only screen bigger than 979px can hover */
   ul.navbar-right li.dropdown:hover > ul.dropdown-menu{
@@ -34,10 +36,7 @@ li.dropdown a.dropdown-toggle{
   font-size: 20px;
   padding-right: 50px;
 }
-
-body {
-  /*http://uigradients.com/#MetallicToad*/
-
+.dropdown-content a:hover {background-color: #f1f1f1}
 
 }
 

@@ -1,3 +1,4 @@
+
 <%= stylesheet_link_tag 'form' %>
 <%= form_for(user, class:"form" ) do |f| %>
   <% if user.errors.any? %>
@@ -12,6 +13,7 @@
     </div>
   <% end %>
 <div class=enclosure>
+
   <div class="field">
     <%= f.label :username %>
     <%= f.text_field :username %>
@@ -25,6 +27,7 @@
   <div class="field">
     <%= f.label :password %>
     <%= f.password_field :password %>
+
   </div>
   <div class="field">
 
@@ -45,7 +48,8 @@
 
   <div class="chosen-field">
     <%= p.label "Health Label" %><!--- was :healthlabel_ids -->
-    <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, { :prompt => ""}, { :multiple => true, class: 'chosen-select' } %>
+    <%= p.select( :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, { :prompt => ""}, { :multiple => true, class: 'chosen-select' } )%>
+
   </div>
 
   <div class="chosen-field">
@@ -57,12 +61,12 @@
 <% else %>
   <%= fields_for @preference do |p| %>
 
-
   <div class="chosen-field">
     <%= p.label "Health Label" %> <!--- was :healthlabel_ids -->
     <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, { :prompt => ""}, { :multiple => true, class: 'chosen-select' }   %>
 
   </div>
+<br/>
 
   <div class="chosen-field">
     <%= p.label "Diet Label" %> <!--- was :dietlabel_ids -->
@@ -77,4 +81,5 @@
     <%= f.submit class: "btn btn-primary"%>
   </div>
 </div>
+
 <% end %>

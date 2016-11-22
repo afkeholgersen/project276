@@ -1,0 +1,132 @@
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
+
+<% content_for(:body_attributes) do %>
+  data-no-turbolink="true"
+<% end %>
+
+<div class="container">
+<h1 class="page-headers">Search Results</h1>
+  <p></p>
+
+
+  <span class="insertDynamicData"> </span>
+
+<!--  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a> -->
+</div>
+
+
+
+<script>
+
+$('[data-toggle="popover"]').popover({
+  placement: "auto",
+  trigger: "hover"
+})
+
+function tableData(r, extra) {
+    tdata = ""
+    if (extra == true){
+      tdata+= '<div class="row portfolio">'
+    }
+    tdata += '<div class="col-sm-6 col-md-3">'
+    tdata += '<div class="thumbnail" data-toggle="popover" title="'+r["label"]+'" data-content= "'+r["healthLabels"] +' '+r["dietLabels"] +'">'
+    tdata += '<a target="_blank" href="'+r["url"]+'">'
+    tdata += '<img id="saved-image" class="img-responsive" src="'+r["image"]+'" alt="" >'
+    tdata += '<h3 id="recipe-name">'+r["label"]+'</h3> </a>'
+    if (r["rExist"] == 1) {
+      tdata += '<a href="javascript:void(0);"> Saved </a>'
+    }
+    else {
+      tdata += '<i class="material-icons">save</i><a href="javascript:void(0);" onclick="save_recipes($(this),'+"'"+r['uri']+"'"+')">Save recipe</a>'
+    }
+    // tdata += '<td> <a target="_blank" href="'+r["url"]+'"><img src="'+r["image"]+'" width="120"> &nbsp; </a></td>'
+    // tdata += '<td> <a target="_blank" href="'+r["url"]+'">'+r["label"]+' </a></td>'
+    // tdata += ' <td> '+r["healthLabels"] +' </td>'
+    // tdata += '<td> '+r["dietLabels"] + '</td>'
+    // tdata += ' <td><a href="javascript:void(0);"> Saved </a>'
+    // tdata += '</td>'
+    tdata += '</div> '
+    tdata += '</div>'
+    if (extra== true ){
+      tdata += '</div>'
+    }
+  return tdata
+}
+
+$(document).on('turbolinks:load', function() {
+  console.log("TURBOLINKS LOAD")
+})
+
+var links = []
+var foundItems = []
+var finishedCalls = 0
+$(document).ready(function(){
+    console.log("RUNNING NOW")
+    <% @foundLinks.each do |fl| %>
+
+    $.ajax({
+      method: "GET",
+      url: "<%= individual_recipes_user_path(@user) %>",
+      data: {uri: "<%= fl %>"}
+    }).done(function(resp) {
+      console.log(resp)
+      foundItems.push(resp)
+      finishedCalls += 1
+      if (finishedCalls % 4 == 0 ){
+        $(".insertDynamicData").append(tableData(foundItems[finishedCalls-1],true))
+      }
+      else {
+        $(".insertDynamicData").append(tableData(foundItems[finishedCalls-1],false))
+      }
+    })
+    <% end %>
+})
+
+
+
+function more(){
+  $("#more_btn").addClass("disabled","disabled");
+  $("#more_btn").removeClass( "btn-warning");
+  $("#more_btn").addClass( "btn-default");
+  $("#more_btn").text( "Loading...");
+  $.ajax({
+    method: "GET",
+    url: "<%= home_user_path(@user) %>",
+    data: { id: "<%= params[:id] %>" ,to: $("#to").val()},
+    dataType: "script"
+  }).done(function() {
+    $("#more_btn").removeClass("disabled","disabled");
+    $("#more_btn").removeClass( "btn-default");
+    $("#more_btn").addClass( "btn-warning");
+    $("#more_btn").text( "Load More");
+  });
+}
+
+
+function save_recipes(ele, recipeURI){
+
+  $(ele).text("Saving..");
+  var recipe;
+  $.each(foundItems, function(ind, val) {
+    if (val['uri'] == recipeURI)
+    {
+      recipe = val
+      return
+    }
+  })
+  delete recipe["rExist"]
+  console.log(recipe)
+  $.ajax({
+    method: "POST",
+    url: "<%= save_recipe_user_path %>",
+    data: { id: "<%= params[:id] %>", recipe: recipe },
+  }).done(function() {
+      console.log("finish save_recipe")
+      $(ele).text("Saved");
+      $(ele).addClass("disabled","disabled");
+  });
+}
+
+</script>
