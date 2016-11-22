@@ -1,6 +1,5 @@
 class RecipesController < ApplicationController
   def show
-
   	logger.debug "STARTING SHOW RECIPE"
   	r = Recipe.find(params[:id])
 		uri = r.source
@@ -32,11 +31,14 @@ class RecipesController < ApplicationController
          #  end
 
       end
+
+    @recipe_comment = Recipe.find(params[:id])
+    @comment = Comment.where(recipe_id: @recipe_comment)
+
   end
 
   def create
-    #u = User.find_by(id: session[:user_id])
-    @recipe = Recipe.find(params[:commit].id)
+    @recipe = Recipe.find(params[:recipe_id])
     @comment = Comment.new(:comment_text => params[:comment_text], :vote => params[:vote])
     current_user.comments.push(@comment)
     @recipe.comments.push(@comment)
@@ -44,6 +46,8 @@ class RecipesController < ApplicationController
     @comment.recipe = @recipe
     @comment.save
   end
+
+
 
 
 end
