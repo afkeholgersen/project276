@@ -1,7 +1,7 @@
 class User < ApplicationRecord
 	belongs_to :preference
 	belongs_to :savedrecipe
-	has_many :recipes
+
 	has_many :comments, dependent: :destroy
 
 
@@ -13,7 +13,6 @@ class User < ApplicationRecord
 	validates_presence_of :password, if: :password_changed?
 	validates_presence_of :username
 	validates_presence_of :email
-
 
 	#validate email- at least looks like an email
 	validates :email, email: true

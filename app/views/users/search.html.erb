@@ -1,0 +1,44 @@
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
+
+<% content_for(:body_attributes) do %>
+  data-no-turbolink="true"
+<% end %>
+
+<div class="container">
+<h1 class="page-headers">Search Results</h1>
+  <p></p>
+      <% @searchResults["hits"].in_groups_of(4,false).each do |group| %>
+      <div class="row portfolio"> <!-- only have a new row every 3 rows -->
+
+        <% group.each do |g| %>
+          <% r = g["recipe"] %>
+          <div class="col-sm-6 col-md-3">
+            <div class="thumbnail" data-toggle="popover" title="<%= r["label"] %>" data-content="<%= r["dietLabels"].join(",") %> <%= r["healthLabels"].join(",")%> ">
+            <a target="_blank" href="<%= recipe_path(r) %>">
+            <img id = "saved-image"  class="img-responsive" src="<%= r["image"] %>" width="130"> </a>
+            <h3 id="recipe-name"><%= r["label"] %></h3> </a>
+            <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')">Remove</a></p>
+          </div>
+          </div>
+          <% end %>
+          </div>
+        <% end %>
+
+
+
+
+<!--  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a> -->
+</div>
+
+
+
+<script>
+
+$('[data-toggle="popover"]').popover({
+  placement: "auto",
+  trigger: "hover"
+})
+
+</script>

@@ -1,71 +1,96 @@
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
 
-
-<!---
+<% content_for(:body_attributes) do %>
+  data-no-turbolink="true"
+<% end %>
 
 <div class="container">
-  <p id="notice"><%= notice %></p>
-
-  <%= form_for(@user, html: { class:"form-inline"} ) do |f| %>
-  <% if @user.errors.any? %>
-  <div id="error_explanation">
-    <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
-    <ul>
-      <% user.errors.full_messages.each do |message| %>
-      <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
-  <% end %>
-
-  <%= fields_for @user.preference do |p| %>
-
-  <div class="form-group">
-    <%= p.label "Health Label" %> was :healthlabel_ids
-    <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, {:include_blank => "Select"}, {class: "form-control"} %>
-  </div>
-
-  <div class="form-group">
-    <%= p.label "Diet Label" %> was: :dietlabel_ids
-    <%= p.select :dietlabel_ids, Dietlabel.all.map{|a| [a.name, a.id]}, {:include_blank => "Select"}, {class: "form-control"}  %>
-  </div>
-  <input type="hidden" name="redirect_to" value="home" />
-  <% end %>
-  <%= f.submit "Update preference", class: "btn btn-primary"%>
-
-  <% end %>
---->
-<h1 class="page-headers">Recommended for You </h1> 
-
+<h1 class="page-headers">Recommended for You </h1>
   <p></p>
-  <table class="table">
-    <thead>
-      <tr class="table">
-        <th></th>
-        <th>Recipe</th>
-        <th>Health Label's</th>
-        <th>Diet Label's</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="recipies_rows">
-      <%= render "recipies" , user: @user%>
-    </tbody>
-  </table>
 
-  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a>
 
+  <span class="insertDynamicData"> </span>
+
+<!--  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a> -->
 </div>
 
 
+
 <script>
+
+$('[data-toggle="popover"]').popover({
+  placement: "auto",
+  trigger: "hover"
+})
+
+function tableData(r, extra) {
+    tdata = ""
+    if (extra == true){
+      tdata+= '<div class="row portfolio">'
+    }
+    tdata += '<div class="col-sm-6 col-md-3">'
+    tdata += '<div class="thumbnail" data-toggle="popover" title="'+r["label"]+'" data-content= "'+r["healthLabels"] +' '+r["dietLabels"] +'">'
+    tdata += '<a target="_blank" href="'+r["url"]+'">'
+    tdata += '<img id="saved-image" class="img-responsive" src="'+r["image"]+'" alt="" >'
+    tdata += '<h3 id="recipe-name">'+r["label"]+'</h3> </a>'
+    if (r["rExist"] == 1) {
+      tdata += '<a href="javascript:void(0);"> Saved </a>'
+    }
+    else {
+      tdata += '<i class="material-icons">save</i><a href="javascript:void(0);" onclick="save_recipes($(this),'+"'"+r['uri']+"'"+')">Save recipe</a>'
+    }
+    // tdata += '<td> <a target="_blank" href="'+r["url"]+'"><img src="'+r["image"]+'" width="120"> &nbsp; </a></td>'
+    // tdata += '<td> <a target="_blank" href="'+r["url"]+'">'+r["label"]+' </a></td>'
+    // tdata += ' <td> '+r["healthLabels"] +' </td>'
+    // tdata += '<td> '+r["dietLabels"] + '</td>'
+    // tdata += ' <td><a href="javascript:void(0);"> Saved </a>'
+    // tdata += '</td>'
+    tdata += '</div> '
+    tdata += '</div>'
+    if (extra== true ){
+      tdata += '</div>'
+    }
+  return tdata
+}
+
+$(document).on('turbolinks:load', function() {
+  console.log("TURBOLINKS LOAD")
+})
+
+var links = []
+var foundItems = []
+var finishedCalls = 0
+$(document).ready(function(){
+    console.log("RUNNING NOW")
+    <% @foundLinks.each do |fl| %>
+
+    $.ajax({
+      method: "GET",
+      url: "<%= individual_recipes_user_path(@user) %>",
+      data: {uri: "<%= fl %>"}
+    }).done(function(resp) {
+      console.log(resp)
+      foundItems.push(resp)
+      finishedCalls += 1
+      if (finishedCalls % 4 == 0 ){
+        $(".insertDynamicData").append(tableData(foundItems[finishedCalls-1],true))
+      }
+      else {
+        $(".insertDynamicData").append(tableData(foundItems[finishedCalls-1],false))
+      }
+    })
+    <% end %>
+})
+
+
+
 function more(){
   $("#more_btn").addClass("disabled","disabled");
   $("#more_btn").removeClass( "btn-warning");
   $("#more_btn").addClass( "btn-default");
   $("#more_btn").text( "Loading...");
-
   $.ajax({
     method: "GET",
     url: "<%= home_user_path(@user) %>",
@@ -80,17 +105,27 @@ function more(){
 }
 
 
+function save_recipes(ele, recipeURI){
 
-function save_recipe(ele,url){
   $(ele).text("Saving..");
+  var recipe;
+  $.each(foundItems, function(ind, val) {
+    if (val['uri'] == recipeURI)
+    {
+      recipe = val
+      return
+    }
+  })
+  console.log(recipe)
   $.ajax({
     method: "POST",
     url: "<%= save_recipe_user_path %>",
-    data: { id: "<%= params[:id] %>" ,recipe_url: url},
-    dataType: "script"
+    data: { id: "<%= params[:id] %>", recipe: recipe },
   }).done(function() {
+      console.log("finish save_recipe")
       $(ele).text("Saved");
       $(ele).addClass("disabled","disabled");
   });
 }
+
 </script>

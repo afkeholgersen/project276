@@ -1,3 +1,4 @@
+
 <%= stylesheet_link_tag 'form' %>
 <%= form_for(user, class:"form" ) do |f| %>
   <% if user.errors.any? %>
@@ -12,6 +13,7 @@
     </div>
   <% end %>
 <div class=enclosure>
+
   <div class="field">
     <%= f.label :username %>
     <%= f.text_field :username %>
@@ -32,7 +34,7 @@
     <%= f.label :password_confirmation %>
     <%= f.password_field :password_confirmation %>
   </div>
-
+<br/>
 <% if current_user %>
   <% if current_user.role == 2 %>
     <div class="field">
@@ -43,27 +45,33 @@
 
   <%= fields_for @user.preference do |p| %>
 
-  <div class="field">
-    <%= p.label "Health Label" %><!--- was :healthlabel_ids --->
-    <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, :include_blank => "Select" %>
+
+  <div class="chosen-field">
+    <%= p.label "Health Label" %><!--- was :healthlabel_ids -->
+    <%= p.select( :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, { :prompt => ""}, { :multiple => true, class: 'chosen-select' } )%>
+
   </div>
 
-  <div class="field">
-    <%= p.label "Diet Label" %> <!--- was :dietlabel_ids --->
-    <%= p.select :dietlabel_ids, Dietlabel.all.map{|a| [a.name, a.id]}, :include_blank => "Select" %>
+  <div class="chosen-field">
+    <%= p.label "Diet Label" %> <!--- was :dietlabel_ids -->
+    <%= p.select :dietlabel_ids, Dietlabel.all.map{|a| [a.name, a.id]}, { :prompt => ""}, { :multiple => true, class: 'chosen-select' } %>
+
   </div>
   <%end%>
 <% else %>
   <%= fields_for @preference do |p| %>
 
-  <div class="field">
-    <%= p.label "Health Label" %> <!--- was :healthlabel_ids --->
-    <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, :include_blank => "Select" %>
-  </div>
+  <div class="chosen-field">
+    <%= p.label "Health Label" %> <!--- was :healthlabel_ids -->
+    <%= p.select :healthlabel_ids , Healthlabel.all.map{|a| [a.name, a.id]}, { :prompt => ""}, { :multiple => true, class: 'chosen-select' }   %>
 
-  <div class="field">
-    <%= p.label "Diet Label" %> <!--- was :dietlabel_ids --->
-    <%= p.select :dietlabel_ids, Dietlabel.all.map{|a| [a.name, a.id]}, :include_blank => "Select" %>
+  </div>
+<br/>
+
+  <div class="chosen-field">
+    <%= p.label "Diet Label" %> <!--- was :dietlabel_ids -->
+    <%= p.select :dietlabel_ids, Dietlabel.all.map{|a| [a.name, a.id]}, { :prompt => ""}, { :multiple => true, class: 'chosen-select' }   %>
+
   </div>
   <%end%>
 
@@ -73,21 +81,5 @@
     <%= f.submit class: "btn btn-primary"%>
   </div>
 </div>
-  <%= fields_for @preference do |p| %>
 
-    <div class="field">
-      <%= p.label :healthlabel_ids %>
-      <%= p.number_field :healthlabel_ids  %>
-    </div>
-
-    <div class="field">
-      <%= p.label :dietlabel_ids %>
-      <%= p.number_field :dietlabel_ids  %>
-    </div>
-
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>

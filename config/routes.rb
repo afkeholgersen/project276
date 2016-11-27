@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
+
   get 'welcome/index'
   get "users/adminhome"
   resources :recipes
 
 
   root to: 'welcome#index' #main home webpage
-  get "welcome/index"
 
   get "users/new"
 
@@ -17,7 +17,9 @@ Rails.application.routes.draw do
 
     member do
       get :home
+      get :search
       get :my_recipes
+      get :individual_recipes
       post :save_recipe
       delete :unsave_recipe
     end
@@ -25,5 +27,4 @@ Rails.application.routes.draw do
 
     end
   end
-
 end

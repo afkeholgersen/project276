@@ -11,9 +11,8 @@ module Project276
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-    ENV['APP_ID'] = "ed2714cc"
-    ENV['APP_KEY'] = "81029d1bb3daad9d1bdaf4a46adca6b2"
+    ENV['APP_ID'] = "02096b9c"
+    ENV['APP_KEY'] = "3f42c3f48deb709909715e3fb7e94bbe"
     ENV['API_URL'] = "https://api.edamam.com"
-
   end
 end

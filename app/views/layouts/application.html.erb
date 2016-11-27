@@ -4,66 +4,66 @@
     <title>FoodNatic</title>
     <%= csrf_meta_tags %>
 
-  <!---  <link rel="stylesheet" type="text/css" href="application.css">
-    <script src="application.js" type="text/javascript"></script> --->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <%= stylesheet_link_tag    "application", :media => "all" %>
     <%= javascript_include_tag "application" %>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+
   </head>
 
 
   <body>
-
-<<<<<<< HEAD
-    <div class="nav-fixer">
-    <ul class="topnav" id="topNavBar_left">
-<!---      <li class="left"><a href="Home">Home</a></li> --->
-      <%= link_to '<img  class= "logo-in-nav" src="/logo-reverse.png" alt="Home"/>'.html_safe, welcome_index_path %>
-  <!---    <li class="left"><input type="text" name="keyword"></li>
-      <li class="left"><input type="submit" value="Search"></li> -->
-      <li class="account">
-        <a href="#" class="dropButton">Account</a>
-        <div id="accountDropDownItems" class="dropDownContent">
-          <% if current_user %>
-      	  <!---  <span>
-      	    	Hello <%= current_user.username %>
-      	    </span> --->
-            <%= link_to "Recommended Recipes", home_user_path(current_user) %>
-            <%= link_to "Favorite Recipes",  my_recipes_user_path(current_user) %>
-            <% if current_user.role == 2 %>
-              <%= link_to "Admin Panel", users_adminhome_path %>
-            <% end %>
-      	    <%= link_to "Settings", edit_user_path(current_user)%>
-            <%= link_to "Log out", logout_path %>
-      	  <% else %>
-      	    <%= link_to "Sign up", new_user_path %>
-      	    <%= link_to "Log in", new_session_path %>
-      	  <% end %>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="nav navbar-nav">
+            <%= link_to '<img class= "logo-in-nav" src="/logo-reverse-transparent.png" alt="Home"/>'.html_safe, welcome_index_path %>
         </div>
-      </li>
-    </ul>
-  </div>
+        <div>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="left">
+              <!-- For now, can only search if a current user, -->
+              <%if current_user.present?%>
+                <%= form_tag search_user_path(current_user), :method => 'get' do %>
+                  <p>
+              <%= text_field_tag :search, params[:search], class: "left" %>
+              <%= submit_tag "Search", :name => nil, class: "left" %>
+
+                 </p>
+                <% end %>
+              <% end %>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <% if current_user %>
+                  <li class="submenu"><%= link_to "Settings", edit_user_path(current_user)%> <!--- TODO fix paths --></li>
+                  <li class="submenu"><%= link_to "Recommended Recipes", home_user_path(current_user) %></li>
+                  <li class="submenu"><%= link_to "Favorite Recipes",  my_recipes_user_path(current_user) %></li>
+                  <% if current_user.role == 2 %>
+                    <li class="submenu"><%= link_to "Admin Panel", users_adminhome_path %></li>
+                  <% end %>
+                  <li class="submenu"><%= link_to "Log out", logout_path %></li>
+            	  <% else %>
+            	    <li class="submenu"><%= link_to "Sign up", new_user_path %></li>
+            	    <li class="submenu"><%= link_to "Log in", new_session_path %></li>
+            	  <% end %>
+              </ul>
+            </li> <!-- dropdown -->
+          </ul> <!-- nav navbar-nav navbar-right -->
+
+        </div>
+      </div>
+    </nav>
 
 
   <div class="main-div">
     <%= yield %>
   </div>
-=======
-  	
-	  <% if current_user %>
-	    <span>
-	    	Hello <%= current_user.username %>
-	    </span>
-	    <%= link_to "Log out", logout_path %>
-	  <% else %>
-	    <%= link_to "Sign up", new_user_path %> or
-	    <%= link_to "log in", new_session_path %>
-	  <% end %>
 
-
-		<%= yield %>
-  
->>>>>>> DB
   </body>
 </html>

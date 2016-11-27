@@ -1,41 +1,44 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
 
 <div class="container">
 <h1 class="page-headers"> Saved Recipes</h2>
+  <% if @recipes %>
+
   <% if @recipes.size == 0 %>
-    <p class="well"> No saved recipes... yet!</p>
-  <% end %>
+      <p class="well"> No saved recipes... yet!</p>
+    <% end %>
 
   <% if @recipes.size > 0%>
-  <p></p>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th></th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="recipies_rows">
-        <% @recipes.each do |r| %>
-        <tr>
-          <td> <a target="_blank" href="<%= recipe_path(r) %>"><img src="<%= r.image_url%>" width="130"> </a></td>
-          </td>
-          <td> <a target="_blank" href="<%= recipe_path(r) %>"><%= r.recipe_name %></a></td>
-          </td>
-          <td> <i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')">Remove</a>
-          </td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <% @recipes.in_groups_of(4,false).each do |group| %>
+    <div class="row portfolio"> <!-- only have a new row every 3 rows -->
+      <% group.each do |r| %>
+      <div class="col-sm-6 col-md-3">
+        <div class="thumbnail" data-toggle="popover" title="<%= r.title%>" data-content= "<%= r.dietLabels %> <%= r.healthLabels%> ">
+        <a target="_blank" href="<%= recipe_path(r) %>">
+        <img id = "saved-image"  class="img-responsive" src="<%= r.sourceIcon %>" width="130"> </a>
+        <h3 id="recipe-name"><%= r.title %></h3> </a>
+        <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['source'] %>')">Remove</a></p>
+      </div>
+      </div>
+      <%end%>
+    </div>
+    <% end %>
 
-  <% end %>
+    <%end %>
+  <%end%>
 </div>
 
-<!--- should this be added to a javascript file instead of within this page?? --->
+
+
+<!--- should this be added to a javascript file instead of within this page?? -->
+
+
+
 
 <script>
+
 
 function unsave_recipe(ele,url){
   $(ele).text("Removing from your saved recipes..");
@@ -45,7 +48,13 @@ function unsave_recipe(ele,url){
     data: { id: "<%= params[:id] %>" ,recipe_url: url},
     dataType: "script"
   }).done(function() {
+    console.log("DONE")
     location.reload();
   });
 }
+
+$('[data-toggle="popover"]').popover({
+  placement: "auto",
+  trigger: "hover"
+})
 </script>

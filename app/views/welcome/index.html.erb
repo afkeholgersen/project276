@@ -1,20 +1,25 @@
-
+<%= stylesheet_link_tag 'index' %>
 <div class="logo">
-  <img  class= "logo" src="/logo.jpg" alt="logo" />
+  <img  class= "logo" src="/logo-transparent.png" alt="logo" />
 </div>
-<div class="main-page">
-  <div class="main-page-links">
+<div class="container">
+	<div class="main-page">
+	  <div class="main-page-links">
+		  <% if current_user %>
+		    <h1>
+		    	Hello <%= current_user.username %>
+		    </h1>
+		  <% end %>
 
-	  <% if current_user %>
-	    <h1>
-	    	Hello <%= current_user.username %>!
-	    </h1>
-	    <%= link_to "Log out", logout_path, :class => "main-page-buttons" %>
-	  <% else %>
-	    <%= link_to "Sign up", new_user_path, :class =>"main-page-buttons" %>
-	    <%= link_to "Log in", new_session_path, :class =>"main-page-buttons" %>
-	  <% end %>
-  </div>
-
-  </div>
+      <!---
+				<div class="input-group stylish-input-group">
+		    <input type="text" class="mainSearch form-control" placeholder="Search Recipes..">
+		    <span class="input-group-addon">
+		        <button type="submit">
+		            <i class="material-icons">search</i>
+		        </button>
+		    </span>
+		  </div> --->
+	  </div>
+	</div>
 </div>

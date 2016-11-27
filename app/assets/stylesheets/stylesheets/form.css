@@ -1,0 +1,16 @@
+div.enclosure{
+  text-align: center;
+  margin: auto;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  border-style: solid;
+  border-color: #990000;
+  border-width: thin;
+  border-radius: 20px;
+  width:50%;
+}
+
+div.field{
+  text-align: right;
+  margin-right: 35%;
+}
