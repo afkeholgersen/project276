@@ -13,7 +13,7 @@
           <%if current_user.present?%>
             <%= form_tag search_user_path(current_user), :method => 'get' do %>
             <%= text_field_tag :search, params[:search], class: "left" %>
-            <%= submit_tag "Search", :name => nil, class: "left" %>
+            <%= button_tag"",type: 'submit', class: "fa fa-search", :name => nil %>
             <% end %>
           <% end %>
         </div>
