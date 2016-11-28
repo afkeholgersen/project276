@@ -9,6 +9,14 @@
 		    <h1>
 		    	Hello <%= current_user.username %>
 		    </h1>
+        <div class="homepage_searchbar">
+          <%if current_user.present?%>
+            <%= form_tag search_user_path(current_user), :method => 'get' do %>
+            <%= text_field_tag :search, params[:search], class: "left" %>
+            <%= submit_tag "Search", :name => nil, class: "left" %>
+            <% end %>
+          <% end %>
+        </div>
 		  <% end %>
 
       <!---
