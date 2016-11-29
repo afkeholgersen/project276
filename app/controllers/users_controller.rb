@@ -205,13 +205,21 @@ class UsersController < ApplicationController
     #puts recipe
     recipe_uri = recipe['uri']
     #logger.debug recipie_url
-    recipe_exists = @user.savedrecipe.recipe.where(:source => recipe_uri).first
+    recipe_exists = Recipe.where(:source => recipe_uri).first
 
     r = Recipe.new(:source => recipe_uri, :sourceIcon => recipe["image"], :dietLabels => recipe["dietLabels"].join(","), :healthLabels => recipe["healthLabels"].join(","), :title => recipe['label'])
 
     if recipe_exists
       logger.debug "CALLING IF"
-       @message = "Recipe is available in your saved recipes list"
+      recipe_exists_user = @user.savedrecipe.recipe.where(:source => recipe_uri).first
+      if recipe_exists_user
+         @message = "Recipe is available in your saved recipes list"
+
+      else
+        @user.savedrecipe.recipe.push(recipe_exists);
+        @message = "Saved successfully"
+      end
+      
     elsif !recipe_exists
       logger.debug "CALLING ELSEIF"
       @user.savedrecipe.recipe.push(r)
