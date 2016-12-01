@@ -1,3 +1,4 @@
+
 class UsersController < ApplicationController
 
   before_action :set_user, only: [:show, :edit, :update, :destroy, :home, :save_recipe, :my_recipes]
@@ -166,38 +167,37 @@ class UsersController < ApplicationController
   end
 
   def home
-    @foundLinks = []
+    # @foundLinks = []
+    # apiURL = ENV['API_URL'].to_s + "/search?app_id=" + ENV['APP_ID'].to_s + "&app_key="+ ENV['APP_KEY'].to_s + "&r="
+    # conn = Faraday.new(:url => "") do |faraday|
+    #   faraday.request  :url_encoded             # form-encode POST params
+    #   faraday.response :logger               # log requests to STDOUT
+    #   faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+    # end
 
-    apiURL = ENV['API_URL'].to_s + "/search?app_id=" + ENV['APP_ID'].to_s + "&app_key="+ ENV['APP_KEY'].to_s + "&r="
-    conn = Faraday.new(:url => "") do |faraday|
-      faraday.request  :url_encoded             # form-encode POST params
-      faraday.response :logger               # log requests to STDOUT
-      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-    end
+    # baseURL = "https://www.edamam.com/recipes/-/"
+    # current_user.preference.healthlabel.each do |hlabel|
+    #   baseURL += hlabel.apiparameter+"/"
+    # end
+    # current_user.preference.dietlabel.each do |dlabel|
+    #   baseURL += dlabel.apiparameter+"/"
+    # end
+    # logger.debug baseURL
+    # #page = Nokogiri::HTML(open(baseURL))
+    # #opens up the page using watir (based off of selinium) using phantomjs driver
+    # brows = Watir::Browser.new(:phantomjs)
+    # brows.goto baseURL
+    # #http://api.edamam.com/search?app_id=ed2714cc&app_key=81029d1bb3daad9d1bdaf4a46adca6b2&r="
 
-    baseURL = "https://www.edamam.com/recipes/-/"
-    current_user.preference.healthlabel.each do |hlabel|
-      baseURL += hlabel.apiparameter+"/"
-    end
-    current_user.preference.dietlabel.each do |dlabel|
-      baseURL += dlabel.apiparameter+"/"
-    end
-    logger.debug baseURL
-    #page = Nokogiri::HTML(open(baseURL))
-    #opens up the page using watir (based off of selinium) using phantomjs driver
-    brows = Watir::Browser.new(:phantomjs)
-    brows.goto baseURL
-    #http://api.edamam.com/search?app_id=ed2714cc&app_key=81029d1bb3daad9d1bdaf4a46adca6b2&r="
+    # #wait for AJAX calls to populate div's
+    # sleep 1
 
-    #wait for AJAX calls to populate div's
-    sleep 1
-
-    doc = Nokogiri::HTML(brows.html)
-    doc.css("li[itemtype='http://schema.org/Thing']").each do |link|
-      logger.debug link['data-id']
-      @foundLinks.push(link['data-id'])
-      #logger.debug resp.body
-    end
+    # doc = Nokogiri::HTML(brows.html)
+    # doc.css("li[itemtype='http://schema.org/Thing']").each do |link|
+    #   logger.debug link['data-id']
+    #   @foundLinks.push(link['data-id'])
+    #   #logger.debug resp.body
+    # end
   end
 
   def save_recipe
@@ -232,6 +232,60 @@ class UsersController < ApplicationController
 
   end
 
+
+
+  def all_recipes
+    @foundLinks = []
+    apiURL = ENV['API_URL'].to_s + "/search?app_id=" + ENV['APP_ID'].to_s + "&app_key="+ ENV['APP_KEY'].to_s + "&r="
+
+    baseURL = "https://www.edamam.com/recipes/-/"
+    current_user.preference.healthlabel.each do |hlabel|
+      baseURL += hlabel.apiparameter+"/"
+    end
+    current_user.preference.dietlabel.each do |dlabel|
+      baseURL += dlabel.apiparameter+"/"
+    end
+    #page = Nokogiri::HTML(open(baseURL))
+    #opens up the page using watir (based off of selinium) using phantomjs driver
+    brows = Watir::Browser.new(:phantomjs)
+    brows.goto baseURL
+    #http://api.edamam.com/search?app_id=ed2714cc&app_key=81029d1bb3daad9d1bdaf4a46adca6b2&r="
+
+    #wait for AJAX calls to poplate div's
+    sleep 1
+
+    doc = Nokogiri::HTML(brows.html)
+    doc.css("li[itemtype='http://schema.org/Thing']").each do |link|
+      logger.debug link['data-id']
+      @foundLinks.push(link['data-id'])
+      #logger.debug resp.body
+    end
+
+      @foundLinks.each do |uri|
+        apiURL += uri+"&r=";
+      end
+
+      resp = RestClient.get(apiURL)
+      resp += ']'
+
+      if resp != nil
+        json_resp = JSON.parse(resp)
+        json_resp.each do |js|
+          recipe_exists = current_user.savedrecipe.recipe.where(:source => js['uri']).first
+          if recipe_exists
+            js['rExist'] = 1
+            puts JSON[js]
+          else
+            js['rExist'] = 0
+            puts JSON[js]
+          end  
+        end
+
+        respond_to do |format|
+          format.json {render json: json_resp, status: :ok }
+        end
+      end
+    end
 
   def individual_recipes
     logger.debug "HAPPENING"

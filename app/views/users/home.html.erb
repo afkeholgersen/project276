@@ -10,6 +10,7 @@
 <h1 class="page-headers">Recommended for You </h1>
   <p></p>
 
+  <img id="loading" src="/ajax-loader.gif">
 
   <span class="insertDynamicData"> </span>
 
@@ -41,12 +42,6 @@ function tableData(r, extra) {
     else {
       tdata += '<i class="material-icons">save</i><a href="javascript:void(0);" onclick="save_recipes($(this),'+"'"+r['uri']+"'"+')">Save recipe</a>'
     }
-    // tdata += '<td> <a target="_blank" href="'+r["url"]+'"><img src="'+r["image"]+'" width="120"> &nbsp; </a></td>'
-    // tdata += '<td> <a target="_blank" href="'+r["url"]+'">'+r["label"]+' </a></td>'
-    // tdata += ' <td> '+r["healthLabels"] +' </td>'
-    // tdata += '<td> '+r["dietLabels"] + '</td>'
-    // tdata += ' <td><a href="javascript:void(0);"> Saved </a>'
-    // tdata += '</td>'
     tdata += '</div> '
     tdata += '</div>'
     if (extra== true ){
@@ -55,33 +50,27 @@ function tableData(r, extra) {
   return tdata
 }
 
-$(document).on('turbolinks:load', function() {
-  console.log("TURBOLINKS LOAD")
-})
-
 var links = []
 var foundItems = []
 var finishedCalls = 0
 $(document).ready(function(){
-    console.log("RUNNING NOW")
-    <% @foundLinks.each do |fl| %>
 
     $.ajax({
       method: "GET",
-      url: "<%= individual_recipes_user_path(@user) %>",
-      data: {uri: "<%= fl %>"}
-    }).done(function(resp) {
-      console.log(resp)
-      foundItems.push(resp)
-      finishedCalls += 1
-      if (finishedCalls % 4 == 0 ){
-        $(".insertDynamicData").append(tableData(foundItems[finishedCalls-1],true))
-      }
-      else {
-        $(".insertDynamicData").append(tableData(foundItems[finishedCalls-1],false))
-      }
-    })
-    <% end %>
+      url: "<%= all_recipes_user_path(@user) %>"
+      }).done(function(resp) {
+        $('#loading').hide();
+          $.each(resp, function(ind, val) {
+              foundItems.push(val);
+              if ((ind+1)%4==0) {
+                $(".insertDynamicData").append(tableData(val, true))
+              }
+              else{
+                $(".insertDynamicData").append(tableData(val, false))
+              }
+          });
+      })
+
 })
 
 
