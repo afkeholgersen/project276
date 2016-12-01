@@ -26,15 +26,24 @@
         <div>
           <ul class="nav navbar-nav navbar-right">
             <li class="left">
-              <!-- For now, can only search if a current user, -->
-              <%if current_user.present?%>
-                <%= form_tag search_user_path(current_user), :method => 'get' do %>
+                <%= form_tag users_search_path, :method => 'get' do %>
                   <p>
               <%= text_field_tag :search, params[:search], class: "left" %>
               <%= submit_tag "Search", :name => nil, class: "left" %>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Advanced<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                  <li class="submenu"><%= collection_check_boxes(:post, :healthlabel_ids, Healthlabel.all, :id, :name) do |b| %> </li>
+                  <div class="collection-check-box">
+                    <%= b.check_box %>
+                    <%= b.label %>
+                  </div>
+                <% end %>
+              </ul>
+            </li> <!-- dropdown -->
 
                  </p>
-                <% end %>
+
               <% end %>
             </li>
             <li class="dropdown">
