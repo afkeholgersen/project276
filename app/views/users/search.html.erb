@@ -17,7 +17,7 @@
           <% r = g["recipe"] %>
           <div class="col-sm-6 col-md-3">
             <div class="thumbnail" data-toggle="popover" title="<%= r["label"] %>" data-content="<%= r["dietLabels"].join(",") %> <%= r["healthLabels"].join(",")%> ">
-            <a target="_blank" href="<%= recipe_path(r) %>">
+            <a target="_blank" href="<%= r["url"]%>">
             <img id = "saved-image"  class="img-responsive" src="<%= r["image"] %>" width="130"> </a>
             <h3 id="recipe-name"><%= r["label"] %></h3> </a>
             <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')">Remove</a></p>
@@ -27,7 +27,7 @@
           </div>
         <% end %>
     <%else%>
-    <h2 class="error-message">No recipes match your search! Try again! </h2>
+    <h2 class="error-message">No recipes match your search! Try again!</h2>
     <%end%>
 
 

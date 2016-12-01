@@ -67,3 +67,4 @@ gem 'phantomjs', :require => "phantomjs/poltergeist"
 
 gem 'chosen-rails'
 gem 'typhoeus'
+gem 'sprig-reap', '~> 0.3.0'
