@@ -47,23 +47,23 @@
 
 
 <script>
+<% if current_user %>
+  function save_recipes(ele, recipe){
 
-function save_recipes(ele, recipe){
-
-  $(ele).text("Saving..");
-  recipe = JSON.parse(recipe);
-  console.log(recipe)
-  $.ajax({
-    method: "POST",
-    url: "<%= save_recipe_user_path(current_user) %>",
-    data: { id: "<%= params[:id] %>", recipe: recipe },
-  }).done(function() {
-      console.log("finish save_recipe")
-      $(ele).text("Saved");
-      $(ele).addClass("disabled","disabled");
-  });
-}
-
+    $(ele).text("Saving..");
+    recipe = JSON.parse(recipe);
+    console.log(recipe)
+    $.ajax({
+      method: "POST",
+      url: "<%= save_recipe_user_path(current_user) %>",
+      data: { id: "<%= params[:id] %>", recipe: recipe },
+    }).done(function() {
+        console.log("finish save_recipe")
+        $(ele).text("Saved");
+        $(ele).addClass("disabled","disabled");
+    });
+  }
+<% end %>
 
 
 $('[data-toggle="popover"]').popover({

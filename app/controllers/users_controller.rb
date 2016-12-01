@@ -147,24 +147,49 @@ class UsersController < ApplicationController
 
   def search
     apiURL = ENV['API_URL'].to_s + "/search?app_id=" + ENV['APP_ID'].to_s + "&app_key="+ ENV['APP_KEY'].to_s + "&q="
-    conn = Faraday.new(:url => "") do |faraday|
-      faraday.request  :url_encoded             # form-encode POST params
-      faraday.response :logger               # log requests to STDOUT
-      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
-    end
-    baseURL=apiURL+params[:search]
-    resp = conn.get baseURL
+    
+    healthLabelsSearch = ""
+    dietLabelsSearch = ""
+    minCalories = ""
+    maxCalories = ""
 
-    if resp.body != nil
-      json_resp = JSON.parse(resp.body)
-      json_resp["hits"].each do |js|
-        recipe_exists = current_user.savedrecipe.recipe.where(:source => js["recipe"]['uri']).first
-        if recipe_exists
-          js["recipe"]['rExist'] = 1
-          puts JSON[js]
-        else
-          js["recipe"]['rExist'] = 0
-          puts JSON[js]
+    if params["healthlabel_apiparameters"]
+      params["healthlabel_apiparameters"].each do |hlapi|
+        healthLabelsSearch += "&health="+hlapi
+      end
+    end
+    if params["dietlabel_apiparameters"]
+      params["dietlabel_apiparameters"].each do |dlapi|
+        dietLabelsSearch += "&diet="+dlapi
+      end
+    end
+
+    if params[:mincalories].size > 0 and params[:maxcalories].size > 0
+      minCalories = "&calories=gte%20" + params[:mincalories]
+      maxCalories = ",lte%20" + params[:maxcalories]
+    elsif params[:mincalories].size > 0
+      minCalories = "&calories=gte%20" + params[:mincalories]
+    elsif params[:maxcalories].size > 0
+      maxCalories = "&calories=lte%20" + params[:maxcalories]
+    end
+
+    baseURL=apiURL+params[:search]
+    baseURL += healthLabelsSearch + dietLabelsSearch + minCalories + maxCalories
+    puts baseURL
+    resp = RestClient.get(baseURL)
+
+    if resp != nil
+      json_resp = JSON.parse(resp)
+      if current_user
+        json_resp["hits"].each do |js|
+          recipe_exists = current_user.savedrecipe.recipe.where(:source => js["recipe"]['uri']).first
+          if recipe_exists
+            js["recipe"]['rExist'] = 1
+            puts JSON[js]
+          else
+            js["recipe"]['rExist'] = 0
+            puts JSON[js]
+          end
         end
       end
       @searchResults = json_resp
@@ -269,7 +294,7 @@ class UsersController < ApplicationController
     #http://api.edamam.com/search?app_id=ed2714cc&app_key=81029d1bb3daad9d1bdaf4a46adca6b2&r="
 
     #wait for AJAX calls to poplate div's
-    sleep 1
+    #sleep 1
 
     doc = Nokogiri::HTML(brows.html)
     doc.css("li[itemtype='http://schema.org/Thing']").each do |link|

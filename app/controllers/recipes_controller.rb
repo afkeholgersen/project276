@@ -15,6 +15,7 @@ class RecipesController < ApplicationController
       resp = conn.get recipeInfo
       if resp.body != nil
         json_resp = JSON.parse(resp.body)
+
         @recipe = json_resp[0]
         logger.debug @reicpe
         respond_to do |format|
