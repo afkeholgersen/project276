@@ -51,7 +51,15 @@
                     <% Dietlabel.all.each do |dlabel| %>
                       <% if searchableDietLabels.include? dlabel.id %>
                     <li class="advanced-params" > 
-                      <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter -%>
+                      <% if params["dietlabel_apiparameters"] %>
+                            <% if params["dietlabel_apiparameters"].include? dlabel.apiparameter %>
+                                <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter, true %>
+                            <% else %>
+                                <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter -%>                   
+                            <% end %>
+                          <% else %>
+                              <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter -%>   
+                          <% end %>
                       <%= h dlabel.name -%>
                     </li>
                     <% end %>
