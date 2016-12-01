@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   get "users/new"
 	get "logout" => "sessions#destroy"
+  get "users/search"
 
   resources :sessions
 
@@ -16,9 +17,10 @@ Rails.application.routes.draw do
 
     member do
       get :home
-      get :search
+      
       get :my_recipes
       get :individual_recipes
+      get :all_recipes
       post :save_recipe
       delete :unsave_recipe
       delete :deleteuser
