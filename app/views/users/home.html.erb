@@ -12,7 +12,9 @@
 
 
   <span class="insertDynamicData"> </span>
-
+  <% if @foundLinks.length ==0 %>
+    <h2 class="error-message"> No results match your specified labels! Try again! </h2>
+  <%end%>
 <!--  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a> -->
 </div>
 

@@ -9,6 +9,7 @@
 <div class="container">
 <h1 class="page-headers">Search Results</h1>
   <p></p>
+  <% if @searchResults["hits"].length > 0 %>
       <% @searchResults["hits"].in_groups_of(4,false).each do |group| %>
       <div class="row portfolio"> <!-- only have a new row every 3 rows -->
 
@@ -25,6 +26,9 @@
           <% end %>
           </div>
         <% end %>
+    <%else%>
+    <h2 class="error-message">No recipes match your search! Try again! </h2>
+    <%end%>
 
 
 
