@@ -157,7 +157,16 @@ class UsersController < ApplicationController
 
     if resp.body != nil
       json_resp = JSON.parse(resp.body)
-      logger.debug json_resp
+      json_resp["hits"].each do |js|
+        recipe_exists = current_user.savedrecipe.recipe.where(:source => js["recipe"]['uri']).first
+        if recipe_exists
+          js["recipe"]['rExist'] = 1
+          puts JSON[js]
+        else
+          js["recipe"]['rExist'] = 0
+          puts JSON[js]
+        end
+      end
       @searchResults = json_resp
       respond_to do |format|
         format.html
@@ -206,8 +215,16 @@ class UsersController < ApplicationController
     recipe_uri = recipe['uri']
     #logger.debug recipie_url
     recipe_exists = Recipe.where(:source => recipe_uri).first
+    dietLabelsString = ""
+    healthLabelsString = ""
+    if recipe["dietLabels"]
+      dietLabelsString =  recipe["dietLabels"].join(",")
+    end
+    if recipe["healthLabels"]
+      healthLabelsString =  recipe["healthLabels"].join(",")
+    end
 
-    r = Recipe.new(:source => recipe_uri, :sourceIcon => recipe["image"], :dietLabels => recipe["dietLabels"].join(","), :healthLabels => recipe["healthLabels"].join(","), :title => recipe['label'])
+    r = Recipe.new(:source => recipe_uri, :sourceIcon => recipe["image"], :dietLabels => dietLabelsString, :healthLabels => healthLabelsString, :title => recipe['label'])
 
     if recipe_exists
       logger.debug "CALLING IF"
