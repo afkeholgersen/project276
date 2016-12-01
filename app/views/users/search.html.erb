@@ -16,10 +16,17 @@
           <% r = g["recipe"] %>
           <div class="col-sm-6 col-md-3">
             <div class="thumbnail" data-toggle="popover" title="<%= r["label"] %>" data-content="<%= r["dietLabels"].join(",") %> <%= r["healthLabels"].join(",")%> ">
-            <a target="_blank" href="<%= recipe_path(r) %>">
+            
+            
+            <a target="_blank" href="<%=r["url"]%>">
+            
             <img id = "saved-image"  class="img-responsive" src="<%= r["image"] %>" width="130"> </a>
             <h3 id="recipe-name"><%= r["label"] %></h3> </a>
-            <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')">Remove</a></p>
+            <% if current_user %>
+              <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="save_recipes($(this),'<%= r.to_json %>')">Save Recipe</a></p>
+            <% else %>            
+            
+            <% end %>
           </div>
           </div>
           <% end %>
@@ -35,6 +42,24 @@
 
 
 <script>
+
+function save_recipes(ele, recipe){
+
+  $(ele).text("Saving..");
+  recipe = JSON.parse(recipe);
+  console.log(recipe)
+  $.ajax({
+    method: "POST",
+    url: "<%= save_recipe_user_path(current_user) %>",
+    data: { id: "<%= params[:id] %>", recipe: recipe },
+  }).done(function() {
+      console.log("finish save_recipe")
+      $(ele).text("Saved");
+      $(ele).addClass("disabled","disabled");
+  });
+}
+
+
 
 $('[data-toggle="popover"]').popover({
   placement: "auto",
