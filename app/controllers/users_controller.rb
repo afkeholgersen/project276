@@ -222,9 +222,11 @@ class UsersController < ApplicationController
     elsif !recipe_exists
       logger.debug "saving recipe to db.."
       r.save
+
     else
       @message = "somthing went wrong! Cannot open page :("+ @user.errors.full_messages.to_sentence
     end
+    render json: r.id
   end
 
 

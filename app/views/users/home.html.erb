@@ -148,8 +148,9 @@ function save_recipe_to_db(ele,recipeURI){
     method: "POST",
     url: "<%= save_recipeOnly_user_path %>",
     data: { id: "<%= params[:id] %>", recipe: recipe },
-  }).done(function() {});
-  window.location.pathname = ("/recipes/"+recipe['id'])
+  }).done(function(rec) {
+    window.location.pathname = ("/recipes/"+rec)
+  });
 
       //window.location.pathname = ("/recipes/"+recipe['id'])
 
