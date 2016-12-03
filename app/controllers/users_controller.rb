@@ -209,6 +209,26 @@ class UsersController < ApplicationController
 
   end
 
+  def save_recipeOnly
+    logger.debug "hi"
+    recipe = params[:recipe]
+    recipe_uri = recipe['uri']
+    recipe_exists = Recipe.where(:source => recipe_uri).first
+    r = Recipe.new(:source => recipe_uri, :sourceIcon => recipe["image"], :dietLabels => recipe["dietLabels"].join(","), :healthLabels => recipe["healthLabels"].join(","), :title => recipe['label'])
+
+    logger.debug "bye"
+    if recipe_exists
+      logger.debug "recipe is in db already"
+    elsif !recipe_exists
+      logger.debug "saving recipe to db.."
+      r.save
+    else
+      @message = "somthing went wrong! Cannot open page :("+ @user.errors.full_messages.to_sentence
+    end
+  end
+
+
+
 
   def individual_recipes
     logger.debug "HAPPENING"

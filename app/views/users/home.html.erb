@@ -130,8 +130,34 @@ function save_recipes(ele, recipeURI){
 }
 
 
-function save_recipe_to_db(recipeURI){
+function save_recipe_to_db(ele,recipeURI){
+  var recipe;
+  console.log(recipeURI)
+  $.each(foundItems, function(ind, val) {
+    if (val['uri'] == recipeURI)
+    {
+      recipe = val
+      console.log(recipe)
 
+      return
+    }
+  })
+
+  console.log(recipe)
+  $.ajax({
+    method: "POST",
+    url: "<%= save_recipeOnly_user_path %>",
+    data: { id: "<%= params[:id] %>", recipe: recipe },
+  }).done(function() {});
+  window.location.pathname = ("/recipes/"+recipe['id'])
+
+      //window.location.pathname = ("/recipes/"+recipe['id'])
+
+//  console.log(recipe);
+//  $.ajax({
+//    method: "POST",
+//    url:
+//  })
 }
 
 </script>

@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       get :my_recipes
       get :individual_recipes
       post :save_recipe
+      post :save_recipeOnly
       delete :unsave_recipe
     end
     collection do
