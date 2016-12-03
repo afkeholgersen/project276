@@ -9,9 +9,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @dietlabel = dietlabels(:one)
   end
 
-  test "should redirect to login" do
-    get home_user_path(@user)
-    assert_response :redirect
+  test "should get index" do
+    get users_url
+    assert_response :success
   end
 
   test "should get new" do
@@ -20,75 +20,35 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create user" do
-    @user = users(:one)
-    @user.email="test@test.com"
-    @user.password="test"
-    @user.username="test"
-    #create the user first
     assert_difference('User.count') do
+      @user.email="test@test.com"
+      @user.password="test"
+      @user.username="test"
       post users_url, params: { user: {email: @user.email, password: @user.password, username: @user.username }, preference: { healthlabel_id: @healthlabel, dietlabel_id: @dietlabel } }
     end
 
+    assert_redirected_to user_url(User.last)
   end
 
   test "should show user" do
-    @user = users(:one)
-    @user.email="test@test.com"
-    @user.password="test"
-    @user.username="test"
-    #create the user first
-    assert_difference('User.count') do
-      post users_url, params: { user: {email: @user.email, password: @user.password, username: @user.username }, preference: { healthlabel_id: @healthlabel, dietlabel_id: @dietlabel } }
-    end
-
-
-    post "/sessions", params: { username: "test", password: "test"}
-    assert_response :redirect
-
     get user_url(@user)
-    assert_response :redirect
+    assert_response :success
   end
 
-  # test "should get edit" do
-  #   get edit_user_url(@user)
-  #   assert_response :success
-  # end
+  test "should get edit" do
+    get edit_user_url(@user)
+    assert_response :success
+  end
 
   test "should update user" do
 
-    @user = users(:one)
-    @user.email="test@test.com"
-    @user.password="test"
-    @user.username="test"
-    #create the user first
-    assert_difference('User.count') do
-      post users_url, params: { user: {email: @user.email, password: @user.password, username: @user.username }, preference: { healthlabel_id: @healthlabel, dietlabel_id: @dietlabel } }
-    end
-
-
-    post "/sessions", params: { username: "test", password: "test"}
-    assert_response :redirect
-
-    patch user_url(@user), params: { user: {email: "test@test.com", password: "test", username: "test" }, preference: { healthlabel_id: @healthlabel, dietlabel_id: @dietlabel } }
-    assert_response :redirect
+    patch user_url(@user), params: { user: {email: "test2@test.com", password: "test2", username: "test2" }, preference: { healthlabel_id: @healthlabel, dietlabel_id: @dietlabel } }
+    assert_redirected_to @user
   end
 
   test "should destroy user" do
-
-    @user = users(:one)
-    @user.email="test@test.com"
-    @user.password="test"
-    @user.username="test"
-    #create the user first
-    assert_difference('User.count') do
-      post users_url, params: { user: {email: @user.email, password: @user.password, username: @user.username }, preference: { healthlabel_id: @healthlabel, dietlabel_id: @dietlabel } }
-    end
-
-    post "/sessions", params: { username: "test", password: "test"}
-    assert_response :redirect
-
     assert_difference('User.count', -1) do
-      delete deleteuser_user_path(@user)
+      delete user_url(@user)
     end
 
     assert_redirected_to users_url
