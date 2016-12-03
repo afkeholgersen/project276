@@ -1,3 +1,6 @@
+img {
+  max-width: 100%;
+}
 nav.navbar-default  {
     background: url('../barBackground.jpeg');
     box-shadow: inset 0 0 0 1000px rgba(153,0,0,0.8);
@@ -84,4 +87,25 @@ body{
   }
 .mainSearch .form-control{
   
+}
+
+#comment_board_reply {
+  margin: 1rem 0;
+}
+#comment_board_reply .comment_text_field {
+  width: 90%;
+  height: 35px;
+  border-radius: 5px;
+}
+#comment_board{
+  border-top-style: groove;
+}
+#comment_board .single_comment {
+  // background-color: white;
+  border-bottom: 1px solid #ccc;
+  margin: 0.3rem;
+  padding: 5px 10px;
+}
+#comment_board .single_comment:last-child {
+  border-bottom: none;
 }
