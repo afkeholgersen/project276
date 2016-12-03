@@ -85,7 +85,13 @@ class UsersController < ApplicationController
 
     #assign the current preference to the user and a new recipe
     @user.preference = @preference
-    @user.savedrecipe = Savedrecipe.new
+    
+    begin
+      currSavedRecipeList = Savedrecipe.find(@user.savedrecipe.id);
+    rescue
+      @user.savedrecipe = Savedrecipe.new
+    end
+      
     #deletes the password parameter if its empty so we don't get error that password is blank
     if user_params[:password].blank?
       params[:user].delete(:password)
