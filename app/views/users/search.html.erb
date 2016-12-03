@@ -24,9 +24,9 @@
             <h3 id="recipe-name"><%= r["label"] %></h3> </a>
             <% if current_user %>
               <% if r["rExist"] == 1 %>
-                <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="save_recipes($(this),'<%= r.to_json %>')">Saved</a></p>
+                <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="save_recipes($(this),'<%= r.to_json.gsub("'", "&quot;") %>' ) ">Saved</a></p>
               <% else %>
-                <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="save_recipes($(this),'<%= r.to_json %>')">Save Recipe</a></p>
+                <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="save_recipes($(this),'<%= r.to_json.gsub("'", "&quot;") %>' ) ">Save Recipe</a></p>
               <% end %>
 
             <% else %>            
