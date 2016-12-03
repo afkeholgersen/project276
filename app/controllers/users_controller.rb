@@ -113,25 +113,10 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-
-    puts @user
     @user.destroy
     respond_to do |format|
-
-
       format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
-    end
-  end
-
-  def deleteuser
-
-    if current_user 
-      current_user.destroy
-      respond_to do |format|
-        format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-        format.json { head :no_content }
-      end
     end
   end
 
@@ -205,21 +190,13 @@ class UsersController < ApplicationController
     #puts recipe
     recipe_uri = recipe['uri']
     #logger.debug recipie_url
-    recipe_exists = Recipe.where(:source => recipe_uri).first
+    recipe_exists = @user.savedrecipe.recipe.where(:source => recipe_uri).first
 
     r = Recipe.new(:source => recipe_uri, :sourceIcon => recipe["image"], :dietLabels => recipe["dietLabels"].join(","), :healthLabels => recipe["healthLabels"].join(","), :title => recipe['label'])
 
     if recipe_exists
       logger.debug "CALLING IF"
-      recipe_exists_user = @user.savedrecipe.recipe.where(:source => recipe_uri).first
-      if recipe_exists_user
-         @message = "Recipe is available in your saved recipes list"
-
-      else
-        @user.savedrecipe.recipe.push(recipe_exists);
-        @message = "Saved successfully"
-      end
-      
+       @message = "Recipe is available in your saved recipes list"
     elsif !recipe_exists
       logger.debug "CALLING ELSEIF"
       @user.savedrecipe.recipe.push(r)
