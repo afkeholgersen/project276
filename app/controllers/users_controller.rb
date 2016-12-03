@@ -219,6 +219,7 @@ class UsersController < ApplicationController
     logger.debug "bye"
     if recipe_exists
       logger.debug "recipe is in db already"
+      r = Recipe.where(:source => recipe_uri).first
     elsif !recipe_exists
       logger.debug "saving recipe to db.."
       r.save
