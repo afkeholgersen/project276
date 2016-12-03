@@ -1,68 +1,68 @@
-<div class="container" style="margin-bottom:300px;">
+<div class="container" style="margin-bottom:300px;background: ghostwhite;">
 
   <br/>
 
   <div class="row">
-    <div class="col-xs-6">
-      <div class="row">
-        <div class="col-xs-4">
-          <% if @recipe %>
-          <a target="_blank" href="<%= @recipe['url']%>">
-          <img src="<%= @recipe["image"] %>" width="100"/>
-          <% end %>
-        </a>
-        </div>
-        <div class="col-xs-8">
-          <% if @recipe %>
+    <div class="col-xs-10">
+      <% if @recipe %>
+        <div class="row">
+          <div class="col-sm-4">
+            <% if @recipe %>
+              <a target="_blank" href="<%= @recipe['url']%>">
+                <img src="<%= @recipe["image"] %>"/>
+              </a>
+            <% end %>
+          </div>
+          <div class="col-sm-8">
+            
             <a target="_blank" href="<%= @recipe['url']%>">
             <h3><%= @recipe['label'] %></h3></a>
-            <b style="color:blue;">* Information below is for 1 serving</b>
+            <b style="color:red;">* Information below is for 1 serving</b>
+            <h4><%= @recipe["ingredients"].size %> Ingredients</h4>
+            <% @recipe["ingredientLines"].each do |i| %>
+              <p><%= i %></p>
+            <% end %>
           </div>
         </div>
 
-          <h4><%= @recipe["ingredients"].size %> Ingredients</h4>
-          <% @recipe["ingredientLines"].each do |i| %>
-          <p><%= i %></p>
-          <% end %>
+        <br>
+        <p><b>Diet Labels:</b> <%= @recipe["dietLabels"].to_sentence  rescue @recipe["dietLabels"] %></p>
+        <p><b>Health Labels:</b> <%= @recipe["healthLabels"].to_sentence  rescue @recipe["healthLabels"]%></p>
+        <p><b>Cautions:</b> <%= @recipe["cautions"].to_sentence  rescue @recipe["cautions"] %></p>
 
-          <p><b>Diet Labels:</b> <%= @recipe["dietLabels"].tr('[ ] " ', '')   rescue @recipe["dietLabels"] %></p>
-          <p><b>Health Labels:</b> <%= @recipe["healthLabels"].tr('[ ] " ', '')  rescue @recipe["healthLabels"]%></p>
-          <p>Cautions: <%= @recipe["cautions"].tr('[ ] " ', '')  rescue @recipe["cautions"] %></p>
-
-          <p><b>Calories/Serving:</b> <%= @recipe["calories"].to_f.round %></p>
-          <p>Total weight: <%= @recipe["totalWeight"] %></p>
-          <% end %>
-
-      </div>
-      <div class="col-xs-6">
-
-      </div>
-    </div>
-
-    <br>
-
-
-    <div id="comment_board">
-      <h4>Show All Comments</h4>
-      <% @comment.each do |c| %>
-      <%= c.user.username %>: <br>
-      <%= c.comment_text %><br><br>
+        <p><b>Calories/Serving:</b> <%= @recipe["calories"].to_f.round %></p>
+        <p><b>Total weight:</b> <%= @recipe["totalWeight"] %></p>
       <% end %>
     </div>
-
-    <div id="comment_board_reply">
-    <h5>Comment Board</h5>
-      <%= form_tag("/recipes", method: "post", :remote => true) do %>
-        <%= label_tag :comment_text %>
-        <%= text_field_tag :comment_text %><br>
-        <%= hidden_field_tag :recipe_id, params[:id] %>
-        <div class="actions">
-          <%= submit_tag "Submit Comment" ,class: "btn btn-primary" %>
-        </div>
-      <% end %>
+    <div class="col-xs-2">
 
     </div>
   </div>
+
+  <br>
+
+
+  <div id="comment_board">
+    <h4>Comments: </h4>
+    <% @comment.each do |c| %>
+    <div class="single_comment">
+    <%= c.user.username %>: <br>
+    <%= c.comment_text %>
+    </div>
+    <% end %>
+  </div>
+  <div class="row">
+    <div id="comment_board_reply" class="col-xs-10">
+      <%= form_tag("/recipes", method: "post", :remote => true) do %>
+        <p>
+          <%= text_field_tag :comment_text, nil, placeholder: "Add a Comment here", class: "comment_text_field" %>    
+          <%= submit_tag "Post" ,class: "btn btn-danger" %>       
+          <%= hidden_field_tag :recipe_id, params[:id] %>
+        </p>  
+      <% end %>
+    </div>
+  </div>
+</div>
 
 <script>
 $('.btn').on("click", function() {
