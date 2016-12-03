@@ -2,6 +2,12 @@
 <div class="logo">
   <img  class= "logo" src="/logo-transparent.png" alt="logo" />
 </div>
+<div class="recipes_of_the_week">
+  <h2>Popular Recipes of the Week</h2>
+  <% @recipes.each do |r| %>
+    <img id = "saved-image"  class="img-responsive" src="<%= r.sourceIcon %>" width="130">
+  <%end%>
+</div>
 <div class="container">
 	<div class="main-page">
 	  <div class="main-page-links">

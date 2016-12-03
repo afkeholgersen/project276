@@ -1,5 +1,6 @@
 class WelcomeController < ApplicationController
   def index
+    @recipes = Recipe.joins(:comments).group(:id).order("count(comments.id) desc").limit(5)
   end
   def search
     if @json_resp != nil && @json_resp
@@ -32,4 +33,6 @@ class WelcomeController < ApplicationController
     end
 
   end
+
+
 end
