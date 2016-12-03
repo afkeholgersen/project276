@@ -9,6 +9,7 @@
 <div class="container">
 <h1 class="page-headers">Search Results</h1>
   <p></p>
+  <% if @searchResults["hits"].length > 0 %>
       <% @searchResults["hits"].in_groups_of(4,false).each do |group| %>
       <div class="row portfolio"> <!-- only have a new row every 3 rows -->
 
@@ -16,7 +17,7 @@
           <% r = g["recipe"] %>
           <div class="col-sm-6 col-md-3">
             <div class="thumbnail" data-toggle="popover" title="<%= r["label"] %>" data-content="<%= r["dietLabels"].join(",") %> <%= r["healthLabels"].join(",")%> ">
-            <a target="_blank" href="<%= recipe_path(r) %>">
+            <a href="javascript:void(0);"  onclick="save_recipe_to_db($(this),'r['url']')">
             <img id = "saved-image"  class="img-responsive" src="<%= r["image"] %>" width="130"> </a>
             <h3 id="recipe-name"><%= r["label"] %></h3> </a>
             <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')">Remove</a></p>
@@ -25,6 +26,9 @@
           <% end %>
           </div>
         <% end %>
+    <%else%>
+    <h2 class="error-message">No recipes match your search! Try again!</h2>
+    <%end%>
 
 
 
@@ -40,5 +44,20 @@ $('[data-toggle="popover"]').popover({
   placement: "auto",
   trigger: "hover"
 })
+
+
+function save_recipe_to_db(ele,recipeURI){
+  var recipe;
+  console.log("in function url:" +recipeURI)
+
+  console.log(recipe)
+  $.ajax({
+    method: "POST",
+    url: "<%= save_recipeOnly_user_path %>",
+    data: { id: "<%= params[:id] %>", recipe: recipeURI },
+  }).done(function(rec) {
+    window.location.pathname = ("/recipes/"+rec)
+  });
+}
 
 </script>

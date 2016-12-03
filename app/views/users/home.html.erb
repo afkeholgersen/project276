@@ -32,7 +32,6 @@ function tableData(r, extra) {
     }
     tdata += '<div class="col-sm-6 col-md-3">'
     tdata += '<div class="thumbnail" data-toggle="popover" title="'+r["label"]+'" data-content= "'+r["healthLabels"] +' '+r["dietLabels"] +'">'
-    //tdata += '<a href="'+r["url"]+'">'
     tdata += '<a href="javascript:void(0);" onclick="save_recipe_to_db($(this),'+"'"+r['uri']+"'"+')">'
     tdata += '<img id="saved-image" class="img-responsive" src="'+r["image"]+'" alt="" >'
     tdata += '<h3 id="recipe-name">'+r["label"]+'</h3> </a>'
@@ -151,14 +150,6 @@ function save_recipe_to_db(ele,recipeURI){
   }).done(function(rec) {
     window.location.pathname = ("/recipes/"+rec)
   });
-
-      //window.location.pathname = ("/recipes/"+recipe['id'])
-
-//  console.log(recipe);
-//  $.ajax({
-//    method: "POST",
-//    url:
-//  })
 }
 
 </script>
