@@ -56,18 +56,14 @@ class CommentTest < ActiveSupport::TestCase
     # Check if user votes, value is saved
     assert c2.vote == 1
 
-    # Comment does not have text, only vote => save success
+    # Check if empty text but voted, comment is saved
     c3 = Comment.new
-    c3.vote = -1
+    c3.vote = 1
     u.comments.push(c3)
     r.comments.push(c3)
 
-    c3.user = u
-    c3.recipe = r
-
-    assert c3.save
+    assert c2.save
     assert Comment.all.length == 5
-
   end
 
   test "comment has a user_id but no recipe_id fail to save" do
@@ -112,5 +108,4 @@ class CommentTest < ActiveSupport::TestCase
 
     assert_not c.save
   end
-
 end
