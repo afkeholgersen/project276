@@ -1,6 +1,7 @@
 class WelcomeController < ApplicationController
   def index
-    @recipes = Recipe.joins(:comments).group(:id).order("count(comments.id) desc").limit(5)
+    @recipes = Recipe.joins(:comments).group(:id).order("sum(comments.vote) desc").limit(5)
+
   end
   def search
     if @json_resp != nil && @json_resp
