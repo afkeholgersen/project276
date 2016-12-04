@@ -46,7 +46,9 @@
       <h4>Show All Comments</h4>
       <% @comment.each do |c| %>
       <%= c.user.username %>: <br>
-      <%= c.comment_text %><br><br>
+      <%= c.id %>:
+      <%= c.comment_text %><br>
+      <a href="javascript:void(0);" onclick="delete_comment($(this),'<%= c.id %>')">delete</a><br><br>
       <% end %>
     </div>
 
@@ -55,7 +57,6 @@
       <%= form_tag("/recipes", method: "post", :remote => true) do %>
         <%= label_tag :comment_text %>
         <%= text_field_tag :comment_text %><br>
-        <%= radio_button_tag :vote , 'upvote', :checked => 1%>
         <%= hidden_field_tag :recipe_id, params[:id] %>
         <div class="actions">
           <%= submit_tag "Submit Comment" ,class: "btn btn-primary" %>
@@ -114,6 +115,18 @@ function vote(ele,vote){
     data: { id: "<%= params[:id] %>", vote: vote },
   }).done(function()  {
     console.log("vote logged")
+  });
+}
+
+function delete_comment(ele, comment_id){
+  console.log("delete function..")
+  $.ajax({
+    method: "GET",
+    url: "<%= deleteComment_recipe_path %>",
+    data: { id: "<%= params[:id] %>" ,comment_id: comment_id}
+  }).done(function(){
+    console.log("comment_text edited")
+    location.reload();
   });
 }
 

@@ -33,7 +33,8 @@ class RecipesController < ApplicationController
       end
 
     @recipe_comment = Recipe.find(params[:id])
-    @comment = Comment.where(recipe_id: @recipe_comment)
+    @comment = Comment.where(recipe_id: @recipe_comment).where.not(:comment_text => nil).where("comment_text <> ''").order(:id)
+
 
   end
 
@@ -66,5 +67,9 @@ class RecipesController < ApplicationController
     end
   end
 
+  def deleteComment
+    comment_to_delete = Comment.where(:recipe_id => params[:id]).find(params[:comment_id])
+    comment_to_delete.update(comment_text: "--DELETED--")
+  end
 
 end
