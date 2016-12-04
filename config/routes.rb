@@ -2,7 +2,12 @@ Rails.application.routes.draw do
 
   get 'welcome/index'
   get "users/adminhome"
-  resources :recipes
+
+  resources :recipes do
+    member do
+      post :createComment
+    end
+  end
 
 
   root to: 'welcome#index' #main home webpage

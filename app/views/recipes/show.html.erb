@@ -61,8 +61,10 @@
           <%= submit_tag "Submit Comment" ,class: "btn btn-primary" %>
         </div>
       <% end %>
-
     </div>
+    <div id="vote">
+      <a href="javascript:void(0);" onclick="vote($(this),1)">upvote</a>
+      <a href="javascript:void(0);" onclick="vote($(this),-1)">downvote</a>
   </div>
 
   <div id="fb-root"></div>
@@ -76,6 +78,8 @@
     data-related="twitterapi,twitter">
   Tweet
   </a>
+  <div class="fb-share-button" data-href=request.original_url data-layout="button" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse">Share</a></div>
+
   <script>(function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
@@ -101,11 +105,18 @@
 
     return t;
   }(document, "script", "twitter-wjs"));
-  </script>
 
-  <div class="fb-share-button" data-href=request.original_url data-layout="button" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse">Share</a></div>
+function vote(ele,vote){
+  console.log("in here")
+  $.ajax({
+    method: "POST",
+    url: "<%= createComment_recipe_path %>",
+    data: { id: "<%= params[:id] %>", vote: vote },
+  }).done(function()  {
+    console.log("vote logged")
+  });
+}
 
-<script>
 $('.btn').on("click", function() {
   console.log("FOUND");
   setTimeout(location.reload(),5000);

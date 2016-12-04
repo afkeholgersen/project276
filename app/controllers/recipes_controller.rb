@@ -25,7 +25,7 @@ class RecipesController < ApplicationController
           logger.debug ex
         end
 
-        
+
          # respond_to do |format|
          #   format.json {render json: json_resp[0], status: :ok }
          #  end
@@ -47,7 +47,15 @@ class RecipesController < ApplicationController
     @comment.save
   end
 
-
+  def createComment
+    @recipe = Recipe.find(params[:id])
+    @comment = Comment.new(:vote => params[:vote])
+    current_user.comments.push(@comment)
+    @recipe.comments.push(@comment)
+    @comment.user = current_user
+    @comment.recipe = @recipe
+    @comment.save
+  end
 
 
 end
