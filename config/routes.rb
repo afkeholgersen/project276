@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
   get 'welcome/index'
+  get 'creator', controller: :welcome, action: :creator
+  get 'about', controller: :welcome, action: :about
   get "users/adminhome"
   resources :recipes
 
