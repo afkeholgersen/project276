@@ -58,8 +58,7 @@ development:
 test:
   <<: *default
   database: project276_test
-  user: postgres
-  password: root
+
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -85,5 +84,3 @@ production:
   database: project276_production
   username: project276
   password: <%= ENV['PROJECT276_DATABASE_PASSWORD'] %>
-  user: postgres
-  password: root
