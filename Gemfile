@@ -69,3 +69,6 @@ gem 'chosen-rails'
 gem 'typhoeus'
 
 gem 'rest-client'
+
+gem 'sprig-reap', '~> 0.3.0'
+

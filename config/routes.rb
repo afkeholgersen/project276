@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'password_resets/new'
+
   get 'welcome/index'
   get "users/adminhome"
 
@@ -18,6 +20,8 @@ Rails.application.routes.draw do
   get "users/search"
 
   resources :sessions
+  
+  resources :password_resets
 
   resources :users do
 
@@ -32,7 +36,7 @@ Rails.application.routes.draw do
       delete :unsave_recipe
       delete :deleteuser
     end
-    
+
     collection do
 
     end

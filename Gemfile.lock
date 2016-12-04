@@ -165,6 +165,7 @@ GEM
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
       websocket (~> 1.0)
+    sprig-reap (0.3.0)
     spring (2.0.0)
       activesupport (>= 4.2)
     spring-watcher-listen (2.0.1)
@@ -226,6 +227,7 @@ DEPENDENCIES
   rails (~> 5.0.0, >= 5.0.0.1)
   rest-client
   sass-rails (~> 5.0)
+  sprig-reap (~> 0.3.0)
   spring
   spring-watcher-listen (~> 2.0.0)
   typhoeus

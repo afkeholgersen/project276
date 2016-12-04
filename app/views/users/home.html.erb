@@ -15,7 +15,10 @@
 
   <img id="loading" src="/ajax-loader.gif">
 
-<a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a>
+  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a>
+
+<!--  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a> -->
+
 </div>
 
 
@@ -62,7 +65,11 @@ $(document).ready(function(){
       method: "GET",
       url: "<%= all_recipes_user_path(@user) %>"
       }).done(function(resp) {
-        $('#more_btn').show();
+        if (resp.length == 0) {
+          $('.insertDynamicData').append('<h2 class="error-message"> No results match your specified labels! Try again! </h2>')
+          $("#more_btn").hide();
+        }
+        else $('#more_btn').show();
         $('#loading').hide();
           $.each(resp, function(ind, val) {
               foundItems.push(val);

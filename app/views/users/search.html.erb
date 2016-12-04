@@ -18,6 +18,7 @@
           <div class="col-sm-6 col-md-3">
             <div class="thumbnail" data-toggle="popover" title="<%= r["label"] %>" data-content="<%= r["dietLabels"].join(",") %> <%= r["healthLabels"].join(",")%> ">
             <a href="javascript:void(0);"  onclick="save_recipe_to_db($(this),'<%= r.to_json.gsub("'", "&quot;") %>')">
+
             <img id = "saved-image"  class="img-responsive" src="<%= r["image"] %>" width="130"> </a>
             <h3 id="recipe-name"><%= r["label"] %></h3> </a>
             <% if current_user %>
