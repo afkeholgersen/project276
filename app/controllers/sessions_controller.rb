@@ -11,9 +11,6 @@ class SessionsController < ApplicationController
       redirect_to home_user_path(user), :notice => "Logged in!"
 
     else
-      flash.now[:notice]= "Invalid username/password combination!"
-      # add forget your password here!? 
-      user=User.new
       render "new"
     end
   end
