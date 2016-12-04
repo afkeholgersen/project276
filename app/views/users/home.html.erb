@@ -10,11 +10,12 @@
 <h1 class="page-headers">Recommended for You </h1>
   <p></p>
 
-  <img id="loading" src="/ajax-loader.gif">
 
   <span class="insertDynamicData"> </span>
 
-<!--  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a> -->
+  <img id="loading" src="/ajax-loader.gif">
+
+<a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a>
 </div>
 
 
@@ -52,13 +53,16 @@ function tableData(r, extra) {
 
 var links = []
 var foundItems = []
-var finishedCalls = 0
+var currentPagesLoaded = 1
+
 $(document).ready(function(){
 
+    $('#more_btn').hide();
     $.ajax({
       method: "GET",
       url: "<%= all_recipes_user_path(@user) %>"
       }).done(function(resp) {
+        $('#more_btn').show();
         $('#loading').hide();
           $.each(resp, function(ind, val) {
               foundItems.push(val);
@@ -71,6 +75,9 @@ $(document).ready(function(){
           });
       })
 
+
+
+
 })
 
 
@@ -82,10 +89,32 @@ function more(){
   $("#more_btn").text( "Loading...");
   $.ajax({
     method: "GET",
-    url: "<%= home_user_path(@user) %>",
-    data: { id: "<%= params[:id] %>" ,to: $("#to").val()},
-    dataType: "script"
-  }).done(function() {
+    url: "<%= all_recipes_user_path(@user) %>",
+    data: { loadmore: currentPagesLoaded }
+  }).done(function(resp) {
+    pushedIndex = 0;
+    currentPagesLoaded += 1;
+    $.each(resp, function(ind, val) {
+      addItem = true;
+        $.each(foundItems, function(itemInd, itemVal) {
+          if (itemVal["uri"] == val["uri"]) {
+            addItem = false;
+            return;
+          }
+        });
+        if (!addItem) {
+          return true;
+        }
+        foundItems.push(val);
+
+        if ((pushedIndex+1)%4==0) {
+          $(".insertDynamicData").append(tableData(val, true))
+        }
+        else{
+          $(".insertDynamicData").append(tableData(val, false))
+        }
+        pushedIndex += 1
+    });
     $("#more_btn").removeClass("disabled","disabled");
     $("#more_btn").removeClass( "btn-default");
     $("#more_btn").addClass( "btn-warning");

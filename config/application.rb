@@ -14,5 +14,6 @@ module Project276
     ENV['APP_ID'] = "89204b0c"
     ENV['APP_KEY'] = "d3d65a3351b05cf915b198302927ab75"
     ENV['API_URL'] = "http://api.edamam.com"
+    ENV['RETRYMAX'] = "5"
   end
 end

@@ -21,13 +21,7 @@ class RecipesController < ApplicationController
         respond_to do |format|
         	format.html
         end
-
-
         
-         # respond_to do |format|
-         #   format.json {render json: json_resp[0], status: :ok }
-         #  end
-
       end
 
     @recipe_comment = Recipe.find(params[:id])
