@@ -17,7 +17,7 @@
           <% r = g["recipe"] %>
           <div class="col-sm-6 col-md-3">
             <div class="thumbnail" data-toggle="popover" title="<%= r["label"] %>" data-content="<%= r["dietLabels"].join(",") %> <%= r["healthLabels"].join(",")%> ">
-            <a href="javascript:void(0);"  onclick="save_recipe_to_db($(this),'r['url']')">
+            <a href="javascript:void(0);"  onclick="save_recipe_to_db($(this),'<%= r['uri'] %>')">
             <img id = "saved-image"  class="img-responsive" src="<%= r["image"] %>" width="130"> </a>
             <h3 id="recipe-name"><%= r["label"] %></h3> </a>
             <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')">Remove</a></p>
@@ -50,12 +50,12 @@ function save_recipe_to_db(ele,recipeURI){
   var recipe;
   console.log("in function url:" +recipeURI)
 
-  console.log(recipe)
   $.ajax({
     method: "POST",
     url: "<%= save_recipeOnly_user_path %>",
     data: { id: "<%= params[:id] %>", recipe: recipeURI },
   }).done(function(rec) {
+    console.log("done")
     window.location.pathname = ("/recipes/"+rec)
   });
 }
