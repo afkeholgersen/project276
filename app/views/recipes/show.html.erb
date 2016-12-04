@@ -46,7 +46,14 @@
       <h4>Show All Comments</h4>
       <% @comment.each do |c| %>
       <%= c.user.username %>: <br>
-      <%= c.comment_text %><br><br>
+      <%= c.id %>:
+      <%= c.comment_text %><br>
+      <% if current_user.id == c.user_id %>
+        <a href="javascript:void(0);" onclick="delete_comment($(this),'<%= c.id %>')">delete</a><br><br>
+      <% elsif current_user.role == 2 %>
+        <a href="javascript:void(0);" onclick="delete_comment($(this),'<%= c.id %>')">delete</a><br><br>
+      <%end %>
+
       <% end %>
     </div>
 
@@ -60,14 +67,78 @@
           <%= submit_tag "Submit Comment" ,class: "btn btn-primary" %>
         </div>
       <% end %>
-
     </div>
+    <div id="vote">
+      <a href="javascript:void(0);" onclick="vote($(this),1)">upvote</a>
+      <a href="javascript:void(0);" onclick="vote($(this),-1)">downvote</a>
   </div>
 
-<script>
+  <div id="fb-root"></div>
+  <a class="twitter-share-button"
+    href="https://twitter.com/share"
+    data-size="large"
+    data-text="Check out this recipe! "
+    data-url=request.original_url
+    data-hashtags="foodNatic"
+    data-via=""
+    data-related="twitterapi,twitter">
+  Tweet
+  </a>
+  <div class="fb-share-button" data-href=request.original_url data-layout="button" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse">Share</a></div>
+
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+
+    window.twttr = (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0],
+      t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+
+    t._e = [];
+    t.ready = function(f) {
+      t._e.push(f);
+    };
+
+    return t;
+  }(document, "script", "twitter-wjs"));
+
+function vote(ele,vote){
+  console.log("in here")
+  $.ajax({
+    method: "POST",
+    url: "<%= createComment_recipe_path %>",
+    data: { id: "<%= params[:id] %>", vote: vote },
+  }).done(function()  {
+    console.log("vote logged")
+  });
+}
+
+function delete_comment(ele, comment_id){
+  console.log("delete function..")
+  $.ajax({
+    method: "GET",
+    url: "<%= deleteComment_recipe_path %>",
+    data: { id: "<%= params[:id] %>" ,comment_id: comment_id}
+  }).done(function(){
+    console.log("comment_text edited")
+    location.reload();
+  });
+}
+
 $('.btn').on("click", function() {
   console.log("FOUND");
-  setTimeout(location.reload(),5000);
+      location.reload();
+
 }
 )
 </script>

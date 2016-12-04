@@ -32,3 +32,7 @@ div.chosen-field {
 li {
   text-align: left;
 }
+
+div.field_with_errors{
+  display : inline;
+}

@@ -34,7 +34,7 @@ function tableData(r, extra) {
     }
     tdata += '<div class="col-sm-6 col-md-3">'
     tdata += '<div class="thumbnail" data-toggle="popover" title="'+r["label"]+'" data-content= "'+r["healthLabels"] +' '+r["dietLabels"] +'">'
-    tdata += '<a target="_blank" href="'+r["url"]+'">'
+    tdata += '<a href="javascript:void(0);" onclick="save_recipe_to_db($(this),'+"'"+r['uri']+"'"+')">'
     tdata += '<img id="saved-image" class="img-responsive" src="'+r["image"]+'" alt="" >'
     tdata += '<h3 id="recipe-name">'+r["label"]+'</h3> </a>'
     if (r["rExist"] == 1) {
@@ -143,6 +143,30 @@ function save_recipes(ele, recipeURI){
       console.log("finish save_recipe")
       $(ele).text("Saved");
       $(ele).addClass("disabled","disabled");
+  });
+}
+
+
+function save_recipe_to_db(ele,recipeURI){
+  var recipe;
+  console.log(recipeURI)
+  $.each(foundItems, function(ind, val) {
+    if (val['uri'] == recipeURI)
+    {
+      recipe = val
+      console.log(recipe)
+
+      return
+    }
+  })
+
+  console.log(recipe)
+  $.ajax({
+    method: "POST",
+    url: "<%= save_recipeOnly_user_path %>",
+    data: { id: "<%= params[:id] %>", recipe: recipe },
+  }).done(function(rec) {
+    window.location.pathname = ("/recipes/"+rec)
   });
 }
 
