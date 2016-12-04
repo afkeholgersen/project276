@@ -3,6 +3,10 @@ class WelcomeController < ApplicationController
     @recipes = Recipe.joins(:comments).group(:id).order("sum(comments.vote) desc").limit(5)
 
   end
+  def about
+  end
+  def creator
+  end
   def search
     if @json_resp != nil && @json_resp
       hits = @json_resp["hits"]

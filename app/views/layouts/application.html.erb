@@ -91,11 +91,14 @@
                   <% if current_user.role == 2 %>
                     <li class="submenu"><%= link_to "Admin Panel", users_adminhome_path %></li>
                   <% end %>
+                  <li class="submenu"><%= link_to "About",  about_path %></li><br>
+
                   <li class="submenu"><%= link_to "Log out", logout_path %></li>
             	  <% else %>
-            	    <li class="submenu"><%= link_to "Sign up", new_user_path %></li>
-            	    <li class="submenu"><%= link_to "Log in", new_session_path %></li>
-            	  <% end %>
+            	    <li class="submenu"><%= link_to "About",  about_path %></li>
+                  <li class="submenu"><%= link_to "Sign up", new_user_path %></li>
+                  <li class="submenu"><%= link_to "Log in", new_session_path %></li>
+                <% end %>
               </ul>
             </li> <!-- dropdown -->
           </ul> <!-- nav navbar-nav navbar-right -->

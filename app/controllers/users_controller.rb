@@ -122,25 +122,10 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-
-    puts @user
     @user.destroy
     respond_to do |format|
-
-
       format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
-    end
-  end
-
-  def deleteuser
-
-    if current_user 
-      current_user.destroy
-      respond_to do |format|
-        format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-        format.json { head :no_content }
-      end
     end
   end
 
@@ -229,6 +214,7 @@ class UsersController < ApplicationController
 
     r = Recipe.new(:source => recipe_uri, :sourceIcon => recipe["image"], :dietLabels => dietLabelsString, :healthLabels => healthLabelsString, :title => recipe['label'])
 
+    
     if recipe_exists
       logger.debug "CALLING IF"
       recipe_exists_user = @user.savedrecipe.recipe.where(:source => recipe_uri).first

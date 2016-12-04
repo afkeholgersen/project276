@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   get 'password_resets/new'
 
   get 'welcome/index'
+  get 'creator', controller: :welcome, action: :creator
+  get 'about', controller: :welcome, action: :about
   get "users/adminhome"
 
   resources :recipes do
@@ -16,6 +18,7 @@ Rails.application.routes.draw do
   root to: 'welcome#index' #main home webpage
 
   get "users/new"
+
 	get "logout" => "sessions#destroy"
   get "users/search"
 
@@ -34,7 +37,6 @@ Rails.application.routes.draw do
       post :save_recipe
       post :save_recipeOnly
       delete :unsave_recipe
-      delete :deleteuser
     end
 
     collection do
