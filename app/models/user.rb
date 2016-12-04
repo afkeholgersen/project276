@@ -66,8 +66,10 @@ class User < ApplicationRecord
 	  generate_token(:password_reset_token)
 	  self.password_reset_sent_at = Time.zone.now
 	  save!
-	  UserMailer.password_reset(self).deliver_now
+	  UserMailer.password_reset(self).deliver!
+
 	end
+
 	#can generate tokens- this will be used for resetting password
 	def generate_token(column)
 	  begin
