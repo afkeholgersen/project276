@@ -49,12 +49,21 @@ class RecipesController < ApplicationController
 
   def createComment
     @recipe = Recipe.find(params[:id])
-    @comment = Comment.new(:vote => params[:vote])
-    current_user.comments.push(@comment)
-    @recipe.comments.push(@comment)
-    @comment.user = current_user
-    @comment.recipe = @recipe
-    @comment.save
+    vote_exist = Comment.where(:comment_text => nil , :user_id => current_user, :recipe_id =>@recipe).first
+    if vote_exist
+      logger.debug "edit vote value"
+      vote_exist.update(vote: params[:vote])
+    elsif !vote_exist
+      logger.debug "new vote"
+      @comment = Comment.new(:vote => params[:vote])
+      current_user.comments.push(@comment)
+      @recipe.comments.push(@comment)
+      @comment.user = current_user
+      @comment.recipe = @recipe
+      @comment.save
+    else
+      logger.debug "error!"
+    end
   end
 
 
