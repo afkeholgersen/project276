@@ -18,8 +18,8 @@ module Project276
     ENV['RETRYMAX'] = "5"
     
     ENV['MAILGUN_SMTP_PORT'] = "587"
-    ENV['MAILGUN_SMTP_SERVER'] = "ENTER SMTP SERVER"
-    ENV['MAILGUN_SMTP_LOGIN'] = "ENTER LOGIN"
-    ENV['MAILGUN_SMTP_PASSWORD'] = "ENTER PASSWORD"
+    ENV['MAILGUN_SMTP_SERVER'] = "smtp.mailgun.org"
+    ENV['MAILGUN_SMTP_LOGIN'] = "postmaster@foodnatic1.tk"
+    ENV['MAILGUN_SMTP_PASSWORD'] = "foodnaticdemo"
   end
 end
