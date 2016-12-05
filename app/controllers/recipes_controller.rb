@@ -15,22 +15,18 @@ class RecipesController < ApplicationController
       resp = conn.get recipeInfo
       if resp.body != nil
         json_resp = JSON.parse(resp.body)
+
         @recipe = json_resp[0]
         logger.debug @reicpe
         respond_to do |format|
         	format.html
         end
-
-
         
-         # respond_to do |format|
-         #   format.json {render json: json_resp[0], status: :ok }
-         #  end
-
       end
 
     @recipe_comment = Recipe.find(params[:id])
-    @comment = Comment.where(recipe_id: @recipe_comment)
+    @comment = Comment.where(recipe_id: @recipe_comment).where.not(:comment_text => nil).where("comment_text <> ''").order(:id)
+
 
   end
 
@@ -44,7 +40,28 @@ class RecipesController < ApplicationController
     @comment.save
   end
 
+  def createComment
+    @recipe = Recipe.find(params[:id])
+    vote_exist = Comment.where(:comment_text => nil , :user_id => current_user, :recipe_id =>@recipe).first
+    if vote_exist
+      logger.debug "edit vote value"
+      vote_exist.update(vote: params[:vote])
+    elsif !vote_exist
+      logger.debug "new vote"
+      @comment = Comment.new(:vote => params[:vote])
+      current_user.comments.push(@comment)
+      @recipe.comments.push(@comment)
+      @comment.user = current_user
+      @comment.recipe = @recipe
+      @comment.save
+    else
+      logger.debug "error!"
+    end
+  end
 
-
+  def deleteComment
+    comment_to_delete = Comment.where(:recipe_id => params[:id]).find(params[:comment_id], :user_id => current_user)
+    comment_to_delete.update(comment_text: "--DELETED--")
+  end
 
 end

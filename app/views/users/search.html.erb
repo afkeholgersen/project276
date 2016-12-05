@@ -9,22 +9,44 @@
 <div class="container">
 <h1 class="page-headers">Search Results</h1>
   <p></p>
+  <% if @searchResults["hits"].length > 0 %>
       <% @searchResults["hits"].in_groups_of(4,false).each do |group| %>
       <div class="row portfolio"> <!-- only have a new row every 3 rows -->
 
         <% group.each do |g| %>
           <% r = g["recipe"] %>
           <div class="col-sm-6 col-md-3">
-            <div class="thumbnail" data-toggle="popover" title="<%= r["label"] %>" data-content="<%= r["dietLabels"].join(",") %> <%= r["healthLabels"].join(",")%> ">
-            <a target="_blank" href="<%= recipe_path(r) %>">
+
+            <% if current_user %>
+
+              <div class="thumbnail" data-toggle="popover" title="<%= r["label"] %>" data-content="<%= r["dietLabels"].join(",") %> <%= r["healthLabels"].join(",")%> ">
+              <a href="javascript:void(0);"  onclick="save_recipe_to_db($(this),'<%= r.to_json.gsub("'", "&quot;") %>')">
+            <% else %>
+
+              <div class="thumbnail" data-toggle="popover" title="<%= r["label"] %>" data-content="<%= r["dietLabels"].join(",") %> <%= r["healthLabels"].join(",")%> ">
+              <a href="<%=new_session_path%>" >
+
+            <% end %>
+
+
             <img id = "saved-image"  class="img-responsive" src="<%= r["image"] %>" width="130"> </a>
             <h3 id="recipe-name"><%= r["label"] %></h3> </a>
-            <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="unsave_recipe($(this),'<%= r['uri'] %>')">Remove</a></p>
+            <% if current_user %>
+              <% if r["rExist"] == 1 %>
+                <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="save_recipes($(this),'<%= r.to_json.gsub("'", "&quot;") %>' ) ">Saved</a></p>
+              <% else %>
+                <p ><i class="material-icons">save</i> <a href="javascript:void(0);" onclick="save_recipes($(this),'<%= r.to_json.gsub("'", "&quot;") %>' ) ">Save Recipe</a></p>
+              <% end %>
+           <% end %>
+           
           </div>
           </div>
           <% end %>
           </div>
         <% end %>
+    <%else%>
+    <h2 class="error-message">No recipes match your search! Try again!</h2>
+    <%end%>
 
 
 
@@ -35,10 +57,43 @@
 
 
 <script>
+<% if current_user %>
+  function save_recipes(ele, recipe){
+
+    $(ele).text("Saving..");
+    recipe = JSON.parse(recipe);
+    console.log(recipe)
+    $.ajax({
+      method: "POST",
+      url: "<%= save_recipe_user_path(current_user) %>",
+      data: { id: "<%= params[:id] %>", recipe: recipe },
+    }).done(function() {
+        console.log("finish save_recipe")
+        $(ele).text("Saved");
+        $(ele).addClass("disabled","disabled");
+    });
+  }
+<% end %>
+
 
 $('[data-toggle="popover"]').popover({
   placement: "auto",
   trigger: "hover"
 })
 
+<% if current_user %>
+function save_recipe_to_db(ele,recipeURI){
+  recipe = JSON.parse(recipeURI);
+  console.log("in function url:" +recipe)
+
+  $.ajax({
+    method: "POST",
+    url: "<%= save_recipeOnly_user_path(current_user) %>",
+    data: { id: "<%= params[:id] %>", recipe: recipe },
+  }).done(function(rec) {
+    console.log("done")
+    window.location.pathname = ("/recipes/"+rec)
+  });
+}
+<% end %>
 </script>

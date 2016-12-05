@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -25,18 +26,68 @@
         </div>
         <div>
           <ul class="nav navbar-nav navbar-right">
-            <li class="left">
-              <!-- For now, can only search if a current user, -->
-              <%if current_user.present?%>
-                <%= form_tag search_user_path(current_user), :method => 'get' do %>
-                  <p>
-              <%= text_field_tag :search, params[:search], class: "left" %>
-              <%= submit_tag "Search", :name => nil, class: "left" %>
-
-                 </p>
-                <% end %>
-              <% end %>
+            <li class="search-bar">
+              <%= text_field_tag :search, params[:search], class: "form-control" %>
             </li>
+            <li class="search-bar dropdown">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+            <div class="advanced-dropdown" style="overflow-y: scroll">
+              <%= form_tag users_search_path, :method => 'get' do %>
+                <li> Health labels </li>
+                <% Healthlabel.all.each do |hlabel| %>
+                  <% if searchableHealthLabels.include? hlabel.id %>
+                    <li class="advanced-params">
+                      <% if params["healthlabel_apiparameters"] %>
+                        <% if params["healthlabel_apiparameters"].include? hlabel.apiparameter %>
+                            <%= check_box_tag 'healthlabel_apiparameters[]', hlabel.apiparameter, true %>
+                        <% else %>
+                            <%= check_box_tag 'healthlabel_apiparameters[]', hlabel.apiparameter -%>
+                        <% end %>
+                      <% else %>
+                          <%= check_box_tag 'healthlabel_apiparameters[]', hlabel.apiparameter -%>
+                      <% end %>
+                      <%= h hlabel.name -%>
+                    </li>
+                    <% end %>
+                <%end%>
+                <li> Diet labels </li>
+                <% Dietlabel.all.each do |dlabel| %>
+                  <% if searchableDietLabels.include? dlabel.id %>
+                <li class="advanced-params" >
+                  <% if params["dietlabel_apiparameters"] %>
+                        <% if params["dietlabel_apiparameters"].include? dlabel.apiparameter %>
+                            <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter, true %>
+                        <% else %>
+                            <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter -%>
+                        <% end %>
+                      <% else %>
+                          <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter -%>
+                      <% end %>
+                  <%= h dlabel.name -%>
+                </li>
+                <% end %>
+              <%end%>
+
+              <li> Minimum Calories: <%= text_field_tag :mincalories, params[:mincalories] %> </li>
+              <li> Maximum Calories: <%= text_field_tag :maxcalories, params[:maxcalories] %> </li>
+              <li>
+              <%= button_tag"",type: 'submit', class: "btn btn-primary", :name => nil  do%>
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+              <%end%>
+            </li>
+              </div>
+            </ul>
+          </li>
+
+            <li class="search-bar">
+              <%= button_tag"",type: 'submit', class: "btn btn-primary", :name => nil  do%>
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+              <%end%>
+
+              <%end %> <!--- end of buttons for ruby -->
+            </li>
+
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account<span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -47,11 +98,14 @@
                   <% if current_user.role == 2 %>
                     <li class="submenu"><%= link_to "Admin Panel", users_adminhome_path %></li>
                   <% end %>
+                  <li class="submenu"><%= link_to "About",  about_path %></li><br>
+
                   <li class="submenu"><%= link_to "Log out", logout_path %></li>
             	  <% else %>
-            	    <li class="submenu"><%= link_to "Sign up", new_user_path %></li>
-            	    <li class="submenu"><%= link_to "Log in", new_session_path %></li>
-            	  <% end %>
+            	    <li class="submenu"><%= link_to "About",  about_path %></li>
+                  <li class="submenu"><%= link_to "Sign up", new_user_path %></li>
+                  <li class="submenu"><%= link_to "Log in", new_session_path %></li>
+                <% end %>
               </ul>
             </li> <!-- dropdown -->
           </ul> <!-- nav navbar-nav navbar-right -->

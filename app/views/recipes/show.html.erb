@@ -1,73 +1,148 @@
-<div class="container" style="margin-bottom:300px;">
+<div class="container" style="margin-bottom:300px;background: ghostwhite;">
 
   <br/>
 
   <div class="row">
-    <div class="col-xs-6">
-      <div class="row">
-        <div class="col-xs-4">
-          <% if @recipe %>
-          <a target="_blank" href="<%= @recipe['url']%>">
-          <img src="<%= @recipe["image"] %>" width="100"/>
-          <% end %>
-        </a>
-        </div>
-        <div class="col-xs-8">
-          <% if @recipe %>
+    <div class="col-xs-10">
+      <% if @recipe %>
+        <div class="row">
+          <div class="col-sm-4">
+            <% if @recipe %>
+              <a target="_blank" href="<%= @recipe['url']%>">
+                <img src="<%= @recipe["image"] %>"/>
+              </a>
+            <% end %>
+          </div>
+          <div class="col-sm-8">
+            
             <a target="_blank" href="<%= @recipe['url']%>">
             <h3><%= @recipe['label'] %></h3></a>
-            <b style="color:blue;">* Information below is for 1 serving</b>
+            <b style="color:red;">* Information below is for <%= @recipe["yield"].to_i %> serving(s)</b>
+            <h4><%= @recipe["ingredients"].size %> Ingredients</h4>
+            <% @recipe["ingredientLines"].each do |i| %>
+              <p><%= i %></p>
+            <% end %>
           </div>
         </div>
 
-          <h4><%= @recipe["ingredients"].size %> Ingredients</h4>
-          <% @recipe["ingredientLines"].each do |i| %>
-          <p><%= i %></p>
-          <% end %>
+        <br>
+        <p><b>Diet Labels:</b> <%= @recipe["dietLabels"].to_sentence  rescue @recipe["dietLabels"] %></p>
+        <p><b>Health Labels:</b> <%= @recipe["healthLabels"].to_sentence  rescue @recipe["healthLabels"]%></p>
+        <p><b>Cautions:</b> <%= @recipe["cautions"].to_sentence  rescue @recipe["cautions"] %></p>
 
-          <p><b>Diet Labels:</b> <%= @recipe["dietLabels"].tr('[ ] " ', '')   rescue @recipe["dietLabels"] %></p>
-          <p><b>Health Labels:</b> <%= @recipe["healthLabels"].tr('[ ] " ', '')  rescue @recipe["healthLabels"]%></p>
-          <p>Cautions: <%= @recipe["cautions"].tr('[ ] " ', '')  rescue @recipe["cautions"] %></p>
-
-          <p><b>Calories/Serving:</b> <%= @recipe["calories"].to_f.round %></p>
-          <p>Total weight: <%= @recipe["totalWeight"] %></p>
-          <% end %>
-
-      </div>
-      <div class="col-xs-6">
-
-      </div>
+        <p><b>Calories/Serving:</b> <%= @recipe["calories"].to_f.round %></p>
+        <p><b>Total weight:</b> <%= @recipe["totalWeight"] %></p>
+      <% end %>
     </div>
+    <div class="col-xs-2">
 
-    <br>
+    </div>
+  </div>
+
+  <br>
 
 
     <div id="comment_board">
       <h4>Show All Comments</h4>
       <% @comment.each do |c| %>
       <%= c.user.username %>: <br>
-      <%= c.comment_text %><br><br>
-      <% end %>
-    </div>
+      <%= c.id %>:
+      <%= c.comment_text %><br>
+        <% if current_user.id == c.user_id %>
+          <a href="javascript:void(0);" onclick="delete_comment($(this),'<%= c.id %>')">delete</a>
+        <% elsif current_user.role == 2 %>
+          <a href="javascript:void(0);" onclick="delete_comment($(this),'<%= c.id %>')">delete</a>
+        <%end %>
+      <br><br>
+      </div>
 
-    <div id="comment_board_reply">
-    <h5>Comment Board</h5>
+ <% end %>
+   
+
+  <div class="row">
+    <div id="comment_board_reply" class="col-xs-10">
       <%= form_tag("/recipes", method: "post", :remote => true) do %>
-        <%= label_tag :comment_text %>
-        <%= text_field_tag :comment_text %><br>
-        <%= hidden_field_tag :recipe_id, params[:id] %>
-        <div class="actions">
-          <%= submit_tag "Submit Comment" ,class: "btn btn-primary" %>
-        </div>
+        <p>
+          <%= text_field_tag :comment_text, nil, placeholder: "Add a Comment here", class: "comment_text_field" %>    
+          <%= submit_tag "Post" ,class: "btn btn-danger" %>       
+          <%= hidden_field_tag :recipe_id, params[:id] %>
+        </p>  
       <% end %>
-
     </div>
-  </div>
 
-<script>
+      <a href="javascript:void(0);" onclick="vote($(this),1)">upvote</a>
+      <a href="javascript:void(0);" onclick="vote($(this),-1)">downvote</a>
+
+</div>
+
+  <div id="fb-root"></div>
+  <a class="twitter-share-button"
+    href="https://twitter.com/share"
+    data-size="large"
+    data-text="Check out this recipe! "
+    data-url=request.original_url
+    data-hashtags="foodNatic"
+    data-via=""
+    data-related="twitterapi,twitter">
+  Tweet
+  </a>
+  <div class="fb-share-button" data-href=request.original_url data-layout="button" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse">Share</a></div>
+
+</div>
+
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+
+    window.twttr = (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0],
+      t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+
+    t._e = [];
+    t.ready = function(f) {
+      t._e.push(f);
+    };
+
+    return t;
+  }(document, "script", "twitter-wjs"));
+
+function vote(ele,vote){
+  console.log("in here")
+  $.ajax({
+    method: "POST",
+    url: "<%= createComment_recipe_path %>",
+    data: { id: "<%= params[:id] %>", vote: vote },
+  }).done(function()  {
+    console.log("vote logged")
+  });
+}
+
+function delete_comment(ele, comment_id){
+  console.log("delete function..")
+  $.ajax({
+    method: "GET",
+    url: "<%= deleteComment_recipe_path %>",
+    data: { id: "<%= params[:id] %>" ,comment_id: comment_id}
+  }).done(function(){
+    console.log("comment_text edited")
+    location.reload();
+  });
+}
+
 $('.btn').on("click", function() {
   console.log("FOUND");
-  setTimeout(location.reload(),5000);
+      location.reload();
+
 }
 )
 </script>

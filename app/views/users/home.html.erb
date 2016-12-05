@@ -13,7 +13,12 @@
 
   <span class="insertDynamicData"> </span>
 
+  <img id="loading" src="/ajax-loader.gif">
+
+  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a>
+
 <!--  <a id="more_btn" href="javascript:void(0);" onclick="more()" class="btn btn-warning pull-right" style="margin-bottom:200px;">Load More</a> -->
+
 </div>
 
 
@@ -32,7 +37,7 @@ function tableData(r, extra) {
     }
     tdata += '<div class="col-sm-6 col-md-3">'
     tdata += '<div class="thumbnail" data-toggle="popover" title="'+r["label"]+'" data-content= "'+r["healthLabels"] +' '+r["dietLabels"] +'">'
-    tdata += '<a target="_blank" href="'+r["url"]+'">'
+    tdata += '<a href="javascript:void(0);" onclick="save_recipe_to_db($(this),'+"'"+r['uri']+"'"+')">'
     tdata += '<img id="saved-image" class="img-responsive" src="'+r["image"]+'" alt="" >'
     tdata += '<h3 id="recipe-name">'+r["label"]+'</h3> </a>'
     if (r["rExist"] == 1) {
@@ -41,12 +46,6 @@ function tableData(r, extra) {
     else {
       tdata += '<i class="material-icons">save</i><a href="javascript:void(0);" onclick="save_recipes($(this),'+"'"+r['uri']+"'"+')">Save recipe</a>'
     }
-    // tdata += '<td> <a target="_blank" href="'+r["url"]+'"><img src="'+r["image"]+'" width="120"> &nbsp; </a></td>'
-    // tdata += '<td> <a target="_blank" href="'+r["url"]+'">'+r["label"]+' </a></td>'
-    // tdata += ' <td> '+r["healthLabels"] +' </td>'
-    // tdata += '<td> '+r["dietLabels"] + '</td>'
-    // tdata += ' <td><a href="javascript:void(0);"> Saved </a>'
-    // tdata += '</td>'
     tdata += '</div> '
     tdata += '</div>'
     if (extra== true ){
@@ -55,33 +54,37 @@ function tableData(r, extra) {
   return tdata
 }
 
-$(document).on('turbolinks:load', function() {
-  console.log("TURBOLINKS LOAD")
-})
-
 var links = []
 var foundItems = []
-var finishedCalls = 0
-$(document).ready(function(){
-    console.log("RUNNING NOW")
-    <% @foundLinks.each do |fl| %>
+var currentPagesLoaded = 1
 
+$(document).ready(function(){
+
+    $('#more_btn').hide();
     $.ajax({
       method: "GET",
-      url: "<%= individual_recipes_user_path(@user) %>",
-      data: {uri: "<%= fl %>"}
-    }).done(function(resp) {
-      console.log(resp)
-      foundItems.push(resp)
-      finishedCalls += 1
-      if (finishedCalls % 4 == 0 ){
-        $(".insertDynamicData").append(tableData(foundItems[finishedCalls-1],true))
-      }
-      else {
-        $(".insertDynamicData").append(tableData(foundItems[finishedCalls-1],false))
-      }
-    })
-    <% end %>
+      url: "<%= all_recipes_user_path(@user) %>"
+      }).done(function(resp) {
+        if (resp.length == 0) {
+          $('.insertDynamicData').append('<h2 class="error-message"> No results match your specified labels! Try again! </h2>')
+          $("#more_btn").hide();
+        }
+        else $('#more_btn').show();
+        $('#loading').hide();
+          $.each(resp, function(ind, val) {
+              foundItems.push(val);
+              if ((ind+1)%4==0) {
+                $(".insertDynamicData").append(tableData(val, true))
+              }
+              else{
+                $(".insertDynamicData").append(tableData(val, false))
+              }
+          });
+      })
+
+
+
+
 })
 
 
@@ -93,10 +96,32 @@ function more(){
   $("#more_btn").text( "Loading...");
   $.ajax({
     method: "GET",
-    url: "<%= home_user_path(@user) %>",
-    data: { id: "<%= params[:id] %>" ,to: $("#to").val()},
-    dataType: "script"
-  }).done(function() {
+    url: "<%= all_recipes_user_path(@user) %>",
+    data: { loadmore: currentPagesLoaded }
+  }).done(function(resp) {
+    pushedIndex = 0;
+    currentPagesLoaded += 1;
+    $.each(resp, function(ind, val) {
+      addItem = true;
+        $.each(foundItems, function(itemInd, itemVal) {
+          if (itemVal["uri"] == val["uri"]) {
+            addItem = false;
+            return;
+          }
+        });
+        if (!addItem) {
+          return true;
+        }
+        foundItems.push(val);
+
+        if ((pushedIndex+1)%4==0) {
+          $(".insertDynamicData").append(tableData(val, true))
+        }
+        else{
+          $(".insertDynamicData").append(tableData(val, false))
+        }
+        pushedIndex += 1
+    });
     $("#more_btn").removeClass("disabled","disabled");
     $("#more_btn").removeClass( "btn-default");
     $("#more_btn").addClass( "btn-warning");
@@ -125,6 +150,30 @@ function save_recipes(ele, recipeURI){
       console.log("finish save_recipe")
       $(ele).text("Saved");
       $(ele).addClass("disabled","disabled");
+  });
+}
+
+
+function save_recipe_to_db(ele,recipeURI){
+  var recipe;
+  console.log(recipeURI)
+  $.each(foundItems, function(ind, val) {
+    if (val['uri'] == recipeURI)
+    {
+      recipe = val
+      console.log(recipe)
+
+      return
+    }
+  })
+
+  console.log(recipe)
+  $.ajax({
+    method: "POST",
+    url: "<%= save_recipeOnly_user_path %>",
+    data: { id: "<%= params[:id] %>", recipe: recipe },
+  }).done(function(rec) {
+    window.location.pathname = ("/recipes/"+rec)
   });
 }
 

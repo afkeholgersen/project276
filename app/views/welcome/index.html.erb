@@ -1,15 +1,28 @@
 <%= stylesheet_link_tag 'index' %>
+<% if current_user %>
+  <h1 style="float: right; font-size: 18px;">
+  	Logged in as <%=link_to current_user.username, edit_user_path(current_user) %>
+  </h1>
+<% end %>
+
 <div class="logo">
   <img  class= "logo" src="/logo-transparent.png" alt="logo" />
+</div>
+
+<div class="recipes_of_the_week">
+  <h2>Popular Recipes of the Week</h2>
+  <% @recipes.each do |r| %>
+  	<% if current_user %>
+	    <a href="<%= recipe_path(r) %>">
+	   <% else %>
+	   	<a href="<%= new_session_path %>">
+	  <% end %>
+    <img id = "saved-image"  class="img-responsive" src="<%= r.sourceIcon %>" width="130"></a>
+  <%end%>
 </div>
 <div class="container">
 	<div class="main-page">
 	  <div class="main-page-links">
-		  <% if current_user %>
-		    <h1>
-		    	Hello <%= current_user.username %>
-		    </h1>
-		  <% end %>
 
       <!---
 				<div class="input-group stylish-input-group">
@@ -20,6 +33,8 @@
 		        </button>
 		    </span>
 		  </div> --->
+
+
 	  </div>
 	</div>
 </div>
