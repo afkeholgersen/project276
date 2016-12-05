@@ -12,7 +12,11 @@
 <div class="recipes_of_the_week">
   <h2>Popular Recipes of the Week</h2>
   <% @recipes.each do |r| %>
-    <a href="<%= recipe_path(r) %>">
+  	<% if current_user %>
+	    <a href="<%= recipe_path(r) %>">
+	   <% else %>
+	   	<a href="<%= new_session_path %>">
+	  <% end %>
     <img id = "saved-image"  class="img-responsive" src="<%= r.sourceIcon %>" width="130"></a>
   <%end%>
 </div>
