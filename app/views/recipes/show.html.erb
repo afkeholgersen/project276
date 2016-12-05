@@ -14,7 +14,7 @@
             <% end %>
           </div>
           <div class="col-sm-8">
-            
+
             <a target="_blank" href="<%= @recipe['url']%>">
             <h3><%= @recipe['label'] %></h3></a>
             <b style="color:red;">* Information below is for <%= @recipe["yield"].to_i %> serving(s)</b>
@@ -49,29 +49,33 @@
       <%= c.id %>:
       <%= c.comment_text %><br>
         <% if current_user.id == c.user_id %>
-          <a href="javascript:void(0);" onclick="delete_comment($(this),'<%= c.id %>')">delete</a>
+          <a href="javascript:void(0);" onclick="delete_comment($(this),'<%= c.id %>')">delete</a><br>
         <% elsif current_user.role == 2 %>
-          <a href="javascript:void(0);" onclick="delete_comment($(this),'<%= c.id %>')">delete</a>
+          <a href="javascript:void(0);" onclick="delete_comment($(this),'<%= c.id %>')">delete</a><br>
         <%end %>
+        <br>
+      <% end %>
       <br><br>
       </div>
 
- <% end %>
-   
+
 
   <div class="row">
     <div id="comment_board_reply" class="col-xs-10">
       <%= form_tag("/recipes", method: "post", :remote => true) do %>
         <p>
-          <%= text_field_tag :comment_text, nil, placeholder: "Add a Comment here", class: "comment_text_field" %>    
-          <%= submit_tag "Post" ,class: "btn btn-danger" %>       
+          <%= text_field_tag :comment_text, nil, placeholder: "Add a Comment here", class: "comment_text_field" %>
+          <%= submit_tag "Post" ,class: "btn btn-danger" %>
           <%= hidden_field_tag :recipe_id, params[:id] %>
-        </p>  
+        </p>
       <% end %>
     </div>
-
-      <a href="javascript:void(0);" onclick="vote($(this),1)">upvote</a>
-      <a href="javascript:void(0);" onclick="vote($(this),-1)">downvote</a>
+    <div class="vote">
+      Let us know if you like this recipe!
+      <a href="javascript:void(0);" onclick="vote($(this),1)"><i class="fa fa-thumbs-up fa-5" aria-hidden="true"></i></a>
+      <a href="javascript:void(0);" onclick="vote($(this),-1)"><i class="fa fa-thumbs-down fa-5" aria-hidden="true"></i></a>
+      <%= @votesum %>
+    </div>
 
 </div>
 
@@ -124,6 +128,7 @@ function vote(ele,vote){
     data: { id: "<%= params[:id] %>", vote: vote },
   }).done(function()  {
     console.log("vote logged")
+    location.reload();
   });
 }
 

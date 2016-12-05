@@ -91,8 +91,6 @@ ActiveRecord::Schema.define(version: 20161203225046) do
     t.integer  "savedrecipe_id"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
-    t.string   "reset_digest"
-    t.datetime "reset_sent_at"
     t.string   "password_reset_token"
     t.datetime "password_reset_sent_at"
   end

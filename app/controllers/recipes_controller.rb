@@ -21,11 +21,12 @@ class RecipesController < ApplicationController
         respond_to do |format|
         	format.html
         end
-        
+
       end
 
     @recipe_comment = Recipe.find(params[:id])
     @comment = Comment.where(recipe_id: @recipe_comment).where.not(:comment_text => nil).where("comment_text <> ''").order(:id)
+    @votesum = @recipe_comment.comments.sum(:vote)
 
 
   end
