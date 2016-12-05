@@ -26,61 +26,68 @@
         </div>
         <div>
           <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Advanced Options<span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                <div class="advanced-dropdown" style="overflow-y: scroll">
-                  <%= form_tag users_search_path, :method => 'get' do %>
-                    <li> Health labels </li>
-                    <% Healthlabel.all.each do |hlabel| %>
-                      <% if searchableHealthLabels.include? hlabel.id %>
-                        <li class="advanced-params"> 
-                          <% if params["healthlabel_apiparameters"] %>
-                            <% if params["healthlabel_apiparameters"].include? hlabel.apiparameter %>
-                                <%= check_box_tag 'healthlabel_apiparameters[]', hlabel.apiparameter, true %>
-                            <% else %>
-                                <%= check_box_tag 'healthlabel_apiparameters[]', hlabel.apiparameter -%>                   
-                            <% end %>
-                          <% else %>
-                              <%= check_box_tag 'healthlabel_apiparameters[]', hlabel.apiparameter -%>   
-                          <% end %>
-                          <%= h hlabel.name -%>
-                        </li>
+            <li class="search-bar">
+              <%= text_field_tag :search, params[:search], class: "form-control" %>
+            </li>
+            <li class="search-bar dropdown">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+            <div class="advanced-dropdown" style="overflow-y: scroll">
+              <%= form_tag users_search_path, :method => 'get' do %>
+                <li> Health labels </li>
+                <% Healthlabel.all.each do |hlabel| %>
+                  <% if searchableHealthLabels.include? hlabel.id %>
+                    <li class="advanced-params">
+                      <% if params["healthlabel_apiparameters"] %>
+                        <% if params["healthlabel_apiparameters"].include? hlabel.apiparameter %>
+                            <%= check_box_tag 'healthlabel_apiparameters[]', hlabel.apiparameter, true %>
+                        <% else %>
+                            <%= check_box_tag 'healthlabel_apiparameters[]', hlabel.apiparameter -%>
                         <% end %>
-                    <%end%>
-                    <li> Diet labels </li>
-                    <% Dietlabel.all.each do |dlabel| %>
-                      <% if searchableDietLabels.include? dlabel.id %>
-                    <li class="advanced-params" > 
-                      <% if params["dietlabel_apiparameters"] %>
-                            <% if params["dietlabel_apiparameters"].include? dlabel.apiparameter %>
-                                <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter, true %>
-                            <% else %>
-                                <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter -%>                   
-                            <% end %>
-                          <% else %>
-                              <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter -%>   
-                          <% end %>
-                      <%= h dlabel.name -%>
+                      <% else %>
+                          <%= check_box_tag 'healthlabel_apiparameters[]', hlabel.apiparameter -%>
+                      <% end %>
+                      <%= h hlabel.name -%>
                     </li>
                     <% end %>
-                  <%end%>
+                <%end%>
+                <li> Diet labels </li>
+                <% Dietlabel.all.each do |dlabel| %>
+                  <% if searchableDietLabels.include? dlabel.id %>
+                <li class="advanced-params" >
+                  <% if params["dietlabel_apiparameters"] %>
+                        <% if params["dietlabel_apiparameters"].include? dlabel.apiparameter %>
+                            <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter, true %>
+                        <% else %>
+                            <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter -%>
+                        <% end %>
+                      <% else %>
+                          <%= check_box_tag 'dietlabel_apiparameters[]', dlabel.apiparameter -%>
+                      <% end %>
+                  <%= h dlabel.name -%>
+                </li>
+                <% end %>
+              <%end%>
 
-                  <li> Minimum Calories: <%= text_field_tag :mincalories, params[:mincalories] %> </li>
-                  <li> Maximum Calories: <%= text_field_tag :maxcalories, params[:maxcalories] %> </li>
-
-                  </div>
-                </ul>
-              </li> <!-- dropdown -->
-
-            <li class="left">
-                
-                
-              <%= text_field_tag :search, params[:search], class: "left" %>
-              <%= button_tag"",type: 'submit', class: "fa fa-search", :name => nil %>
-
-              <% end %>
+              <li> Minimum Calories: <%= text_field_tag :mincalories, params[:mincalories] %> </li>
+              <li> Maximum Calories: <%= text_field_tag :maxcalories, params[:maxcalories] %> </li>
+              <li>
+              <%= button_tag"",type: 'submit', class: "btn btn-primary", :name => nil  do%>
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+              <%end%>
             </li>
+              </div>
+            </ul>
+          </li>
+
+            <li class="search-bar">
+              <%= button_tag"",type: 'submit', class: "btn btn-primary", :name => nil  do%>
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+              <%end%>
+
+              <%end %> <!--- end of buttons for ruby -->
+            </li>
+
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account<span class="caret"></span></a>
               <ul class="dropdown-menu">

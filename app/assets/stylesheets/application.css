@@ -69,25 +69,22 @@ body{
 }
 
 
-.search-bar .search-button{
-    background: white;
-}
-
-.search-bar button{
-    border:0;
-    background:transparent;
-}
-
 #recipe-name{
   font-size: 90%;
 }
 #remove-recipe{
   font-size:120%;
-  }
+}
 
+.search-bar{
+  padding-left:0;
+  padding-right:0;
+}
 
 .advanced-dropdown {
   height:500px;
+  margin:0;
+  padding:0;
 }
 
 
@@ -96,6 +93,10 @@ body{
   width: 100%;
 
 }
+.btn-primary{
+  background-color: currentColor;
+}
+
 
 #comment_board_reply {
   margin: 1rem 0;
