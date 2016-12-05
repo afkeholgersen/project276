@@ -1,7 +1,7 @@
 <%= stylesheet_link_tag 'index' %>
 <%= stylesheet_link_tag 'gallery' %>
 <% if current_user %>
-  <h1 style="float: right; font-size: 18px;">
+  <h1 style="float: right; font-size: 18px; margin-right:20px;">
   	Logged in as <%=link_to current_user.username, edit_user_path(current_user) %>
   </h1>
 <% end %>
@@ -9,9 +9,10 @@
 <div class="logo">
   <img  class= "logo" src="/logo-transparent.png" alt="logo" />
 </div>
-
+<!--- font-family:'Comic Sans MS',cursive,sans-serif;--->
 <div class="recipes_of_the_week">
-  <h2 style="text-align: center; font-family:'Comic Sans MS',cursive,sans-serif; font-weight: 700;">Popular Recipes of the Week</h2>
+  <h1 style="text-align: center;  font-weight: 700;">Popular Recipes of the Week</h1>
+  <br></br>
   <div id="myCarousel" class="carousel slide" data-ride="carousel" style="width: 60%; height: 50%">
   <ol class="carousel-indicators">
     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -34,7 +35,7 @@
 	  <% end %>
     <img class="img-responsive center-block" src="<%= r.sourceIcon %>"  ></a>
     <div class="carousel-caption" style="bottom: 7%">
-      <h3 style="font-size: 40px; color: #990000; font-style: italic; font-weight: bold; background-color: #eff4fc; filter: alpha(opacity=100); opacity: 0.8; display: inline-block"><%= r.title %></h3>
+      <h3 style="font-size: 40px; color: #990000; font-weight: bold; background-color: #eff4fc; filter: alpha(opacity=100); opacity: 0.8; display: inline-block"><%= r.title %></h3>
     </div>
   </div>
   <%end%>
@@ -49,22 +50,11 @@
 </a>
 </div>
 </div>
-
-<div class="container">
-	<div class="main-page">
-	  <div class="main-page-links">
-
-      <!---
-				<div class="input-group stylish-input-group">
-		    <input type="text" class="mainSearch form-control" placeholder="Search Recipes..">
-		    <span class="input-group-addon">
-		        <button type="submit">
-		            <i class="material-icons">search</i>
-		        </button>
-		    </span>
-		  </div> --->
-
-
-	  </div>
-	</div>
+<div class="logo">
+<% if !current_user %>
+  <h2 style="left:50%, right:50%, font-size: 20px; margin-right:20px;">
+    Log in or create an account to get started on FoodNatic!
+  </h2>
+<% end %>
+</div>
 </div>
