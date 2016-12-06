@@ -129,6 +129,18 @@ class UsersController < ApplicationController
     end
   end
 
+
+  def deleteuser
+
+    if current_user 
+      current_user.destroy
+      respond_to do |format|
+        format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    end
+  end
+
   def adminhome
     if current_user
       if current_user.role != 2
@@ -139,6 +151,7 @@ class UsersController < ApplicationController
   end
 
   def search
+    
     apiURL = ENV['API_URL'].to_s + "/search?app_id=" + ENV['APP_ID'].to_s + "&app_key="+ ENV['APP_KEY'].to_s + "&q="
     
     healthLabelsSearch = ""
@@ -198,7 +211,9 @@ class UsersController < ApplicationController
   end
 
   def save_recipe
+
     recipe = params[:recipe]
+
     #puts recipe
     recipe_uri = recipe['uri']
     #logger.debug recipie_url
@@ -277,7 +292,7 @@ class UsersController < ApplicationController
 
 
   def all_recipes
-    @foundLinks = []
+    foundLinks = []
     currentPage = 0;
     retryCount = 0;
 
@@ -292,8 +307,13 @@ class UsersController < ApplicationController
     end
     #page = Nokogiri::HTML(open(baseURL))
     #opens up the page using watir (based off of selinium) using phantomjs driver
-    brows = Watir::Browser.new(:phantomjs)
-    brows.goto baseURL
+    begin
+      brows = Watir::Browser.new(:phantomjs)
+      brows.goto baseURL
+    rescue
+      logger.debug "error in watir brows.goto"
+      brows.close
+    end
 
     if params[:loadmore]
       while currentPage < params[:loadmore].to_i
@@ -311,12 +331,12 @@ class UsersController < ApplicationController
       doc = Nokogiri::HTML(brows.html)
       doc.css("li[itemtype='http://schema.org/Thing']").each do |link|
         logger.debug link['data-id']
-        @foundLinks.push(link['data-id'])
+        foundLinks.push(link['data-id'])
         #logger.debug resp.body
       
     end
 
-      @foundLinks.each do |uri|
+      foundLinks.each do |uri|
         apiURL += uri+"&r=";
       end
       puts apiURL
@@ -332,6 +352,10 @@ class UsersController < ApplicationController
       end
 
       resp += ']'
+      
+      if brows
+        brows.close
+      end
 
       if resp != nil
         json_resp = JSON.parse(resp)
