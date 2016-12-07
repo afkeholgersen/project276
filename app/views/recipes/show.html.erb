@@ -48,11 +48,6 @@
       <%= c.user.username %>: <br>
       <%= c.id %>:
       <%= c.comment_text %><br>
-        <% if current_user.id == c.user_id %>
-          <a href="javascript:void(0);" onclick="delete_comment($(this),'<%= c.id %>')">delete</a><br>
-        <% elsif current_user.role == 2 %>
-          <a href="javascript:void(0);" onclick="delete_comment($(this),'<%= c.id %>')">delete</a><br>
-        <%end %>
         <br>
       <% end %>
       <br><br>
