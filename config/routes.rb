@@ -30,12 +30,12 @@ Rails.application.routes.draw do
 
     member do
       get :home
-      
       get :my_recipes
       get :individual_recipes
       get :all_recipes
       post :save_recipe
       post :save_recipeOnly
+      delete :deleteuser
       delete :unsave_recipe
     end
 
